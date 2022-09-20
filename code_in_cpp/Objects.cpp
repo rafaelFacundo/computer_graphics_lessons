@@ -47,3 +47,11 @@ double* Object::get_center() {
     Method that checks if the point intercept the object
     this method it's diferent in each type of object
 */
+
+double* Object::gime_your_color(
+            Vector *Eye_position,
+            Vector *Direction,
+            Vector *Light_source_position,
+            Vector *Light_source_intesity,
+            Vector *Ambient_light_intensity
+        ) {};

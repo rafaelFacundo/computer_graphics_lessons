@@ -38,7 +38,13 @@ class Object {
             this method it's diferent in each type of object
         */
 
-        virtual double* gime_your_color();
+        virtual double* gime_your_color(
+            Vector *Eye_position,
+            Vector *Direction,
+            Vector *Light_source_position,
+            Vector *Light_source_intesity,
+            Vector *Ambient_light_intensity
+        );
 
-        virtual returnType does_the_point_intercept(Vector *dir, Vector *w);
+        virtual returnType does_the_point_intercept(Vector *dir, Vector *P_o);
 };

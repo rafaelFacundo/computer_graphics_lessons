@@ -3,8 +3,9 @@
 #include <math.h>
 
 /* Method that says if the ray intersect the sphere */
-returnType Sphere::does_the_point_intercept( Vector *dir, Vector *w) {
+returnType Sphere::does_the_point_intercept( Vector *dir, Vector *P_o) {
     returnType result;
+    Vector *w = P_o->minus_with_the_vector(this->center_Of_Object);
     double a = dir->scalar_with(dir); 
     double b = 2 * w->scalar_with(dir); 
     double cx = w->scalar_with(w) - pow(this->Sphere_radius, 2); 
@@ -32,8 +33,7 @@ double* Sphere::gime_your_color(
     Vector *Direction,
     Vector *Light_source_position,
     Vector *Light_source_intesity,
-    Vector *Ambient_light_intensity,
-    double T_i
+    Vector *Ambient_light_intensity
 ) {
 
     Vector *P_o_plus_Dir = Eye_position->sum_with_the_vector(Direction);
