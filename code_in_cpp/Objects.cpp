@@ -42,7 +42,7 @@ Object::Object(
 
 double* Object::get_center() {
     return this->center_Of_Object->getPoint_s();
-
+}
 /* 
     Method that checks if the point intercept the object
     this method it's diferent in each type of object

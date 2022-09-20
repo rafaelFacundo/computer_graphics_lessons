@@ -1,9 +1,11 @@
 #pragma once
 #include "Objects.h"
+#include <iostream>
+using namespace std;
+#include <vector>
 
-template <int NUMBER_OF_OBJECTS>
 class Scenery {
-    Object list_Of_Objects[NUMBER_OF_OBJECTS];
+    std::vector<sf::Object> list_Of_Objects;
     Vector* Light_position;
     Vector* Light_intensity;
     Vector* Ambient_Light_intesity;
