@@ -44,7 +44,7 @@ class Object {
             Vector *Light_source_position,
             Vector *Light_source_intesity,
             Vector *Ambient_light_intensity
-        );
+        ) = 0;
 
         virtual returnType does_the_point_intercept(Vector *dir, Vector *P_o);
 };

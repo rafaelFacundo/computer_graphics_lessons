@@ -16,6 +16,7 @@ returnType Sphere::does_the_point_intercept( Vector *dir, Vector *P_o) {
         double T_i = (-b - sqrt(delta))/(2*a);
         result.doesIntersect = true;
         result.point_of_intersection = T_i;
+        this->set_T_i(T_i);
     }else {
         result.doesIntersect = false;
         result.point_of_intersection = -1.0;
@@ -38,7 +39,7 @@ double* Sphere::gime_your_color(
 
     Vector *P_o_plus_Dir = Eye_position->sum_with_the_vector(Direction);
 
-    Vector *P_i = P_o_plus_Dir->multiply_by_a_scalar(T_i);  
+    Vector *P_i = P_o_plus_Dir->multiply_by_a_scalar(this->T_i);  
 
     Vector *Pf_Pi = new Vector(
         Light_source_position->get_x_Point() - P_i->get_x_Point(), 

@@ -1,12 +1,14 @@
-#include <iostream>
+#include <SDL2/SDL.h>
 #include "Objects.h"
+#include "Sphere.h"
+#include <iostream>
 using namespace std;
 
 int main() {
   double c[3] = {0.0,10.0,0.0};
   double ke[3] = {0.0,10.0,0.0};
-  double kd[3] = {0.0,10.0,0.0};
-  Object newObject = Object(c, ke, kd, 10);
-  cout << newObject.get_center() << endl;
+  
+  Sphere *theSphere = new Sphere(c,ke,ke,10.0,10.0);
+  Scenery theScenery = new Scenery();
   return 0;
 } 

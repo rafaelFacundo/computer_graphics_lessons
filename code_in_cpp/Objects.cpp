@@ -49,9 +49,9 @@ double* Object::get_center() {
 */
 
 double* Object::gime_your_color(
-            Vector *Eye_position,
-            Vector *Direction,
-            Vector *Light_source_position,
-            Vector *Light_source_intesity,
-            Vector *Ambient_light_intensity
-        ) {};
+    Vector *Eye_position,
+    Vector *Direction,
+    Vector *Light_source_position,
+    Vector *Light_source_intesity,
+    Vector *Ambient_light_intensity
+) {};

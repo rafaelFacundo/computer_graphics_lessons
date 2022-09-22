@@ -1,0 +1,24 @@
+#pragma once
+#include <SDL2/SDL.h>
+
+
+void init_sdl_window (
+    int width,
+    int height,
+    SDL_Window *window,
+    SDL_Renderer *renderer
+);
+
+void set_sdl_draw_color (
+    SDL_Renderer *renderer,
+    float R,
+    float G,
+    float B,
+    float A
+);
+
+void paint_the_point (
+    SDL_Renderer *renderer,
+    int column,
+    int line
+);
