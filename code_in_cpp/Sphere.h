@@ -8,10 +8,7 @@ class Sphere : public Object {
         
     public:
         void set_radius(double radius);
-        
-
         double get_radius();
-
 
         Sphere();
 

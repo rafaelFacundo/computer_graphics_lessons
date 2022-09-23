@@ -1,6 +1,26 @@
 #include "Sphere.h"
 #include <math.h>
 
+Sphere::Sphere(){}
+
+void Sphere::set_radius(double radius){
+    this->Sphere_radius = radius;
+}
+
+Sphere::Sphere(
+    double center[3],
+    double K_e[3],
+    double K_d[3],
+    double shine,
+    double radius
+):Object() {
+    this->set_Center_of_Object(center);
+    this->set_K_e(K_e);
+    this->set_K_d(K_d);
+    this->set_shine(shine);
+    this->set_radius(radius);
+};
+
 /* Method that says if the ray intersect the sphere */
 returnType Sphere::does_the_point_intercept( Vector *dir, Vector *P_o) {
     returnType result;
@@ -10,7 +30,7 @@ returnType Sphere::does_the_point_intercept( Vector *dir, Vector *P_o) {
     double cx = w->scalar_with(w) - pow(this->Sphere_radius, 2); 
     double delta = pow(b,2) - 4*a*cx;
     
-
+ 
     if (delta > 0) {
         double T_i = (-b - sqrt(delta))/(2*a);
         result.doesIntersect = true;

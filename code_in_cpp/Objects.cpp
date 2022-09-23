@@ -1,5 +1,4 @@
 #include "Objects.h"
-#include "Vector.h"
 
 void Object::set_Center_of_Object(double center[3]) {
     this->center_Of_Object->setPoints(center[0], center[1], center[2]);
@@ -29,7 +28,9 @@ Vector* Object::get_K_d(){
     return this->K_e_of_object;
 };
 
-
+Object::Object(){
+    
+}
 
 /* get methods */
 

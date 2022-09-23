@@ -12,34 +12,16 @@ class Object {
     public:
         /* sets and gets of the object atributtes */
         void set_Center_of_Object(double center[3]);
-
         void set_K_e(double K_e[3]);
-
         void set_K_d(double K_d[3]);
-
         void set_shine(double shine);
-
         void set_T_i(double point);
-
         Vector *get_K_e();
-
         Vector *get_K_d();
-
-
         double* get_center();
 
         /* Constructor of the class */
-        Object(
-            double center[3],
-            double k_e[3],
-            double K_d[3],
-            double shine
-        );
-
-        /* 
-            Method that checks if the point intercept the object
-            this method it's diferent in each type of object
-        */
+        Object();
 
         virtual double* gime_your_color(
             Vector *Eye_position,
