@@ -1,5 +1,4 @@
 #include "Sphere.h"
-#include "Vector.h"
 #include <math.h>
 
 /* Method that says if the ray intersect the sphere */

@@ -1,13 +1,14 @@
 #pragma once
 #include "Objects.h"
+#include "Vector.h"
 
 class Sphere : public Object {
     private:
         double Sphere_radius;
-        double T_i;
+        
     public:
         void set_radius(double radius);
-        void set_T_i(double point);
+        
 
         double get_radius();
 

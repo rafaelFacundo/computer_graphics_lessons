@@ -23,7 +23,7 @@ double Vector::get_x_Point(){
 };
 
 double Vector::get_y_Point(){
-    this->points[1];
+    return this->points[1];
 };
 
 double Vector::get_z_Point(){

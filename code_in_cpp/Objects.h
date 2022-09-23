@@ -8,6 +8,7 @@ class Object {
         Vector *K_d_of_object;
         Vector *K_e_of_object;
         double shineness_of_object;
+        double T_i;
     public:
         /* sets and gets of the object atributtes */
         void set_Center_of_Object(double center[3]);
@@ -17,6 +18,8 @@ class Object {
         void set_K_d(double K_d[3]);
 
         void set_shine(double shine);
+
+        void set_T_i(double point);
 
         Vector *get_K_e();
 

@@ -9,6 +9,6 @@ int main() {
   double ke[3] = {0.0,10.0,0.0};
   
   Sphere *theSphere = new Sphere(c,ke,ke,10.0,10.0);
-  Scenery theScenery = new Scenery();
+  
   return 0;
 } 

@@ -17,6 +17,10 @@ void Object::set_shine(double shine) {
     this->shineness_of_object = shine;
 };
 
+void Object::set_T_i(double point) {
+    this->T_i = point;
+};
+
 Vector* Object::get_K_e(){
     return this->K_e_of_object;
 };
@@ -25,18 +29,7 @@ Vector* Object::get_K_d(){
     return this->K_e_of_object;
 };
 
-/* Constructor of the class */
-Object::Object(
-    double center[3],
-    double k_e[3],
-    double K_d[3],
-    double shine
-){
-    this->set_Center_of_Object(center);
-    this->set_K_e(k_e);
-    this->set_K_d(K_d);
-    this->set_shine(shine);
-};
+
 
 /* get methods */
 
@@ -47,11 +40,3 @@ double* Object::get_center() {
     Method that checks if the point intercept the object
     this method it's diferent in each type of object
 */
-
-double* Object::gime_your_color(
-    Vector *Eye_position,
-    Vector *Direction,
-    Vector *Light_source_position,
-    Vector *Light_source_intesity,
-    Vector *Ambient_light_intensity
-) {};
