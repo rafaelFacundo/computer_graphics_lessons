@@ -32,6 +32,14 @@ Object::Object(){
     
 }
 
+Object::Object(
+    double center[3],
+    double K_e[3],
+    double K_d[3],
+    double shine,
+    double radius
+) {};
+
 /* get methods */
 
 double* Object::get_center() {

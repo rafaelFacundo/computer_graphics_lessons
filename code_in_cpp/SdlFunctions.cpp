@@ -28,3 +28,7 @@ void paint_the_point (
 ){
     SDL_RenderDrawPoint(renderer, column, line);
 };
+
+void show_the_window( SDL_Renderer *renderer) {
+    SDL_RenderPresent(renderer);
+};

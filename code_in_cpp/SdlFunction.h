@@ -22,3 +22,7 @@ void paint_the_point (
     int column,
     int line
 );
+
+void show_the_window(
+    SDL_Renderer *renderer
+);

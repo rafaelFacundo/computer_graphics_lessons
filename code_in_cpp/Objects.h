@@ -23,6 +23,14 @@ class Object {
         /* Constructor of the class */
         Object();
 
+        Object(
+            double center[3],
+            double K_e[3],
+            double K_d[3],
+            double shine,
+            double radius
+        );
+
         virtual double* gime_your_color(
             Vector *Eye_position,
             Vector *Direction,
@@ -31,5 +39,5 @@ class Object {
             Vector *Ambient_light_intensity
         ) = 0;
 
-        virtual returnType does_the_point_intercept(Vector *dir, Vector *P_o);
+        virtual returnType does_the_point_intercept(Vector *dir, Vector *P_o) = 0;
 };

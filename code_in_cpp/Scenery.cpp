@@ -56,6 +56,15 @@ void Scenery::set_renderer(SDL_Renderer *renderer) {
     this->renderer = renderer;
 };
 
+void Scenery::set_Dx_and_Dy(double dx, double dy) {
+    this->Dx = dx;
+    this->Dy = dy;
+}
+
+Scenery::Scenery() {
+    
+}
+
 Scenery::Scenery(
     Vector* Light_position,
     Vector* Light_intensity,

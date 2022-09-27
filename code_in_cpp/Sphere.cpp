@@ -1,7 +1,7 @@
 #include "Sphere.h"
 #include <math.h>
 
-Sphere::Sphere(){}
+Sphere::Sphere():Object(){}
 
 void Sphere::set_radius(double radius){
     this->Sphere_radius = radius;

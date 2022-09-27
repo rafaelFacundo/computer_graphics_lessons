@@ -33,6 +33,7 @@ class Scenery {
         void addObjectToTheScene(Object *object);
         void set_n_lines_and_columns(int lines, int column);
         void set_width_and_height(int width, int height);
+        void set_Dx_and_Dy(double dx, double dy);
         void set_z(int z);
         void set_renderer(SDL_Renderer *renderer);
 
@@ -40,6 +41,8 @@ class Scenery {
         Vector* get_ambient_light_intensity();
         Vector* get_light_intensity();
         Vector* get_observer_position();
+
+        Scenery();
 
         Scenery(
             Vector* Light_position,
