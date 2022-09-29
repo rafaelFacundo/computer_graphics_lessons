@@ -1,5 +1,7 @@
 #include "Sphere.h"
 #include <math.h>
+#include <iostream>
+using namespace std;
 
 Sphere::Sphere():Object(){}
 
@@ -48,12 +50,13 @@ double Sphere::get_radius() {
     return this->Sphere_radius;
 };
 
-double* Sphere::gime_your_color(
+void Sphere::gime_your_color(
     Vector *Eye_position,
     Vector *Direction,
     Vector *Light_source_position,
     Vector *Light_source_intesity,
-    Vector *Ambient_light_intensity
+    Vector *Ambient_light_intensity,
+    double *addressToPutTheColor
 ) {
 
     Vector *P_o_plus_Dir = Eye_position->sum_with_the_vector(Direction);
@@ -137,11 +140,19 @@ double* Sphere::gime_your_color(
     Vector *vectorWithColors = I_eye_d->sum_with_the_vector(I_eye_e);
     vectorWithColors = vectorWithColors->sum_with_the_vector(Ambient_light_intensity);
 
-    double color[3] = {
+    addressToPutTheColor[0] = vectorWithColors->get_x_Point();
+    addressToPutTheColor[1] = vectorWithColors->get_y_Point();
+    addressToPutTheColor[2] = vectorWithColors->get_z_Point();
+
+
+    /* double and[3] = {
         vectorWithColors->get_x_Point(),
         vectorWithColors->get_y_Point(),
         vectorWithColors->get_z_Point()
-    };
+    }; */
+
+    
+
 
     /* double color[3] = {
         I_eye_d[0] + I_eye_e[0] + L_amb[0],
@@ -149,5 +160,5 @@ double* Sphere::gime_your_color(
         I_eye_d[1] + I_eye_e[1] + L_amb[2],
     }; */
 
-    return color;
+    
 };

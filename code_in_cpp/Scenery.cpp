@@ -1,5 +1,8 @@
 #include "scenery.h"
 #include "Vector.h"
+#include <iostream>
+using namespace std; 
+
 
 Vector* Scenery::get_light_position(){
     return this->Light_position;
@@ -17,6 +20,10 @@ Vector* Scenery::get_light_intensity(){
 
 Vector* Scenery::get_observer_position(){
     return this->observer_point;
+};
+
+int Scenery::get_Object_list_lenght() {
+    return this->list_Of_Objects.size();
 };
 
 void Scenery::set_Light_position(Vector *light){
@@ -94,42 +101,55 @@ Scenery::Scenery(
 int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
     int numberOfObjects = this->list_Of_Objects.size();
     double minimunPont = 0.0;
-    int indexOfTheObject;
+    int *indexOfTheObject;
+    
     for (int i = 0; i < numberOfObjects; i++) {
+        /* cout << "o i é: " << i ; */
         returnType thisPoint = this->list_Of_Objects[i]->does_the_point_intercept(dir, P_o);
         if ( thisPoint.doesIntersect && i == 0 ) {
             minimunPont = thisPoint.point_of_intersection;
-            indexOfTheObject = i;
-        }else if ( thisPoint.doesIntersect ) {
+            *indexOfTheObject = i;
+           
+        }else if ( thisPoint.doesIntersect && (thisPoint.point_of_intersection < minimunPont) ) {
             minimunPont = thisPoint.point_of_intersection;
-            indexOfTheObject = i;
+            *indexOfTheObject = i;
         }
     }
 
-    return indexOfTheObject;
+    int value = 0;
+     
+    return value;
 }
 
 void Scenery::ray_tracing_algorithm() {
+    
     for (int l = 0; l < this->n_lines; l++) {
         double Yj = this->height/2 - Dy/2 - l*Dy;
         for (int c = 0; c < this->n_collumns; c++ ) {
             double Xj = - this->width/2 + Dx/2 + c*Dx;
             Vector *dir = new Vector(Xj, Yj, this->z);
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
-            double *color;
+            
             if ( objePosiInList > -1) {
-                color = this->list_Of_Objects[objePosiInList]->gime_your_color(
+                /* this->list_Of_Objects[objePosiInList]->gime_your_color(
                     this->get_observer_position(),
                     dir,
                     this->get_light_position(),
                     this->get_light_intensity(),
-                    this->get_ambient_light_intensity()
-                );
+                    this->get_ambient_light_intensity(), 
+                    this->colorToDraw
+                ); */
+                /* cout << this->list_Of_Objects[objePosiInList]->teste() << '\n'; */
             }else{
-                double color[3] = {0.0,0.0,0.0};
+                this->colorToDraw[0] = 0.0;
+                this->colorToDraw[1] = 0.0;
+                this->colorToDraw[2] = 0.0;
             }
+            /*
             set_sdl_draw_color(this->renderer, color[0], color[1], color[3], 255);
-            paint_the_point(this->renderer, c, l);
+            paint_the_point(this->renderer, c, l); */
+            
+            
         }
     }
 }

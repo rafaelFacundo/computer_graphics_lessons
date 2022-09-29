@@ -20,12 +20,13 @@ class Sphere : public Object {
             double radius
         );
 
-        double* gime_your_color(
+        void gime_your_color(
             Vector *Eye_position,
             Vector *Direction,
             Vector *Light_source,
             Vector *Light_source_intesity,
-            Vector *Ambient_light_intensity
+            Vector *Ambient_light_intensity,
+            double *addressToPutTheColor
         );
 
         virtual returnType does_the_point_intercept( Vector *dir, Vector *w);

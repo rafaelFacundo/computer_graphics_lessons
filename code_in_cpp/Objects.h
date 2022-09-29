@@ -20,6 +20,8 @@ class Object {
         Vector *get_K_d();
         double* get_center();
 
+        int teste ();
+
         /* Constructor of the class */
         Object();
 
@@ -31,12 +33,13 @@ class Object {
             double radius
         );
 
-        virtual double* gime_your_color(
+        virtual void gime_your_color(
             Vector *Eye_position,
             Vector *Direction,
             Vector *Light_source_position,
             Vector *Light_source_intesity,
-            Vector *Ambient_light_intensity
+            Vector *Ambient_light_intensity,
+            double *addressToPutTheColor
         ) = 0;
 
         virtual returnType does_the_point_intercept(Vector *dir, Vector *P_o) = 0;

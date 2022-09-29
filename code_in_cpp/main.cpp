@@ -46,13 +46,42 @@ int main() {
     z,
     renderer
   );
-  
-  Sphere *theSphere = new Sphere();
-  theSphere->set_radius(10.0);
-  theSphere->set_K_d(K_d);
+  theScenery->set_Dx_and_Dy(Dx, Dy);
+
+  Sphere *theSphere = new Sphere(
+    centroEsfera,
+    K_d,
+    K_d,
+    10.0,
+    10.0
+  );
+
+  theScenery->addObjectToTheScene(theSphere);
+  cout << theScenery->get_Object_list_lenght() << '\n';
+
+  /* theScenery->ray_tracing_algorithm(); */
+
+  Vector *direction = new Vector(0.0,0.0,z);
+
+  /* double* color = (double*)malloc(sizeof(double) * 3);
+
+  theSphere->gime_your_color(
+    P_o,
+    direction,
+    light_position,
+    light_intensity,
+    ambient_light,
+    color
+  );
+
   
 
+  cout << color[0] << '\n';
+  cout << color[1] << '\n';
+  cout << color[2] << '\n'; */
 
+  theScenery->ray_tracing_algorithm();
+  
   
 
 

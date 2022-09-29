@@ -19,6 +19,7 @@ class Scenery {
     int Dy;
     int Dx;
     double z;
+    double* colorToDraw = (double*)malloc(sizeof(double)*3);
     SDL_Renderer *renderer;
 
     public:
@@ -41,6 +42,7 @@ class Scenery {
         Vector* get_ambient_light_intensity();
         Vector* get_light_intensity();
         Vector* get_observer_position();
+        int get_Object_list_lenght();
 
         Scenery();
 
