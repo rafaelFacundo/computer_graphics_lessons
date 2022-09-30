@@ -1,7 +1,7 @@
 main: main.o Sphere.o Scenery.o Objects.o Vector.o SdlFunctions.o
 	g++ SdlFunctions.o Scenery.o Vector.o Objects.o Sphere.o main.o -lSDL2 -o main
 
-main.o: Sphere.h
+main.o: Sphere.h SdlFunction.h
 	g++ -c main.cpp -o main.o
 
 Scenery.o: scenery.h
@@ -16,7 +16,7 @@ Objects.o: Objects.cpp Objects.h returnType.h
 Vector.o: Vector.cpp Vector.h
 	g++ -c Vector.cpp -o Vector.o 
 
-SdlFunctions.o:
+SdlFunctions.o: SdlFunction.h
 	g++ -c SdlFunctions.cpp -o SdlFunctions.o
 
 clean:

@@ -152,6 +152,9 @@ int main(int argc, char const *argv[]) {
             if(event.type == SDL_QUIT) 
             isRunning = 0; 
         }
-    SDL_UpdateWindowSurface (window); } SDL_DestroyWindow (window); SDL_Quit ();
+    SDL_UpdateWindowSurface (window); 
+    } 
+    SDL_DestroyWindow (window); 
+    SDL_Quit ();
     return 0;
 }

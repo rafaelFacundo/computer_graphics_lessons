@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 
 
-void init_sdl_window (
+SDL_Renderer* init_sdl_window (
     int width,
     int height,
     SDL_Window *window,
@@ -23,6 +23,6 @@ void paint_the_point (
     int line
 );
 
-void show_the_window(
-    SDL_Renderer *renderer
-);
+void show_the_window(SDL_Renderer *renderer);
+
+void SDL_events();

@@ -1,11 +1,14 @@
 #include <SDL2/SDL.h>
 #include "Sphere.h"
+#include "SdlFunction.h"
 #include "scenery.h"
 #include <iostream>
 using namespace std;
 
 int main() {
-  SDL_Renderer *renderer;
+  SDL_Window* window = NULL; 
+  SDL_Renderer* renderer = NULL;
+  SDL_Event event; 
   double c[3] = {0.0,10.0,0.0};
   double ke[3] = {0.0,10.0,0.0};
 
@@ -13,7 +16,7 @@ int main() {
   double h = 600.0; 
   double n_lines = 600.0; 
   double n_collumns = 600.0; 
-  double dJ = 50.0; 
+  double dJ = 30.0; 
 
   double Dx = wid/n_lines; 
   double Dy = h/n_collumns;
@@ -34,6 +37,18 @@ int main() {
   Vector *light_position = new Vector(0.0,5.0,0.0);
   Vector *P_o = new Vector(0.0,0.0,0.0);
 
+  
+  /* initing the sdl window */
+  renderer = init_sdl_window (
+    wid,
+    h,
+    window,
+    renderer
+  );
+
+  
+
+  /* instanciating the scenery class */
   Scenery *theScenery = new Scenery(
     light_position,
     light_intensity,
@@ -48,28 +63,35 @@ int main() {
   );
   theScenery->set_Dx_and_Dy(Dx, Dy);
 
+  
+  
+  /* instance of a sphere */
   Sphere *theSphere = new Sphere(
     centroEsfera,
     K_d,
     K_d,
     10.0,
-    10.0
+    60.0
   );
 
+  /* adding an object to the scenery, in this case, the sphere */
   theScenery->addObjectToTheScene(theSphere);
-  cout << theScenery->get_Object_list_lenght() << '\n';
 
-  
-
-  Vector *direction = new Vector(0.0,0.0,z);
-
-  
-
+  /* calling the ray tracing algorithm */
   theScenery->ray_tracing_algorithm();
 
+  /* this code below is treating the window's */
+  int isRunning = 1; 
+  while (isRunning) { 
+      while (SDL_PollEvent (&event) != 0) { 
+          if(event.type == SDL_QUIT) 
+          isRunning = 0; 
+      }
+  SDL_UpdateWindowSurface (window); 
+  } 
+  SDL_DestroyWindow (window); 
+  SDL_Quit ();  
 
-  
-  
   
   
 

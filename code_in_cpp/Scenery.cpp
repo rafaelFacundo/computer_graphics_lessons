@@ -146,6 +146,7 @@ void Scenery::ray_tracing_algorithm() {
                     this->get_ambient_light_intensity(), 
                     this->colorToDraw
                 );
+                
                 /* cout << this->list_Of_Objects[objePosiInList]->teste() << '\n'; */
             }else{
                 this->colorToDraw[0] = 0.0;
@@ -153,16 +154,18 @@ void Scenery::ray_tracing_algorithm() {
                 this->colorToDraw[2] = 0.0;
             }
             
-            set_sdl_draw_color(
+            SDL_SetRenderDrawColor(
                 this->renderer,
                 this->colorToDraw[0],
                 this->colorToDraw[1],
-                this->colorToDraw[3],
+                this->colorToDraw[2],
                 255
             );
-            /*paint_the_point(this->renderer, c, l); */
+            SDL_RenderDrawPoint(this->renderer, c, l);
             
             
         }
     }
+
+    SDL_RenderPresent(this->renderer);
 }
