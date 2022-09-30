@@ -11,10 +11,10 @@ void init_sdl_window (
 
 void set_sdl_draw_color (
     SDL_Renderer *renderer,
-    float R,
-    float G,
-    float B,
-    float A
+    double R,
+    double G,
+    double B,
+    double A
 );
 
 void paint_the_point (

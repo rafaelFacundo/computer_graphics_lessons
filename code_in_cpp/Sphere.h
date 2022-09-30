@@ -29,7 +29,7 @@ class Sphere : public Object {
             double *addressToPutTheColor
         );
 
-        virtual returnType does_the_point_intercept( Vector *dir, Vector *w);
+        double does_the_point_intercept( Vector *dir, Vector *w);
 
 
 

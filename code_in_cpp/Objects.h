@@ -42,5 +42,5 @@ class Object {
             double *addressToPutTheColor
         ) = 0;
 
-        virtual returnType does_the_point_intercept(Vector *dir, Vector *P_o) = 0;
+        virtual double does_the_point_intercept(Vector *dir, Vector *P_o) = 0;
 };

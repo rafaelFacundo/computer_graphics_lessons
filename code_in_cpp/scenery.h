@@ -43,6 +43,7 @@ class Scenery {
         Vector* get_light_intensity();
         Vector* get_observer_position();
         int get_Object_list_lenght();
+        SDL_Renderer* get_sceneryRender();
 
         Scenery();
 
