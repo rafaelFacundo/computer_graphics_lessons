@@ -34,6 +34,7 @@ double Sphere::does_the_point_intercept( Vector *dir, Vector *P_o) {
     
  
     if (delta > 0) {
+        
         double T_i = (-b - sqrt(delta))/(2*a);
         pointToReturn = T_i;
         this->set_T_i(T_i);
@@ -56,7 +57,7 @@ void Sphere::gime_your_color(
     Vector *Ambient_light_intensity,
     double *addressToPutTheColor
 ) {
-
+ 
     Vector *P_o_plus_Dir = Eye_position->sum_with_the_vector(Direction);
 
     Vector *P_i = P_o_plus_Dir->multiply_by_a_scalar(this->T_i);  
@@ -141,7 +142,7 @@ void Sphere::gime_your_color(
     addressToPutTheColor[0] = vectorWithColors->get_x_Point();
     addressToPutTheColor[1] = vectorWithColors->get_y_Point();
     addressToPutTheColor[2] = vectorWithColors->get_z_Point();
-
+    
 
     /* double and[3] = {
         vectorWithColors->get_x_Point(),

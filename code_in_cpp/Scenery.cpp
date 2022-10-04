@@ -72,6 +72,14 @@ SDL_Renderer* Scenery::get_sceneryRender(){
     return this->renderer;
 };
 
+double Scenery::get_minimun(double num1, double num2) {
+    if ( num1 < num2 ) {
+        return num1;
+    }
+
+    return num2;
+};
+
 Scenery::Scenery() {
     
 }
@@ -104,27 +112,17 @@ Scenery::Scenery(
 */
 int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
     int numberOfObjects = this->get_Object_list_lenght();
-    
-    double minimunPont = 0.0;
-    
-
-    int point = -1;
+    double minimunPont = 100000000;
+    int point = 100000000;
     for (int i = 0; i < numberOfObjects; i++) {
-        
         double thisPoint = this->list_Of_Objects[i]->does_the_point_intercept(dir, P_o);
-        
-        if ( thisPoint > -1 && i == 0 ) {
-            minimunPont = thisPoint;
+        if (thisPoint > (-1) && thisPoint < minimunPont) {
             point = i;
-        }else if ( thisPoint > -1 && (thisPoint < minimunPont) ) {
             minimunPont = thisPoint;
-            point = i;
         }else {
-           point = -1;
+            point = -1;
         }
-        
     }
-
     return point;
 }
 
@@ -136,7 +134,7 @@ void Scenery::ray_tracing_algorithm() {
             double Xj = - this->width/2 + Dx/2 + c*Dx;
             Vector *dir = new Vector(Xj, Yj, this->z);
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
-           
+            
             if ( objePosiInList > -1) {
                 this->list_Of_Objects[objePosiInList]->gime_your_color(
                     this->get_observer_position(),
@@ -145,20 +143,24 @@ void Scenery::ray_tracing_algorithm() {
                     this->get_light_intensity(),
                     this->get_ambient_light_intensity(), 
                     this->colorToDraw
-                );
-                
+                ); 
                 /* cout << this->list_Of_Objects[objePosiInList]->teste() << '\n'; */
             }else{
-                this->colorToDraw[0] = 0.0;
-                this->colorToDraw[1] = 0.0;
-                this->colorToDraw[2] = 0.0;
+                this->colorToDraw[0] = 140.0;
+                this->colorToDraw[1] = 123.0;
+                this->colorToDraw[2] = 120.0;
             }
+
+            /* if (this->colorToDraw[0] == 241.0) {
+                cout << this->colorToDraw[0] << '\n';
+            } */
             
+            /* this->colorToDraw[0] */
             SDL_SetRenderDrawColor(
                 this->renderer,
-                this->colorToDraw[0],
-                this->colorToDraw[1],
-                this->colorToDraw[2],
+                this->get_minimun(this->colorToDraw[0], 255.0),
+                this->get_minimun(this->colorToDraw[1], 255.0),
+                this->get_minimun(this->colorToDraw[2], 255.0),
                 255
             );
             SDL_RenderDrawPoint(this->renderer, c, l);
