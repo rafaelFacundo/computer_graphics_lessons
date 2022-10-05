@@ -141,16 +141,31 @@ void Scenery::ray_tracing_algorithm() {
             double Xj = - this->width/2 + Dx/2 + c*Dx;
             Vector *dir = new Vector(Xj, Yj, this->z);
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
+
             if ( objePosiInList > -1) {
-                this->list_Of_Objects[objePosiInList]->gime_your_color(
-                    this->get_observer_position(),
-                    dir,
+                bool doesHaveShadow = verify_the_shadow(
                     this->get_light_position(),
-                    this->get_light_intensity(),
-                    this->get_ambient_light_intensity(), 
-                    this->colorToDraw
-                ); 
-                /* cout << this->list_Of_Objects[objePosiInList]->teste() << '\n'; */
+                    dir,
+                    this->get_observer_position(),
+                    objePosiInList
+                );
+
+                if ( !doesHaveShadow ) {
+                    this->list_Of_Objects[objePosiInList]->gime_your_color(
+                        this->get_observer_position(),
+                        dir,
+                        this->get_light_position(),
+                        this->get_light_intensity(),
+                        this->get_ambient_light_intensity(), 
+                        this->colorToDraw
+                    );
+                }else {
+                    this->list_Of_Objects[objePosiInList]->gimme_your_ambientColor(
+                        this->get_ambient_light_intensity(),
+                        this->colorToDraw
+                    );
+                };
+                 
             }else{
                 this->colorToDraw[0] = 0.0;
                 this->colorToDraw[1] = 0.0;
@@ -177,3 +192,50 @@ void Scenery::ray_tracing_algorithm() {
 
     SDL_RenderPresent(this->renderer);
 }
+
+bool Scenery::verify_the_shadow(
+    Vector *Light_source_position,
+    Vector *dir,
+    Vector *P_o,
+    int indexOfObject
+){
+    int numberOfObjects = this->get_Object_list_lenght();
+    double nearPoint = 0;
+    int indexOfInterceptedObje = -1;
+    Vector *L_vector = this->list_Of_Objects[indexOfObject]->get_L_vector(dir, P_o, Light_source_position);
+    Vector *P_i = this->list_Of_Objects[indexOfObject]->get_Pi(dir, P_o);
+    Vector *Pf_pi = this->get_light_position()->minus_with_the_vector(P_i);
+    double Pf_pi_norm = sqrt(Pf_pi->scalar_with(Pf_pi));
+
+    for (int i = 0; i < numberOfObjects; i++) {
+        if ( i != indexOfObject ) {
+            double thisPoint = this->list_Of_Objects[i]->does_the_point_intercept(L_vector, P_i);
+            if ( i == 0 && thisPoint == -1 ) {
+                nearPoint = thisPoint;
+                indexOfInterceptedObje = -1;
+            }else if ( i == 0 && thisPoint != -1 ) {
+                nearPoint = thisPoint;
+                indexOfInterceptedObje = i;
+            }else if (thisPoint > -1  && nearPoint == -1) {
+                nearPoint = thisPoint;
+                indexOfInterceptedObje = i;
+            }else if (nearPoint > -1 && thisPoint > -1 && nearPoint > thisPoint){
+                nearPoint = thisPoint;
+                indexOfInterceptedObje = i;
+            }
+
+            if(thisPoint > Pf_pi_norm){
+                indexOfInterceptedObje = -1;
+            }
+
+        }
+        
+    }
+
+    if ( indexOfInterceptedObje == -1 ) {
+        return false;
+    }else {
+        return true;
+    }
+    
+};

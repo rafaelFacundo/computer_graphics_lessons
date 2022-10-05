@@ -23,9 +23,15 @@ class Scenery {
     SDL_Renderer *renderer;
 
     public:
-        int call_the_intersections_verifications(Vector *dir, Vector *P_o);
+        int  call_the_intersections_verifications(Vector *dir, Vector *P_o);
         void ray_tracing_algorithm();
         void draw_pixel();
+        bool verify_the_shadow(
+            Vector *Light_source_position,
+            Vector *dir,
+            Vector *P_o,
+            int indexOfObject
+        );
 
         void set_Light_position(Vector *light);
         void set_Light_intensity(Vector *intensityOfLight);

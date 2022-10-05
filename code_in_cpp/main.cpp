@@ -10,28 +10,24 @@ int main() {
   SDL_Window* window = NULL; 
   SDL_Renderer* renderer = NULL;
   SDL_Event event; 
-  double c[3] = {0.0,10.0,0.0};
-  double ke[3] = {0.0,10.0,0.0};
 
-  double wid = 60.0; 
-  double h = 60.0; 
+  double wid = 500.0; 
+  double h = 500.0; 
   double n_lines = 500.0; 
   double n_collumns = 500.0; 
-  double dJ = 30.0; 
+  double dJ = 80.0; 
 
   double Dx = wid/n_lines; 
   double Dy = h/n_collumns;
 
   double z = -dJ; 
-  double raioDaEsf = 80.0;
 
   double cJan[3] = {0.0,0.0,-dJ}; 
   double centroEsfera[3] = {0.0,0.0,-100}; 
   
-  double L_amb[3] = {0.05, 0.05, 0.05}; 
   double K_d[3] = {0.7, 0.2, 0.2}; 
   
-  Vector *ambient_light = new Vector(0.05,0.05,0.05);
+  Vector *ambient_light = new Vector(0.3,0.3,0.3);
   Vector *light_intensity = new Vector(0.7,0.7,0.7);
   Vector *light_position = new Vector(0.0,60.0,-30.0);
   Vector *P_o = new Vector(0.0,0.0,0.0);
@@ -92,6 +88,7 @@ int main() {
     10.0,
     40.0
   );
+  theSphere->set_K_a(K_d);
 
   /* adding an object to the scenery */
   theScenery->addObjectToTheScene(theSphere);

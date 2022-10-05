@@ -23,6 +23,9 @@ class Object {
         Vector *get_K_a();
         double* get_center();
         double get_shiness();
+        Vector *get_L_vector(Vector *Direction, Vector *Eye_position, Vector *Light_source_position);
+        Vector *get_Pi(Vector *Direction, Vector *Eye_position);
+        void gimme_your_ambientColor(Vector *Ambient_light_intensity, double *addressToPutTheColor);
 
         int teste ();
 

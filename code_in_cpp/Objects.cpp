@@ -1,4 +1,5 @@
 #include "Objects.h"
+#include <math.h>
 
 void Object::set_Center_of_Object(double center[3]) {
     this->center_Of_Object = new Vector(center[0], center[1], center[2]);
@@ -67,4 +68,38 @@ double* Object::get_center() {
 
 int Object::teste () {
     return 2;
+};
+
+Vector *Object::get_Pi(Vector *Direction, Vector *Eye_position) {
+    Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
+    Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
+    return P_i;
+}
+
+Vector *Object::get_L_vector(
+    Vector *Direction,
+    Vector *Eye_position,
+    Vector *Light_source_position
+){
+    Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
+    Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
+    Vector *Pf_Pi = new Vector(
+        Light_source_position->get_x_Point() - P_i->get_x_Point(), 
+        Light_source_position->get_y_Point() - P_i->get_y_Point(), 
+        Light_source_position->get_z_Point() - P_i->get_z_Point() 
+    );
+    double Pf_pi_norm = sqrt(Pf_Pi->scalar_with(Pf_Pi));          
+    Vector *l_vector = new Vector( 
+        (Pf_Pi->get_x_Point())/Pf_pi_norm, 
+        (Pf_Pi->get_y_Point())/Pf_pi_norm, 
+        (Pf_Pi->get_z_Point())/Pf_pi_norm 
+    );
+    return l_vector;
+};
+
+void Object::gimme_your_ambientColor(Vector *Ambient_light_intensity, double *addressToPutTheColor){
+    Vector *vectorWithColors = Ambient_light_intensity->at_sign_with(this->get_K_a());
+    addressToPutTheColor[0] = vectorWithColors->get_x_Point() * 255;
+    addressToPutTheColor[1] = vectorWithColors->get_y_Point() * 255;
+    addressToPutTheColor[2] = vectorWithColors->get_z_Point() * 255;
 };
