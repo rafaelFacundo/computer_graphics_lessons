@@ -7,6 +7,7 @@ class Object {
         Vector *center_Of_Object;
         Vector *K_d_of_object;
         Vector *K_e_of_object;
+        Vector *K_a_Of_object;
         double shineness_of_object;
         double T_i;
     public:
@@ -14,11 +15,14 @@ class Object {
         void set_Center_of_Object(double center[3]);
         void set_K_e(double K_e[3]);
         void set_K_d(double K_d[3]);
+        void set_K_a(double K_d[3]);
         void set_shine(double shine);
         void set_T_i(double point);
         Vector *get_K_e();
         Vector *get_K_d();
+        Vector *get_K_a();
         double* get_center();
+        double get_shiness();
 
         int teste ();
 

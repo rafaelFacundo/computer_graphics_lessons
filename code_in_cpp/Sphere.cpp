@@ -57,10 +57,10 @@ void Sphere::gime_your_color(
     Vector *Ambient_light_intensity,
     double *addressToPutTheColor
 ) {
- 
-    Vector *P_o_plus_Dir = Eye_position->sum_with_the_vector(Direction);
+    
+    Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
 
-    Vector *P_i = P_o_plus_Dir->multiply_by_a_scalar(this->T_i);  
+    Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
 
     Vector *Pf_Pi = new Vector(
         Light_source_position->get_x_Point() - P_i->get_x_Point(), 
@@ -91,14 +91,9 @@ void Sphere::gime_your_color(
         -(Direction->get_z_Point())/dr_nom 
     );
 
-    double F_d = l_vector->scalar_with(normal); 
-                
-    if (F_d < 0 ) {
-        F_d = 0;
-    }
+    
 
-    Vector *I_eye_d = Light_source_intesity->at_sign_with(this->get_K_d());
-    I_eye_d = I_eye_d->multiply_by_a_scalar(F_d);
+    
 
     /* double I_eye_d[3] = { 
         I_f[0] * K_d[0]*F_d, 
@@ -110,7 +105,7 @@ void Sphere::gime_your_color(
     /* Reaproveitando o valor de F_d, pois é L escalar normal */
 
     Vector* R_vector = normal->multiply_by_a_scalar(2.0);
-    R_vector = R_vector->multiply_by_a_scalar(F_d);
+    R_vector = R_vector->multiply_by_a_scalar(l_vector->scalar_with(normal));
     R_vector = R_vector->minus_with_the_vector(l_vector);
 
     /* double r[3] = {
@@ -121,11 +116,22 @@ void Sphere::gime_your_color(
 
     /* double F_e = prod_Esc(r, vector_v); */
 
+    double F_d = l_vector->scalar_with(normal); 
+                
+    if (F_d < 0 ) {
+        F_d = 0.0;
+    }
+
+    Vector *I_eye_d = Light_source_intesity->at_sign_with(this->get_K_d());
+    I_eye_d = I_eye_d->multiply_by_a_scalar(F_d);
+
     double F_e = R_vector->scalar_with(vector_v);
 
     if (F_e <0 ) {
         F_e = 0;
     };
+
+    F_e = pow(F_e, this->get_shiness());
 
     /* double I_eye_e[3] = { 
         I_f[0] * K_d[0]*F_e, 
@@ -139,9 +145,9 @@ void Sphere::gime_your_color(
     Vector *vectorWithColors = I_eye_d->sum_with_the_vector(I_eye_e);
     vectorWithColors = vectorWithColors->sum_with_the_vector(Ambient_light_intensity);
 
-    addressToPutTheColor[0] = vectorWithColors->get_x_Point();
-    addressToPutTheColor[1] = vectorWithColors->get_y_Point();
-    addressToPutTheColor[2] = vectorWithColors->get_z_Point();
+    addressToPutTheColor[0] = vectorWithColors->get_x_Point() * 255;
+    addressToPutTheColor[1] = vectorWithColors->get_y_Point() * 255;
+    addressToPutTheColor[2] = vectorWithColors->get_z_Point() * 255;
     
 
     /* double and[3] = {

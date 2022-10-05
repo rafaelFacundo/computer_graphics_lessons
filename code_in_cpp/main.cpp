@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include "Sphere.h"
-#include "Plane.h"
+#include "Plan.h"
 #include "SdlFunction.h"
 #include "scenery.h"
 #include <iostream>
@@ -13,10 +13,10 @@ int main() {
   double c[3] = {0.0,10.0,0.0};
   double ke[3] = {0.0,10.0,0.0};
 
-  double wid = 600.0; 
-  double h = 600.0; 
-  double n_lines = 600.0; 
-  double n_collumns = 600.0; 
+  double wid = 60.0; 
+  double h = 60.0; 
+  double n_lines = 500.0; 
+  double n_collumns = 500.0; 
   double dJ = 30.0; 
 
   double Dx = wid/n_lines; 
@@ -26,16 +26,14 @@ int main() {
   double raioDaEsf = 80.0;
 
   double cJan[3] = {0.0,0.0,-dJ}; 
-  double centroEsfera[3] = {0.0,0.0,-90}; 
+  double centroEsfera[3] = {0.0,0.0,-100}; 
   
-  double Fonte_luminosa[3] = {};
-  double L_amb[3] = {0.05, 0.05, 0.05};
-  double I_f[3] = {}; 
-  double K_d[3] = {255,0.0,0.0}; 
+  double L_amb[3] = {0.05, 0.05, 0.05}; 
+  double K_d[3] = {0.7, 0.2, 0.2}; 
   
   Vector *ambient_light = new Vector(0.05,0.05,0.05);
   Vector *light_intensity = new Vector(0.7,0.7,0.7);
-  Vector *light_position = new Vector(0.0,5.0,0.0);
+  Vector *light_position = new Vector(0.0,60.0,-30.0);
   Vector *P_o = new Vector(0.0,0.0,0.0);
 
   
@@ -64,14 +62,27 @@ int main() {
   );
   theScenery->set_Dx_and_Dy(Dx, Dy);
 
-  double color_dChao[3] = {51,178,51};
-  double color_eChao[3] = {0,0,0};
+  double color_dChao[3] = {0.2, 0.7, 0.2};
+  double color_eChao[3] = {0.2, 0.7, 0.2};
   /* instance of a sphere */
-  Plane *thePlane = new Plane();
+  Plan *thePlane = new Plan();
   thePlane->set_PI_Point(0.0, -40.0, 0.0);
   thePlane->set_N_vector(0.0, 1.0, 0.0);
   thePlane->set_K_d(color_dChao);
   thePlane->set_K_e(color_eChao);
+  thePlane->set_K_a(color_dChao);
+  thePlane->set_shine(1.0);
+
+  double K_e_plan_backgrnd[3] = {0.3,0.3,0.7};
+  double K_d_plan_backgrnd[3] = {0.3,0.3,0.7};
+
+  Plan *backgrnd_plan = new Plan();
+  backgrnd_plan->set_PI_Point(0.0,0.0,-200.0);
+  backgrnd_plan->set_N_vector(0.0,0.0,1.0);
+  backgrnd_plan->set_K_d(K_d_plan_backgrnd);
+  backgrnd_plan->set_K_e(K_e_plan_backgrnd);
+  backgrnd_plan->set_K_a(K_d_plan_backgrnd);
+  backgrnd_plan->set_shine(1.0);
 
   /* instance of a sphere */
   Sphere *theSphere = new Sphere(
@@ -79,12 +90,13 @@ int main() {
     K_d,
     K_d,
     10.0,
-    60.0
+    40.0
   );
 
   /* adding an object to the scenery */
   theScenery->addObjectToTheScene(theSphere);
   theScenery->addObjectToTheScene(thePlane);
+  theScenery->addObjectToTheScene(backgrnd_plan);
   
   
 

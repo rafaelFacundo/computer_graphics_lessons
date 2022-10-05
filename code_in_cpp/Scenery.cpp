@@ -112,18 +112,25 @@ Scenery::Scenery(
 */
 int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
     int numberOfObjects = this->get_Object_list_lenght();
-    double minimunPont = 100000000;
-    int point = 100000000;
+    double nearPoint = 0;
+    int indexToReturn = -1;
     for (int i = 0; i < numberOfObjects; i++) {
         double thisPoint = this->list_Of_Objects[i]->does_the_point_intercept(dir, P_o);
-        if (thisPoint > (-1) && thisPoint < minimunPont) {
-            point = i;
-            minimunPont = thisPoint;
-        }else {
-            point = -1;
+        if ( i == 0 && thisPoint == -1 ) {
+            nearPoint = thisPoint;
+            indexToReturn = -1;
+        }else if ( i == 0 && thisPoint != -1 ) {
+            nearPoint = thisPoint;
+            indexToReturn = i;
+        }else if (thisPoint > -1  && nearPoint == -1) {
+            nearPoint = thisPoint;
+            indexToReturn = i;
+        }else if (nearPoint > -1 && thisPoint > -1 && nearPoint > thisPoint){
+            nearPoint = thisPoint;
+            indexToReturn = i;
         }
     }
-    return point;
+    return indexToReturn;
 }
 
 void Scenery::ray_tracing_algorithm() {
@@ -134,7 +141,6 @@ void Scenery::ray_tracing_algorithm() {
             double Xj = - this->width/2 + Dx/2 + c*Dx;
             Vector *dir = new Vector(Xj, Yj, this->z);
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
-            
             if ( objePosiInList > -1) {
                 this->list_Of_Objects[objePosiInList]->gime_your_color(
                     this->get_observer_position(),
@@ -146,9 +152,9 @@ void Scenery::ray_tracing_algorithm() {
                 ); 
                 /* cout << this->list_Of_Objects[objePosiInList]->teste() << '\n'; */
             }else{
-                this->colorToDraw[0] = 140.0;
-                this->colorToDraw[1] = 123.0;
-                this->colorToDraw[2] = 120.0;
+                this->colorToDraw[0] = 0.0;
+                this->colorToDraw[1] = 0.0;
+                this->colorToDraw[2] = 0.0;
             }
 
             /* if (this->colorToDraw[0] == 241.0) {

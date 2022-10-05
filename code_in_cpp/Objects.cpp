@@ -12,6 +12,10 @@ void Object::set_K_e(double K_e[3]) {
 
 void Object::set_K_d(double K_d[3]) {
     this->K_d_of_object = new Vector(K_d[0], K_d[1], K_d[2]);
+};
+
+void Object::set_K_a(double K_a[3]) {
+    this->K_a_Of_object = new Vector(K_a[0], K_a[1], K_a[2]);
     /* this->K_d_of_object->setPoints(K_d[0], K_d[1], K_d[2]); */
 };
 
@@ -29,6 +33,14 @@ Vector* Object::get_K_e(){
 
 Vector* Object::get_K_d(){
     return this->K_e_of_object;
+};
+
+Vector* Object::get_K_a() {
+    return this->K_a_Of_object;
+};
+
+double Object::get_shiness(){
+    return this->shineness_of_object;
 };
 
 Object::Object(){
