@@ -10,21 +10,14 @@ int main() {
   SDL_Window* window = NULL; 
   SDL_Renderer* renderer = NULL;
   SDL_Event event; 
-
-  double wid = 500.0; 
-  double h = 500.0; 
+  double wid = 60.0; 
+  double h = 60.0; 
   double n_lines = 500.0; 
   double n_collumns = 500.0; 
-  double dJ = 80.0; 
-
-  double Dx = wid/n_lines; 
-  double Dy = h/n_collumns;
-
+  double dJ = 30.0; 
   double z = -dJ; 
-
   double cJan[3] = {0.0,0.0,-dJ}; 
   double centroEsfera[3] = {0.0,0.0,-100}; 
-  
   double K_d[3] = {0.7, 0.2, 0.2}; 
   
   Vector *ambient_light = new Vector(0.3,0.3,0.3);
@@ -32,16 +25,13 @@ int main() {
   Vector *light_position = new Vector(0.0,60.0,-30.0);
   Vector *P_o = new Vector(0.0,0.0,0.0);
 
-  
   /* initing the sdl window */
   renderer = init_sdl_window (
-    wid,
-    h,
+    n_lines,
+    n_collumns,
     window,
     renderer
   );
-
-  
 
   /* instanciating the scenery class */
   Scenery *theScenery = new Scenery(
@@ -56,7 +46,6 @@ int main() {
     z,
     renderer
   );
-  theScenery->set_Dx_and_Dy(Dx, Dy);
 
   double color_dChao[3] = {0.2, 0.7, 0.2};
   double color_eChao[3] = {0.2, 0.7, 0.2};

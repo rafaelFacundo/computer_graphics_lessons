@@ -12,12 +12,10 @@ class Scenery {
     Vector* Light_intensity;
     Vector* Ambient_Light_intesity;
     Vector* observer_point;
-    int n_lines;
-    int n_collumns;
-    int height;
-    int width;
-    int Dy;
-    int Dx;
+    double n_lines;
+    double n_collumns;
+    double height;
+    double width;
     double z;
     double* colorToDraw = (double*)malloc(sizeof(double)*3);
     SDL_Renderer *renderer;
@@ -38,9 +36,8 @@ class Scenery {
         void set_ambient_light_intensity(Vector *light);
         void set_observer_postion(Vector *observer);
         void addObjectToTheScene(Object *object);
-        void set_n_lines_and_columns(int lines, int column);
-        void set_width_and_height(int width, int height);
-        void set_Dx_and_Dy(double dx, double dy);
+        void set_n_lines_and_columns(double lines, double column);
+        void set_width_and_height(double width, double height);
         void set_z(int z);
         void set_renderer(SDL_Renderer *renderer);
 
@@ -59,10 +56,10 @@ class Scenery {
             Vector* Light_intensity,
             Vector* Ambient_Light_intesity,
             Vector* observer_point,
-            int n_lines,
-            int n_collumns,
-            int height,
-            int width,
+            double n_lines,
+            double n_collumns,
+            double height,
+            double width,
             double z,
             SDL_Renderer *renderer
         );

@@ -47,11 +47,11 @@ void Scenery::addObjectToTheScene(Object *object) {
     this->list_Of_Objects.push_back(object);
 };
 
-void Scenery::set_n_lines_and_columns(int lines, int column) {
+void Scenery::set_n_lines_and_columns(double lines, double column) {
     this->n_lines = lines;
     this->n_collumns = column;
 };
-void Scenery::set_width_and_height(int width, int height) {
+void Scenery::set_width_and_height(double width, double height) {
     this->width = width;
     this->height = height;
 };
@@ -62,11 +62,6 @@ void Scenery::set_z(int z) {
 void Scenery::set_renderer(SDL_Renderer *renderer) {
     this->renderer = renderer;
 };
-
-void Scenery::set_Dx_and_Dy(double dx, double dy) {
-    this->Dx = dx;
-    this->Dy = dy;
-}
 
 SDL_Renderer* Scenery::get_sceneryRender(){
     return this->renderer;
@@ -89,10 +84,10 @@ Scenery::Scenery(
     Vector* Light_intensity,
     Vector* Ambient_Light_intesity,
     Vector* observer_point,
-    int n_lines,
-    int n_collumns,
-    int height,
-    int width,
+    double n_lines,
+    double n_collumns,
+    double height,
+    double width,
     double z,
     SDL_Renderer *renderer
 ) {
@@ -104,8 +99,7 @@ Scenery::Scenery(
     this->set_width_and_height(width, height);
     this->set_z(z);
     this->set_renderer(renderer);
-};
-
+}
 /* 
     method that run through the list of objects and take the object point 
     that is near of the observer's position
@@ -134,12 +128,18 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
 }
 
 void Scenery::ray_tracing_algorithm() {
-    
+    double Dx = this->width/this->n_lines;
+    double Dy = this->height/this->n_collumns;
+    cout <<this->width << '\n';
+    cout << this->height << '\n';
+    cout << this->n_lines << '\n';
     for (int l = 0; l < this->n_lines; l++) {
         double Yj = this->height/2 - Dy/2 - l*Dy;
+        
         for (int c = 0; c < this->n_collumns; c++ ) {
-            double Xj = - this->width/2 + Dx/2 + c*Dx;
-            Vector *dir = new Vector(Xj, Yj, this->z);
+            double Xj = -this->width/2 + Dx/2 + c*Dx;
+
+            Vector *dir = new Vector(Xj, Yj, -30);
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
 
             if ( objePosiInList > -1) {
