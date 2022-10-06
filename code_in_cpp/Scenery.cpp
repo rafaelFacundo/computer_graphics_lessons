@@ -130,18 +130,12 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
 void Scenery::ray_tracing_algorithm() {
     double Dx = this->width/this->n_lines;
     double Dy = this->height/this->n_collumns;
-    cout <<this->width << '\n';
-    cout << this->height << '\n';
-    cout << this->n_lines << '\n';
     for (int l = 0; l < this->n_lines; l++) {
         double Yj = this->height/2 - Dy/2 - l*Dy;
-        
         for (int c = 0; c < this->n_collumns; c++ ) {
             double Xj = -this->width/2 + Dx/2 + c*Dx;
-
             Vector *dir = new Vector(Xj, Yj, -30);
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
-
             if ( objePosiInList > -1) {
                 bool doesHaveShadow = verify_the_shadow(
                     this->get_light_position(),
@@ -149,7 +143,6 @@ void Scenery::ray_tracing_algorithm() {
                     this->get_observer_position(),
                     objePosiInList
                 );
-
                 if ( !doesHaveShadow ) {
                     this->list_Of_Objects[objePosiInList]->gime_your_color(
                         this->get_observer_position(),
@@ -165,7 +158,6 @@ void Scenery::ray_tracing_algorithm() {
                         this->colorToDraw
                     );
                 };
-                 
             }else{
                 this->colorToDraw[0] = 0.0;
                 this->colorToDraw[1] = 0.0;
