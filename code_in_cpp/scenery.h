@@ -42,6 +42,7 @@ class Scenery {
         void set_renderer(SDL_Renderer *renderer);
 
         double get_minimun(double num1, double num2);
+        double get_z();
         Vector* get_light_position();
         Vector* get_ambient_light_intensity();
         Vector* get_light_intensity();

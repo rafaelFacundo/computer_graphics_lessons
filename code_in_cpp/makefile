@@ -1,11 +1,14 @@
-main: main.o Sphere.o Scenery.o Objects.o Vector.o SdlFunctions.o Plan.o
-	g++ SdlFunctions.o Scenery.o Plan.o Vector.o Objects.o Sphere.o main.o -lSDL2 -o main
+main: main.o Sphere.o Scenery.o Objects.o Vector.o SdlFunctions.o Cylinder.o Plan.o
+	g++ SdlFunctions.o Scenery.o Plan.o Vector.o Objects.o Cylinder.o Sphere.o main.o -lSDL2 -o main
 
 main.o: Sphere.h SdlFunction.h
 	g++ -c main.cpp -o main.o
 
 Scenery.o: scenery.h
 	g++ -c Scenery.cpp -o Scenery.o
+
+Cylinder.o: Cylinder.h
+	g++ -c Cylinder.cpp -o Cylinder.o
 
 Sphere.o: Sphere.cpp Sphere.h returnType.h
 	g++ -c Sphere.cpp -o Sphere.o

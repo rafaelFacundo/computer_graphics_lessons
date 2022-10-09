@@ -67,6 +67,10 @@ SDL_Renderer* Scenery::get_sceneryRender(){
     return this->renderer;
 };
 
+double Scenery::get_z() {
+    return this->z;
+};
+
 double Scenery::get_minimun(double num1, double num2) {
     if ( num1 < num2 ) {
         return num1;
@@ -134,7 +138,7 @@ void Scenery::ray_tracing_algorithm() {
         double Yj = this->height/2 - Dy/2 - l*Dy;
         for (int c = 0; c < this->n_collumns; c++ ) {
             double Xj = -this->width/2 + Dx/2 + c*Dx;
-            Vector *dir = new Vector(Xj, Yj, -30);
+            Vector *dir = new Vector(Xj, Yj, this->get_z());
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
             if ( objePosiInList > -1) {
                 bool doesHaveShadow = verify_the_shadow(

@@ -3,6 +3,7 @@
 #include "Plan.h"
 #include "SdlFunction.h"
 #include "scenery.h"
+#include "Cylinder.h"
 #include <iostream>
 using namespace std;
 
@@ -79,10 +80,34 @@ int main() {
   );
   theSphere->set_K_a(K_d);
 
+  double centroEsfera2[3] = {50.0,0.0,-100}; 
+  double K_d2[3] = {0.7, 0.2, 0.2}; 
+  Sphere *theSphere2 = new Sphere(
+    centroEsfera2,
+    K_d2,
+    K_d2,
+    10.0,
+    40.0
+  );
+  theSphere2->set_K_a(K_d2);
+
+  double cylinderCoeficients[3] =  {0.2, 0.3, 0.8};
+  Cylinder *theCylinder = new Cylinder();
+  theCylinder->set_B_vector(0.0,4.0,-100.0);
+  theCylinder->set_radius(40.0/3.0);
+  theCylinder->set_height(100.0);
+  theCylinder->set_unitary_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
+  theCylinder->set_K_a(cylinderCoeficients);
+  theCylinder->set_K_a(cylinderCoeficients);
+  theCylinder->set_K_a(cylinderCoeficients);
+
+
   /* adding an object to the scenery */
   theScenery->addObjectToTheScene(theSphere);
   theScenery->addObjectToTheScene(thePlane);
   theScenery->addObjectToTheScene(backgrnd_plan);
+  //theScenery->addObjectToTheScene(theSphere2);
+  theScenery->addObjectToTheScene(theCylinder);
   
   
 
