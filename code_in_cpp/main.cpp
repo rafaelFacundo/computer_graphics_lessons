@@ -93,13 +93,14 @@ int main() {
 
   double cylinderCoeficients[3] =  {0.2, 0.3, 0.8};
   Cylinder *theCylinder = new Cylinder();
-  theCylinder->set_B_vector(0.0,4.0,-100.0);
+  theCylinder->set_B_vector(0.0,0.0,-100.0);
   theCylinder->set_radius(40.0/3.0);
   theCylinder->set_height(100.0);
   theCylinder->set_unitary_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
   theCylinder->set_K_a(cylinderCoeficients);
-  theCylinder->set_K_a(cylinderCoeficients);
-  theCylinder->set_K_a(cylinderCoeficients);
+  theCylinder->set_K_d(cylinderCoeficients);
+  theCylinder->set_K_e(cylinderCoeficients);
+  theCylinder->set_shine(5);
 
 
   /* adding an object to the scenery */

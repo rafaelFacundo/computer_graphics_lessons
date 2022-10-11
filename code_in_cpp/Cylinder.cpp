@@ -48,11 +48,77 @@ void Cylinder::gime_your_color(
     double *addressToPutTheColor
 ){
 
-    addressToPutTheColor[0] = 250.0;
-    addressToPutTheColor[1] = 109.0;
-    addressToPutTheColor[2] = 253.0;
-    
+    Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
 
+    Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
+
+    Vector *Pf_Pi = new Vector(
+        Light_source_position->get_x_Point() - P_i->get_x_Point(), 
+        Light_source_position->get_y_Point() - P_i->get_y_Point(), 
+        Light_source_position->get_z_Point() - P_i->get_z_Point() 
+    );
+
+    double Pf_pi_norm = sqrt(Pf_Pi->scalar_with(Pf_Pi));
+                
+    Vector *l_vector = new Vector( 
+        (Pf_Pi->get_x_Point())/Pf_pi_norm, 
+        (Pf_Pi->get_y_Point())/Pf_pi_norm,
+        (Pf_Pi->get_z_Point())/Pf_pi_norm
+    );
+
+    Vector *Pi_m_B = P_i->minus_with_the_vector(this->get_B_vector());
+    double Pi_m_b_Scalar_U = Pi_m_B->scalar_with(this->get_unitary_vector());
+    /* ================================================================================= */
+    /* Vector_UpB = U_times_Pi_m_b_ScalarU  */
+
+    Vector *Vector_UpB = this->get_unitary_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U);
+
+    Vector *Pi_minus_Vector_UpB = P_i->minus_with_the_vector(Vector_UpB);
+
+    double norm_of_Pi_minus_Vector_UpB = sqrt(Pi_minus_Vector_UpB->scalar_with(Pi_minus_Vector_UpB));
+
+    Vector *normal = Pi_minus_Vector_UpB->multiply_by_a_scalar(1/norm_of_Pi_minus_Vector_UpB);
+
+                
+    double dr_nom = sqrt(Direction->scalar_with(Direction));
+    Vector *vector_v = new Vector( 
+        -(Direction->get_x_Point())/dr_nom, 
+        -(Direction->get_y_Point())/dr_nom, 
+        -(Direction->get_z_Point())/dr_nom 
+    );
+
+
+    Vector* R_vector = normal->multiply_by_a_scalar(2.0);
+    R_vector = R_vector->multiply_by_a_scalar(l_vector->scalar_with(normal));
+    R_vector = R_vector->minus_with_the_vector(l_vector);
+
+    double F_d = l_vector->scalar_with(normal); 
+                
+    if (F_d < 0 ) {
+        F_d = 0.0;
+    }
+
+    Vector *I_eye_d = Light_source_intesity->at_sign_with(this->get_K_d());
+    I_eye_d = I_eye_d->multiply_by_a_scalar(F_d);
+
+    double F_e = R_vector->scalar_with(vector_v);
+
+    if (F_e <0 ) {
+        F_e = 0;
+    };
+
+    F_e = pow(F_e, this->get_shiness());
+
+    Vector *I_eye_e = Light_source_intesity->at_sign_with(this->get_K_e());
+    I_eye_e = I_eye_e->multiply_by_a_scalar(F_e);
+
+    Vector *vectorWithColors = I_eye_d->sum_with_the_vector(I_eye_e);
+    vectorWithColors = vectorWithColors->sum_with_the_vector(Ambient_light_intensity->at_sign_with(this->get_K_a()));
+ 
+    addressToPutTheColor[0] = vectorWithColors->get_x_Point() * 255;
+    addressToPutTheColor[1] = vectorWithColors->get_y_Point() * 255;
+    addressToPutTheColor[2] = vectorWithColors->get_z_Point() * 255;
+    
 };
 
 bool Cylinder::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti) {
@@ -67,7 +133,7 @@ bool Cylinder::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti) {
     Vector *Vector_UpB = this->get_unitary_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U);
     double norm_of_Vector_UpB = sqrt(Vector_UpB->scalar_with(Vector_UpB));
 
-    if ( norm_of_Vector_UpB > 0 && norm_of_Vector_UpB < this->get_height()) {
+    if ( Pi_m_b_Scalar_U > 0 && Pi_m_b_Scalar_U < this->get_height()) {
         return true;
     }else {
         return false;
