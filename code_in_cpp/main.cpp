@@ -4,6 +4,7 @@
 #include "SdlFunction.h"
 #include "scenery.h"
 #include "Cylinder.h"
+#include "Cone.h"
 #include <iostream>
 using namespace std;
 
@@ -102,13 +103,27 @@ int main() {
   theCylinder->set_K_e(cylinderCoeficients);
   theCylinder->set_shine(5);
 
+  double coeficients_Cone[3] = {0.8, 0.3, 0.2};
+  Cone *theCone = new Cone();
+  theCone->set_K_a(coeficients_Cone);
+  theCone->set_K_d(coeficients_Cone);
+  theCone->set_K_e(coeficients_Cone);
+  theCone->set_radius(60);
+  theCone->set_height(20);
+  theCone->set_angle(72);
+  theCone->set_unitary_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
+  theCone->set_B_vector(0.0,120.0,-100.0);
+  theCone->set_Vertice_vector(0.0,140.0,-100.0);
+
+
 
   /* adding an object to the scenery */
-  theScenery->addObjectToTheScene(theSphere);
+  //theScenery->addObjectToTheScene(theSphere);
   theScenery->addObjectToTheScene(thePlane);
   theScenery->addObjectToTheScene(backgrnd_plan);
   //theScenery->addObjectToTheScene(theSphere2);
-  theScenery->addObjectToTheScene(theCylinder);
+  //theScenery->addObjectToTheScene(theCylinder);
+  theScenery->addObjectToTheScene(theCone);
   
   
 
