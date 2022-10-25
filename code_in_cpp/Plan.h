@@ -6,6 +6,7 @@ class Plan : public Object {
     private:
         Vector* Ppi_Point;
         Vector* N_vector;
+        int typeOfThisObject = 1;
     public:
 
     Plan();
@@ -26,6 +27,6 @@ class Plan : public Object {
         double *addressToPutTheColor
     );
 
-    double does_the_point_intercept(Vector *dir, Vector *P_o) ;
+    returnType does_the_point_intercept(Vector *dir, Vector *P_o) ;
     
 };

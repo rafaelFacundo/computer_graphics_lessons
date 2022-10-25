@@ -9,6 +9,8 @@ class Cone : public Object {
         double height;
         double radius;
         double angle;
+        int typeOfThisObject = 3;
+        bool doesHaveLid;
     
     public:
         void set_B_vector(double x, double y, double z);
@@ -17,6 +19,8 @@ class Cone : public Object {
         void set_radius(double radius);
         void set_height(double height);
         void set_angle(double angle);
+        void setLid(bool haveOrNot);
+        bool thisConeHaveLid();
         double get_radius();
         double get_height();
         double get_angle();
@@ -36,5 +40,5 @@ class Cone : public Object {
             double *addressToPutTheColor
         );
 
-        double does_the_point_intercept(Vector *dir, Vector *P_o);
+        returnType does_the_point_intercept(Vector *dir, Vector *P_o);
 };

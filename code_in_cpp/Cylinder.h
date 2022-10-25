@@ -7,6 +7,7 @@ class Cylinder : public Object {
     Vector *B_vector;
     double height;
     double radius;
+    int typeOfThisObject = 2;
 
     public:
         void set_B_vector(double x, double y, double z);
@@ -31,6 +32,6 @@ class Cylinder : public Object {
             double *addressToPutTheColor
         );
 
-        double does_the_point_intercept(Vector *dir, Vector *P_o);
+        returnType does_the_point_intercept(Vector *dir, Vector *P_o);
         
 };

@@ -112,9 +112,17 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
     int numberOfObjects = this->get_Object_list_lenght();
     double nearPoint = 0;
     int indexToReturn = -1;
+    
     for (int i = 0; i < numberOfObjects; i++) {
-        double thisPoint = this->list_Of_Objects[i]->does_the_point_intercept(dir, P_o);
-        if ( i == 0 && thisPoint == -1 ) {
+        returnType result = this->list_Of_Objects[i]->does_the_point_intercept(dir, P_o);
+        if (result.doesIntersect && indexToReturn == -1) {
+            nearPoint =  result.point_of_intersection;
+            indexToReturn = i;
+        }else if (result.doesIntersect && result.point_of_intersection < nearPoint) {
+            nearPoint =  result.point_of_intersection;
+            indexToReturn = i;
+        }
+        /* if ( i == 0 && thisPoint == -1 ) {
             nearPoint = thisPoint;
             indexToReturn = -1;
         }else if ( i == 0 && thisPoint != -1 ) {
@@ -126,7 +134,7 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
         }else if (nearPoint > -1 && thisPoint > -1 && nearPoint > thisPoint){
             nearPoint = thisPoint;
             indexToReturn = i;
-        }
+        } */
     }
     return indexToReturn;
 }
@@ -134,6 +142,7 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
 void Scenery::ray_tracing_algorithm() {
     double Dx = this->width/this->n_lines;
     double Dy = this->height/this->n_collumns;
+    
     for (int l = 0; l < this->n_lines; l++) {
         double Yj = this->height/2 - Dy/2 - l*Dy;
         for (int c = 0; c < this->n_collumns; c++ ) {
@@ -205,8 +214,15 @@ bool Scenery::verify_the_shadow(
 
     for (int i = 0; i < numberOfObjects; i++) {
         if ( i != indexOfObject ) {
-            double thisPoint = this->list_Of_Objects[i]->does_the_point_intercept(L_vector, P_i);
-            if ( i == 0 && thisPoint == -1 ) {
+            returnType result = this->list_Of_Objects[i]->does_the_point_intercept(L_vector, P_i);
+            if (result.doesIntersect && indexOfInterceptedObje == -1) {
+                nearPoint =  result.point_of_intersection;
+                indexOfInterceptedObje = i;
+            }else if (result.doesIntersect && result.point_of_intersection < nearPoint) {
+                nearPoint =  result.point_of_intersection;
+                indexOfInterceptedObje = i;
+            }
+            /* if ( i == 0 && thisPoint == -1 ) {
                 nearPoint = thisPoint;
                 indexOfInterceptedObje = -1;
             }else if ( i == 0 && thisPoint != -1 ) {
@@ -218,9 +234,9 @@ bool Scenery::verify_the_shadow(
             }else if (nearPoint > -1 && thisPoint > -1 && nearPoint > thisPoint){
                 nearPoint = thisPoint;
                 indexOfInterceptedObje = i;
-            }
+            } */
 
-            if(thisPoint > Pf_pi_norm){
+            if(result.point_of_intersection > Pf_pi_norm){
                 indexOfInterceptedObje = -1;
             }
 

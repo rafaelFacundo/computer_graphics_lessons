@@ -140,7 +140,8 @@ bool Cylinder::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti) {
     };
 };
 
-double Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
+returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
+    returnType result;
     Vector *d_scalar_u = this->get_unitary_vector()->multiply_by_a_scalar(dir->scalar_with(this->get_unitary_vector()));
     Vector *w_vector = dir->minus_with_the_vector(d_scalar_u);
     Vector *Po_minus_B = P_o->minus_with_the_vector(this->get_B_vector());
@@ -152,6 +153,11 @@ double Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
     double b = 2 * (v_vector->scalar_with(w_vector));
     double c = v_vector->scalar_with(v_vector) - pow(this->get_radius(), 2);
     double delta = pow(b,2) - 4*a*c;
+
+    result.point_of_intersection = -1.0;
+    result.doesIntersect = false;
+    result.doesTheRayInterceptSomeLid = false;
+    result.typeOfTheInterceptedObject = this->getTypeOfThisObject();
 
     if ( delta > 0 ) {
 
@@ -165,22 +171,21 @@ double Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
             nearPoint = Ti_2;
         }
 
-        
-
         bool Ti_1_verification = this->is_Ti_a_valid_point(P_o, dir, Ti_1);
         bool Ti_2_verification = this->is_Ti_a_valid_point(P_o, dir, Ti_2);
         
         if (Ti_1_verification == true && Ti_2_verification == false) {
-                return Ti_1;
+            result.point_of_intersection = Ti_1;
+            result.doesIntersect = true;
         }else if (Ti_1_verification == false && Ti_2_verification == true) {
-                return Ti_2;
+            result.point_of_intersection = Ti_2;
+            result.doesIntersect = true;
         }else if (Ti_1_verification == true && Ti_2_verification == true) {
-                return nearPoint;
-        }else {
-                return (-1.0);
-        };
-    
+            result.point_of_intersection = nearPoint;
+            result.doesIntersect = true;
+        }
+        return result;
     }else {
-        return (-1.0);
+        return result;
     };
 };

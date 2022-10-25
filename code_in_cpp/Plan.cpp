@@ -87,22 +87,24 @@ void Plan::gime_your_color(
 
 };
 
-double Plan::does_the_point_intercept(Vector *dir, Vector *P_o) {
+returnType Plan::does_the_point_intercept(Vector *dir, Vector *P_o) {
+    returnType result;
     Vector* Ppi_minus_P_o = this->Ppi_Point->minus_with_the_vector(P_o);
     double Ppi_mns_Po_scalar_N = Ppi_minus_P_o->scalar_with(this->get_N_vector());
     double D_scalar_n = dir->scalar_with(this->get_N_vector());
-
+    result.point_of_intersection = -1.0;
+    result.doesIntersect = false;
+    result.doesTheRayInterceptSomeLid = false;
+    result.typeOfTheInterceptedObject = this->getTypeOfThisObject();
     if ( D_scalar_n == 0 ) {
-        return (-1.0);
+        return result;
     }
-
     double T_i = Ppi_mns_Po_scalar_N / D_scalar_n;
-
     if ( T_i > 0 ) {
-        
         this->set_T_i(T_i);
-        return T_i;
+        result.point_of_intersection = T_i;
+        result.doesIntersect = true;
+        return result;
     }
-
-    return (-1.0);
+    return result;
 };

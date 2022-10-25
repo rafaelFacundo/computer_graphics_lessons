@@ -24,25 +24,29 @@ Sphere::Sphere(
 };
 
 /* Method that says if the ray intersect the sphere */
-double Sphere::does_the_point_intercept( Vector *dir, Vector *P_o) {
-    double pointToReturn = 0.0;
+returnType Sphere::does_the_point_intercept( Vector *dir, Vector *P_o) {
+    returnType result;
     Vector *w = P_o->minus_with_the_vector(this->center_Of_Object);
     double a = dir->scalar_with(dir); 
     double b = 2 * w->scalar_with(dir); 
     double cx = w->scalar_with(w) - pow(this->Sphere_radius, 2); 
     double delta = pow(b,2) - 4*a*cx;
-    
  
     if (delta > 0) {
-        
         double T_i = (-b - sqrt(delta))/(2*a);
-        pointToReturn = T_i;
+        result.point_of_intersection = T_i;
+        result.doesIntersect = true;
+        result.doesTheRayInterceptSomeLid = false;
+        result.typeOfTheInterceptedObject = this->getTypeOfThisObject();
         this->set_T_i(T_i);
     }else {
-        pointToReturn = -1.0;
+        result.point_of_intersection = -1.0;
+        result.doesIntersect = false;
+        result.doesTheRayInterceptSomeLid = false;
+        result.typeOfTheInterceptedObject = this->getTypeOfThisObject();
     }
 
-    return pointToReturn;
+    return result;
 }
 
 double Sphere::get_radius() {

@@ -10,6 +10,8 @@ class Object {
         Vector *K_a_Of_object;
         double shineness_of_object;
         double T_i;
+        int typeOfThisObject;
+
     public:
         /* sets and gets of the object atributtes */
         void set_Center_of_Object(double center[3]);
@@ -23,6 +25,7 @@ class Object {
         Vector *get_K_a();
         double* get_center();
         double get_shiness();
+        int getTypeOfThisObject();
         Vector *get_L_vector(Vector *Direction, Vector *Eye_position, Vector *Light_source_position);
         Vector *get_Pi(Vector *Direction, Vector *Eye_position);
         void gimme_your_ambientColor(Vector *Ambient_light_intensity, double *addressToPutTheColor);
@@ -49,5 +52,5 @@ class Object {
             double *addressToPutTheColor
         ) = 0;
 
-        virtual double does_the_point_intercept(Vector *dir, Vector *P_o) = 0;
+        virtual returnType does_the_point_intercept(Vector *dir, Vector *P_o) = 0;
 };

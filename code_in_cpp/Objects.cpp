@@ -44,6 +44,10 @@ double Object::get_shiness(){
     return this->shineness_of_object;
 };
 
+int Object::getTypeOfThisObject(){
+    return this->typeOfThisObject;
+};
+
 Object::Object(){
     
 }
