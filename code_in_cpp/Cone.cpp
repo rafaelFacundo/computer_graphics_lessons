@@ -59,9 +59,6 @@ bool Cone::thisConeHaveLid(){
     return this->doesHaveLid;
 };
 
-bool Cone::thisConeHaveLid(){
-    return this->doesHaveLid;
-};
 
 void Cone::gime_your_color(
     Vector *Eye_position,
@@ -88,8 +85,10 @@ bool Cone::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti){
     double norm_of_Vector_UpB = sqrt(Vector_UpB->scalar_with(Vector_UpB));
 
     if ( Pi_m_b_Scalar_U > 0 && Pi_m_b_Scalar_U < this->get_height()) {
+
         return true;
     }else {
+
         return false;
     };
 };
@@ -119,26 +118,31 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
 
     double delta = pow(b,2) - a*c;
 
-    if ( a != 0 && delta >= 0 ) {
+    if (delta >= 0 ) {
+
         double Ti_1 = (-b + sqrt(delta))/2*a;
         double Ti_2 = (-b - sqrt(delta))/2*a;
         bool Ti_1_verification = is_Ti_a_valid_point(P_o, dir, Ti_1);
         bool Ti_2_verification = is_Ti_a_valid_point(P_o, dir, Ti_2);
-        
-        if (Ti_2_verification){
-            result.point_of_intersection = Ti_2;
-            result.doesIntersect = false;
+
+
+        if (Ti_1_verification && Ti_2_verification && Ti_1 < Ti_2){
+
+            result.point_of_intersection = Ti_1;
+            result.doesIntersect = true;
         }else if (Ti_1_verification && Ti_2_verification && Ti_1 > Ti_2) {
+
             result.point_of_intersection = Ti_2;
-            result.doesIntersect = false;
+            result.doesIntersect = true;
         }
     }else if (delta == 0) {
+
         double Ti_1 = (-b + sqrt(delta))/2*a;
         result.point_of_intersection = Ti_1;
-        result.doesIntersect = false;
+        result.doesIntersect = true;
     }
 
     return result;
 
-    
+
 };

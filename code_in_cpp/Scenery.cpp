@@ -116,6 +116,7 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
     for (int i = 0; i < numberOfObjects; i++) {
         returnType result = this->list_Of_Objects[i]->does_the_point_intercept(dir, P_o);
         if (result.doesIntersect && indexToReturn == -1) {
+    
             nearPoint =  result.point_of_intersection;
             indexToReturn = i;
         }else if (result.doesIntersect && result.point_of_intersection < nearPoint) {
