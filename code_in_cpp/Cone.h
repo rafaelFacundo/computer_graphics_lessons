@@ -4,29 +4,32 @@
 class Cone : public Object {
     private:
         Vector *vertice_vector;
+        Vector *direction_vector;
         Vector *unitary_vector;
         Vector *B_vector;
+        double T_i;
         double height;
         double radius;
-        double angle;
-        int typeOfThisObject = 3;
-        bool doesHaveLid;
-    
+        double cos_angle;
+        bool haveLid;
+
     public:
         void set_B_vector(double x, double y, double z);
-        void set_unitary_vector(double x, double y, double z);
+        void set_B_vector(Vector *B);
+        void set_direction_vector(double x, double y, double z);
         void set_Vertice_vector(double x, double y, double z);
         void set_radius(double radius);
         void set_height(double height);
         void set_angle(double angle);
-        void setLid(bool haveOrNot);
-        bool thisConeHaveLid();
         double get_radius();
         double get_height();
         double get_angle();
+        Vector* getTop();
+        Vector* get_direction_vector();
         Vector* get_unitary_vector();
         Vector* get_B_vector();
         Vector* get_Vertice_vector();
+        returnType didThePointIntercepted(Vector *dir, Vector *P_o);
         Cone();
 
         bool is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti);

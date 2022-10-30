@@ -9,19 +9,19 @@
 using namespace std;
 
 int main() {
-  SDL_Window* window = NULL; 
+  SDL_Window* window = NULL;
   SDL_Renderer* renderer = NULL;
-  SDL_Event event; 
-  double wid = 60.0; 
-  double h = 60.0; 
-  double n_lines = 500.0; 
-  double n_collumns = 500.0; 
-  double dJ = 30.0; 
-  double z = -dJ; 
-  double cJan[3] = {0.0,0.0,-dJ}; 
-  double centroEsfera[3] = {0.0,0.0,-100}; 
-  double K_d[3] = {0.7, 0.2, 0.2}; 
-  
+  SDL_Event event;
+  double wid = 60.0;
+  double h = 60.0;
+  double n_lines = 500.0;
+  double n_collumns = 500.0;
+  double dJ = 30.0;
+  double z = -dJ;
+  double cJan[3] = {0.0,0.0,-dJ};
+  double centroEsfera[3] = {0.0,0.0,-100};
+  double K_d[3] = {0.7, 0.2, 0.2};
+
   Vector *ambient_light = new Vector(0.3,0.3,0.3);
   Vector *light_intensity = new Vector(0.7,0.7,0.7);
   Vector *light_position = new Vector(0.0,60.0,-30.0);
@@ -81,8 +81,8 @@ int main() {
   );
   theSphere->set_K_a(K_d);
 
-  double centroEsfera2[3] = {50.0,0.0,-100}; 
-  double K_d2[3] = {0.7, 0.2, 0.2}; 
+  double centroEsfera2[3] = {50.0,0.0,-100};
+  double K_d2[3] = {0.7, 0.2, 0.2};
   Sphere *theSphere2 = new Sphere(
     centroEsfera2,
     K_d2,
@@ -108,12 +108,12 @@ int main() {
   theCone->set_K_a(coeficients_Cone);
   theCone->set_K_d(coeficients_Cone);
   theCone->set_K_e(coeficients_Cone);
-  theCone->set_radius(60);
-  theCone->set_height(20);
-  theCone->set_angle(72);
-  theCone->set_unitary_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
-  theCone->set_B_vector(0.0,120.0,-100.0);
-  theCone->set_Vertice_vector(0.0,140.0,-100.0);
+  theCone->set_radius(15);
+  theCone->set_height(5);
+  //theCone->set_direction_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
+  theCone->set_direction_vector(0,1,0);
+  //theCone->set_B_vector(theCylinder->get_center_top_vector());
+  theCone->set_B_vector(0.0, 0.0, -100.0);
 
 
 
@@ -124,26 +124,26 @@ int main() {
   //theScenery->addObjectToTheScene(theSphere2);
   //theScenery->addObjectToTheScene(theCylinder);
   theScenery->addObjectToTheScene(theCone);
-  
-  
+
+
 
   /* calling the ray tracing algorithm */
   theScenery->ray_tracing_algorithm();
 
   /* this code below is treating the window's */
-  int isRunning = 1; 
-  while (isRunning) { 
-      while (SDL_PollEvent (&event) != 0) { 
-          if(event.type == SDL_QUIT) 
-          isRunning = 0; 
+  int isRunning = 1;
+  while (isRunning) {
+      while (SDL_PollEvent (&event) != 0) {
+          if(event.type == SDL_QUIT)
+          isRunning = 0;
       }
-  SDL_UpdateWindowSurface (window); 
-  } 
-  SDL_DestroyWindow (window); 
-  SDL_Quit ();  
+  SDL_UpdateWindowSurface (window);
+  }
+  SDL_DestroyWindow (window);
+  SDL_Quit ();
 
-  
-  
+
+
 
   return 0;
-} 
+}
