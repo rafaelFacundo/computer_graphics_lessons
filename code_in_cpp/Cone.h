@@ -11,7 +11,8 @@ class Cone : public Object {
         double height;
         double radius;
         double cos_angle;
-        bool haveLid;
+        bool haveLid = false;
+        bool intercepted = false;
 
     public:
         void set_B_vector(double x, double y, double z);
@@ -30,6 +31,8 @@ class Cone : public Object {
         Vector* get_B_vector();
         Vector* get_Vertice_vector();
         returnType didThePointIntercepted(Vector *dir, Vector *P_o);
+        void putOrRemoveLid(bool put);
+        void setInterception(bool intercept);
         Cone();
 
         bool is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti);

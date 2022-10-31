@@ -119,8 +119,8 @@ int main() {
 
   /* adding an object to the scenery */
   //theScenery->addObjectToTheScene(theSphere);
-  //theScenery->addObjectToTheScene(thePlane);
-  //theScenery->addObjectToTheScene(backgrnd_plan);
+  theScenery->addObjectToTheScene(thePlane);
+  theScenery->addObjectToTheScene(backgrnd_plan);
   //theScenery->addObjectToTheScene(theSphere2);
   //theScenery->addObjectToTheScene(theCylinder);
   theScenery->addObjectToTheScene(theCone);

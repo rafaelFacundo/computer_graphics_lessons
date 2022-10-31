@@ -7,6 +7,13 @@ Cone::Cone():Object(){
 
 };
 
+void Cone::putOrRemoveLid(bool put){
+    this->haveLid = put;
+};
+void Cone::setInterception(bool intercept){
+    this->intercepted = intercept;
+};
+
 void Cone::set_direction_vector(double x, double y, double z){
     this->direction_vector = new Vector(x,y,z);
     this->unitary_vector = direction_vector->get_this_vector_unitary();
@@ -75,6 +82,7 @@ void Cone::gime_your_color(
     Vector *Ambient_light_intensity,
     double *addressToPutTheColor
 ){
+    Vector *normal;
 
     Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
 
@@ -105,11 +113,17 @@ void Cone::gime_your_color(
 
     double norm_of_Pi_minus_Vector_UpB = sqrt(Pi_minus_Vector_UpB->scalar_with(Pi_minus_Vector_UpB));
 
-    Vector *top_minus_pi = this->getTop()->minus_with_the_vector(P_i);
 
-    Vector *Top_minus_pi_vecProd_Direc = top_minus_pi->vectorProductWith(this->get_unitary_vector());
 
-    Vector *normal = (Top_minus_pi_vecProd_Direc->vectorProductWith(top_minus_pi))->get_this_vector_unitary();
+    if (this->intercepted) {
+        normal = this->get_unitary_vector()->multiply_by_a_scalar(-1);
+        cout << "aasdfg" << '\n';
+    }else {
+        Vector *top_minus_pi = this->getTop()->minus_with_the_vector(P_i);
+        Vector *Top_minus_pi_vecProd_Direc = top_minus_pi->vectorProductWith(this->get_unitary_vector());
+        normal = (Top_minus_pi_vecProd_Direc->vectorProductWith(top_minus_pi))->get_this_vector_unitary();
+    }
+
 
 
     double dr_nom = sqrt(Direction->scalar_with(Direction));
@@ -187,6 +201,7 @@ returnType Cone::didThePointIntercepted(Vector *dir, Vector *P_o) {
         this->set_T_i(T_i);
         result.point_of_intersection = T_i;
         result.doesIntersect = true;
+        this->setInterception(true);
         return result;
     }
     return result;
@@ -234,12 +249,12 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
         bool Ti2_verification = is_Ti_a_valid_point(P_o, dir, Ti_2);
 
         if ( Ti1_verification && Ti2_verification && Ti_1 < Ti_2 ) {
-           
+
             this->set_T_i(Ti_1);
             result.point_of_intersection = Ti_1;
             result.doesIntersect = true;
         }else if ( Ti1_verification && Ti2_verification && Ti_1 >= Ti_2 ) {
-            
+
             this->set_T_i(Ti_2);
             result.point_of_intersection = Ti_2;
             result.doesIntersect = true;
@@ -267,6 +282,6 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
 
 
 
-    }  
+    }
     return result;
 };
