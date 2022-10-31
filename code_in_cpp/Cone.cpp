@@ -9,7 +9,6 @@ Cone::Cone():Object(){
 
 void Cone::set_direction_vector(double x, double y, double z){
     this->direction_vector = new Vector(x,y,z);
-    cout << "Norma é: " << this->direction_vector->getNormOfThisVector() << '\n';
     this->unitary_vector = direction_vector->get_this_vector_unitary();
 };
 
@@ -159,15 +158,11 @@ bool Cone::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti){
     /* Pi_m_B = Pi_minus_B_vector  */
     Vector *Pi_m_B = Pi->minus_with_the_vector(this->get_B_vector());
     double Pi_m_b_Scalar_U = Pi_m_B->scalar_with(this->get_direction_vector());
-
     //cout << Pi_m_b_Scalar_U << '\n';
-
     /* Vector_UpB = U_times_Pi_m_b_ScalarU  */
     Vector *Vector_UpB = this->get_direction_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U);
-    double norm_of_Vector_UpB = sqrt(Vector_UpB->scalar_with(Vector_UpB));
-
     if ( Pi_m_b_Scalar_U >= 0 && Pi_m_b_Scalar_U <= this->get_height()) {
-        this->T_i = Ti;
+
         return true;
     }else {
         return false;
@@ -204,52 +199,52 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
     result.doesTheRayInterceptSomeLid = false;
     result.typeOfTheInterceptedObject = this->getTypeOfThisObject();
 
+
     this->cos_angle = pow(this->height,2)/(pow(this->height,2) + pow(this->radius,2));
     double nearPoint;
     bool Ti_verification = false;
-    Vector *little_v_vector = vertice_vector->minus_with_the_vector(P_o);
-    double square_of_cos = pow(cos_angle, 2);
+    Vector *little_v_vector = this->vertice_vector->minus_with_the_vector(P_o);
+    double square_of_cos = this->cos_angle;
 
     //cout << cos(this->get_angle()) << '\n';
 
     /* A */
-    double square_of_dir_scalar_unit_vector = pow(dir->scalar_with(this->get_direction_vector()), 2);
+    double square_of_dir_scalar_unit_vector = pow(dir->scalar_with(this->get_unitary_vector()), 2);
     double Dir_scalar_dir_times_square_of_cos = dir->scalar_with(dir) * this->cos_angle;
     double a = square_of_dir_scalar_unit_vector - Dir_scalar_dir_times_square_of_cos;
 
     /* B */
     double v_scalar_dr_times_square_of_cos = little_v_vector->scalar_with(dir) * this->cos_angle;
     /* (v scalar n) x (dir scalar n ) = v_sc_n_times_dir_sc_n */
-    double v_sc_n_times_dir_sc_n = little_v_vector->scalar_with(this->get_direction_vector()) * dir->scalar_with(this->get_direction_vector());
-    double b = v_scalar_dr_times_square_of_cos - v_sc_n_times_dir_sc_n;
+    double v_sc_n_times_dir_sc_n = little_v_vector->scalar_with(this->get_unitary_vector()) * dir->scalar_with(this->get_unitary_vector());
+    double b = 2*(v_scalar_dr_times_square_of_cos - v_sc_n_times_dir_sc_n);
 
     /* C */
-    double v_scalar_unitary_vector = pow(little_v_vector->scalar_with(this->get_direction_vector()), 2);
+    double v_scalar_unitary_vector = pow(little_v_vector->scalar_with(this->get_unitary_vector()), 2);
     double v_scalar_v_times_square_of_cos = little_v_vector->scalar_with(little_v_vector) * this->cos_angle;
     double c = v_scalar_unitary_vector - v_scalar_v_times_square_of_cos;
 
     double delta = pow(b, 2) - 4*a*c;
 
-
-
     if (delta > 0) {
-        double Ti_1 = (-b + sqrt(delta))/ a;
-        double Ti_2 = (-b - sqrt(delta))/ a;
+        double Ti_1 = (-b + sqrt(delta))/ (2*a);
+        double Ti_2 = (-b - sqrt(delta))/ (2*a);
 
         bool Ti1_verification = is_Ti_a_valid_point(P_o, dir, Ti_1);
         bool Ti2_verification = is_Ti_a_valid_point(P_o, dir, Ti_2);
 
-        /* cout << "Ti1: " << Ti1_verification << '\n';
-        cout << "Ti2: " << Ti2_verification << '\n'; */
-
         if ( Ti1_verification && Ti2_verification && Ti_1 < Ti_2 ) {
-
+           
+            this->set_T_i(Ti_1);
             result.point_of_intersection = Ti_1;
             result.doesIntersect = true;
         }else if ( Ti1_verification && Ti2_verification && Ti_1 >= Ti_2 ) {
+            
+            this->set_T_i(Ti_2);
             result.point_of_intersection = Ti_2;
             result.doesIntersect = true;
-        }/* else if ( Ti1_verification && !Ti2_verification ) {
+
+        } else if ( Ti1_verification) {
             returnType T2_lid_verif = didThePointIntercepted(dir, P_o);
             if (T2_lid_verif.doesIntersect && Ti_2 <= Ti_1) {
                 result.point_of_intersection = Ti_2;
@@ -258,7 +253,7 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
                 result.point_of_intersection = Ti_1;
                 result.doesIntersect = true;
             }
-        }else if (Ti2_verification && !Ti1_verification) {
+        }else if (Ti2_verification) {
             returnType T1_lid_verif = didThePointIntercepted(dir, P_o);
             if (T1_lid_verif.doesIntersect && Ti_1 <= Ti_2) {
                 result.point_of_intersection = Ti_1;
@@ -267,12 +262,11 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
                 result.point_of_intersection = Ti_2;
                 result.doesIntersect = true;
             }
-        } */
+        }
 
 
 
 
-    }
-
+    }  
     return result;
 };

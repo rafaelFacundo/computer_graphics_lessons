@@ -109,9 +109,9 @@ int main() {
   theCone->set_K_d(coeficients_Cone);
   theCone->set_K_e(coeficients_Cone);
   theCone->set_radius(15);
-  theCone->set_height(5);
+  theCone->set_height(80);
   //theCone->set_direction_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
-  theCone->set_direction_vector(0,1,0);
+  theCone->set_direction_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
   //theCone->set_B_vector(theCylinder->get_center_top_vector());
   theCone->set_B_vector(0.0, 0.0, -100.0);
 

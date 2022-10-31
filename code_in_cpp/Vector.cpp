@@ -59,6 +59,7 @@ double Vector::getNormOfThisVector(){
 Vector* Vector::get_this_vector_unitary(){
     double norm = this->getNormOfThisVector();
     return this->multiply_by_a_scalar(1/norm);
+
     /* if (module->get_x_Point() != 0){
         result->set_x_Point(this->get_x_Point() / module->get_x_Point());
     }
@@ -89,7 +90,6 @@ Vector* Vector::get_module_this_vector(){
     result->set_y_Point(sqrt(squared->get_y_Point()));
     result->set_z_Point(sqrt(squared->get_z_Point())); */
     double scalar = result->scalar_with(result);
-
     return result;
 };
 
