@@ -117,7 +117,7 @@ void Cone::gime_your_color(
 
     if (this->intercepted) {
         normal = this->get_unitary_vector()->multiply_by_a_scalar(-1);
-        cout << "aasdfg" << '\n';
+        
     }else {
         Vector *top_minus_pi = this->getTop()->minus_with_the_vector(P_i);
         Vector *Top_minus_pi_vecProd_Direc = top_minus_pi->vectorProductWith(this->get_unitary_vector());
@@ -201,7 +201,7 @@ returnType Cone::didThePointIntercepted(Vector *dir, Vector *P_o) {
         this->set_T_i(T_i);
         result.point_of_intersection = T_i;
         result.doesIntersect = true;
-        this->setInterception(true);
+        
         return result;
     }
     return result;
@@ -249,33 +249,36 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
         bool Ti2_verification = is_Ti_a_valid_point(P_o, dir, Ti_2);
 
         if ( Ti1_verification && Ti2_verification && Ti_1 < Ti_2 ) {
-
             this->set_T_i(Ti_1);
             result.point_of_intersection = Ti_1;
             result.doesIntersect = true;
+            this->setInterception(false);
         }else if ( Ti1_verification && Ti2_verification && Ti_1 >= Ti_2 ) {
-
             this->set_T_i(Ti_2);
             result.point_of_intersection = Ti_2;
             result.doesIntersect = true;
-
+            this->setInterception(false);
         } else if ( Ti1_verification) {
             returnType T2_lid_verif = didThePointIntercepted(dir, P_o);
-            if (T2_lid_verif.doesIntersect && Ti_2 <= Ti_1) {
+            if (T2_lid_verif.doesIntersect && (T2_lid_verif.point_of_intersection <= Ti_1)) {
                 result.point_of_intersection = Ti_2;
                 result.doesIntersect = true;
+                this->setInterception(true);
             }else {
                 result.point_of_intersection = Ti_1;
                 result.doesIntersect = true;
+                this->setInterception(false);
             }
         }else if (Ti2_verification) {
             returnType T1_lid_verif = didThePointIntercepted(dir, P_o);
-            if (T1_lid_verif.doesIntersect && Ti_1 <= Ti_2) {
+            if (T1_lid_verif.doesIntersect && (T1_lid_verif.point_of_intersection <= Ti_2)) {
                 result.point_of_intersection = Ti_1;
                 result.doesIntersect = true;
+                this->setInterception(true);
             }else {
                 result.point_of_intersection = Ti_2;
                 result.doesIntersect = true;
+                this->setInterception(false);
             }
         }
 

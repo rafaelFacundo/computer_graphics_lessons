@@ -110,17 +110,22 @@ int main() {
   theCone->set_K_e(coeficients_Cone);
   theCone->set_radius(15);
   theCone->set_height(80);
-  //theCone->set_direction_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
   theCone->set_direction_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
-  //theCone->set_B_vector(theCylinder->get_center_top_vector());
-  theCone->set_B_vector(0.0, 0.0, -100.0);
+
+  Vector *cone_b_vec = theCylinder->get_B_vector()->sum_with_the_vector(theCylinder->get_unitary_vector());
+  cone_b_vec = cone_b_vec->multiply_by_a_scalar(theCylinder->get_height());
+  theCone->set_B_vector(
+    cone_b_vec->get_x_Point(),
+    cone_b_vec->get_y_Point(),
+    cone_b_vec->get_z_Point()
+  );
 
 
 
   /* adding an object to the scenery */
   //theScenery->addObjectToTheScene(theSphere);
-  theScenery->addObjectToTheScene(thePlane);
-  theScenery->addObjectToTheScene(backgrnd_plan);
+  //theScenery->addObjectToTheScene(thePlane);
+  //theScenery->addObjectToTheScene(backgrnd_plan);
   //theScenery->addObjectToTheScene(theSphere2);
   //theScenery->addObjectToTheScene(theCylinder);
   theScenery->addObjectToTheScene(theCone);
