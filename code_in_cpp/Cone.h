@@ -13,6 +13,7 @@ class Cone : public Object {
         double cos_angle;
         bool haveLid = false;
         bool intercepted = false;
+        int typeOfThisObject = 2;
 
     public:
         void set_B_vector(double x, double y, double z);

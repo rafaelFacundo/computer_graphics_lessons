@@ -41,6 +41,58 @@ Vector *Cylinder::get_B_vector() {
     return this->B_vector;
 }
 
+Vector *Cylinder::get_center_top_vector() {
+    Vector *unitary_vector = (this->get_unitary_vector())->get_this_vector_unitary();
+    return B_vector->sum_with_the_vector(unitary_vector->multiply_by_a_scalar(this->height));
+}
+
+
+returnType Cylinder::didThePointIntercepted(Vector *dir, Vector *P_o, Vector *base){
+    returnType result;
+    double D_scalar_n;
+    Vector *Ppi_minus_P_o = base->minus_with_the_vector(P_o);
+    double Ppi_mns_Po_scalar_N = Ppi_minus_P_o->scalar_with(this->get_unitary_vector()->multiply_by_a_scalar(-1.0));
+
+    if (base == this->get_B_vector()) {
+        D_scalar_n = dir->scalar_with(this->get_unitary_vector()->multiply_by_a_scalar(-1.0));
+    }else {
+        D_scalar_n = dir->scalar_with(this->get_unitary_vector());
+    }
+
+    double norm = Ppi_minus_P_o->getNormOfThisVector();
+    result.point_of_intersection = -1.0;
+    result.doesIntersect = false;
+    result.doesTheRayInterceptSomeLid = false;
+    result.typeOfTheInterceptedObject = this->getTypeOfThisObject();
+
+    if ( D_scalar_n == 0) {
+        return result;
+    }
+    double T_i = Ppi_mns_Po_scalar_N / D_scalar_n;
+    if ( T_i > 0 && norm <= this->get_radius()) {
+        this->set_T_i(T_i);
+        result.point_of_intersection = T_i;
+        result.doesIntersect = true;
+
+        return result;
+    }
+    return result;
+};
+
+void Cylinder::putOrRemoveLid(bool put){
+    this->haveLid = put;
+};
+void Cylinder::setInterception(bool intercept){
+    this->intercepted = intercept;
+};
+
+void Cylinder::setIntercBase(bool interc){
+    this->intercepBase = interc;
+};
+void Cylinder::setIntercLid(bool interc){
+    this->intercepLid = interc;
+};
+
 void Cylinder::gime_your_color(
     Vector *Eye_position,
     Vector *Direction,
@@ -49,6 +101,8 @@ void Cylinder::gime_your_color(
     Vector *Ambient_light_intensity,
     double *addressToPutTheColor
 ){
+
+    Vector *normal;
 
     Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
 
@@ -73,13 +127,21 @@ void Cylinder::gime_your_color(
     /* ================================================================================= */
     /* Vector_UpB = U_times_Pi_m_b_ScalarU  */
 
-    Vector *Vector_UpB = this->get_unitary_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U);
+    if (this->intercepted && this->intercepBase) {
+        normal = this->get_unitary_vector()->multiply_by_a_scalar(-1);
+    }else if (this->intercepted && this->intercepLid) {
+        normal = this->get_unitary_vector();
+    }else {
+        Vector *Vector_UpB = this->get_unitary_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U);
 
-    Vector *Pi_minus_Vector_UpB = P_i->minus_with_the_vector(Vector_UpB);
+        Vector *Pi_minus_Vector_UpB = P_i->minus_with_the_vector(Vector_UpB);
 
-    double norm_of_Pi_minus_Vector_UpB = sqrt(Pi_minus_Vector_UpB->scalar_with(Pi_minus_Vector_UpB));
+        double norm_of_Pi_minus_Vector_UpB = sqrt(Pi_minus_Vector_UpB->scalar_with(Pi_minus_Vector_UpB));
 
-    Vector *normal = Pi_minus_Vector_UpB->multiply_by_a_scalar(1/norm_of_Pi_minus_Vector_UpB);
+        normal = Pi_minus_Vector_UpB->multiply_by_a_scalar(1/norm_of_Pi_minus_Vector_UpB);
+    }
+
+
 
 
     double dr_nom = sqrt(Direction->scalar_with(Direction));
@@ -167,27 +229,80 @@ returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
         double Ti_1 = (-b + sqrt(delta))/(2*a);
         double Ti_2 = (-b - sqrt(delta))/(2*a);
 
-        if ( Ti_1 < Ti_2 ) {
-            nearPoint = Ti_1;
-        }else {
-            nearPoint = Ti_2;
-        }
+
 
         bool Ti_1_verification = this->is_Ti_a_valid_point(P_o, dir, Ti_1);
         bool Ti_2_verification = this->is_Ti_a_valid_point(P_o, dir, Ti_2);
 
-        if (Ti_1_verification == true && Ti_2_verification == false) {
+        if (Ti_1_verification && Ti_2_verification && Ti_1 < Ti_2) {
             result.point_of_intersection = Ti_1;
             result.doesIntersect = true;
-        }else if (Ti_1_verification == false && Ti_2_verification == true) {
+            this->setInterception(false);
+            this->setIntercBase(false);
+            this->setIntercLid(false);
+        }else if (Ti_1_verification && Ti_2_verification && Ti_1 >= Ti_2) {
             result.point_of_intersection = Ti_2;
             result.doesIntersect = true;
-        }else if (Ti_1_verification == true && Ti_2_verification == true) {
-            result.point_of_intersection = nearPoint;
-            result.doesIntersect = true;
+            this->setInterception(false);
+            this->setIntercBase(false);
+            this->setIntercLid(false);
+
+        }else if (Ti_1_verification) {
+            returnType T2_base = didThePointIntercepted(dir, P_o, this->get_B_vector());
+            returnType T2_top = didThePointIntercepted(dir, P_o, this->get_center_top_vector());
+
+            if (T2_base.doesIntersect && T2_base.point_of_intersection < Ti_1) {
+                result.point_of_intersection = T2_base.point_of_intersection;
+                result.doesIntersect = true;
+                this->setInterception(true);
+                this->setIntercBase(true);
+                this->setIntercLid(false);
+            }else if (T2_top.doesIntersect && (T2_top.point_of_intersection < Ti_1)) {
+                result.point_of_intersection = T2_top.point_of_intersection;
+                result.doesIntersect = true;
+                this->setInterception(true);
+                this->setIntercBase(false);
+                this->setIntercLid(true);
+            }else {
+                result.point_of_intersection = Ti_1;
+                result.doesIntersect = true;
+                this->setInterception(false);
+                this->setIntercBase(false);
+                this->setIntercLid(false);
+            }
+        }else if (Ti_2_verification) {
+            returnType T1_base = didThePointIntercepted(dir, P_o, this->get_B_vector());
+            returnType T1_top = didThePointIntercepted(dir, P_o, this->get_center_top_vector());
+            if (T1_base.doesIntersect && (T1_base.point_of_intersection < Ti_2)) {
+                result.point_of_intersection = Ti_1;
+                result.doesIntersect = true;
+                this->setInterception(true);
+            }else if (T1_top.doesIntersect && (T1_top.point_of_intersection < Ti_2)) {
+                result.point_of_intersection = Ti_1;
+                result.doesIntersect = true;
+                this->setInterception(true);
+            }else {
+                result.point_of_intersection = Ti_2;
+                result.doesIntersect = true;
+                this->setInterception(false);
+            }
         }
-        return result;
     }else {
-        return result;
-    };
+        returnType bse = didThePointIntercepted(dir, P_o, this->get_B_vector());
+        returnType tp = didThePointIntercepted(dir, P_o, this->get_center_top_vector());
+        if(bse.doesIntersect && tp.doesIntersect && (bse.point_of_intersection <= tp.point_of_intersection)) {
+            result.point_of_intersection = bse.point_of_intersection;
+            result.doesIntersect = true;
+            this->setInterception(true);
+            this->setIntercBase(true);
+            this->setIntercLid(false);
+        }else if(bse.doesIntersect && tp.doesIntersect && (bse.point_of_intersection > tp.point_of_intersection)){
+            result.point_of_intersection = tp.point_of_intersection;
+            result.doesIntersect = true;
+            this->setInterception(true);
+            this->setIntercBase(false);
+            this->setIntercLid(true);
+        }
+    }
+    return result;
 };

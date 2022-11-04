@@ -96,29 +96,24 @@ int main() {
   Cylinder *theCylinder = new Cylinder();
   theCylinder->set_B_vector(0.0,0.0,-100.0);
   theCylinder->set_radius(40.0/3.0);
-  theCylinder->set_height(100.0);
-  theCylinder->set_unitary_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
+  theCylinder->set_height(120.0);
+  /* -1/sqrt(3), 1/sqrt(3), -1/sqrt(3) */
+  theCylinder->set_unitary_vector(0,0,1);
   theCylinder->set_K_a(cylinderCoeficients);
   theCylinder->set_K_d(cylinderCoeficients);
   theCylinder->set_K_e(cylinderCoeficients);
   theCylinder->set_shine(5);
+  theCylinder->set_radius(60);
 
   double coeficients_Cone[3] = {0.8, 0.3, 0.2};
   Cone *theCone = new Cone();
   theCone->set_K_a(coeficients_Cone);
   theCone->set_K_d(coeficients_Cone);
   theCone->set_K_e(coeficients_Cone);
-  theCone->set_radius(15);
+  theCone->set_radius(15.0);
   theCone->set_height(80);
   theCone->set_direction_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
-
-  Vector *cone_b_vec = theCylinder->get_B_vector()->sum_with_the_vector(theCylinder->get_unitary_vector());
-  cone_b_vec = cone_b_vec->multiply_by_a_scalar(theCylinder->get_height());
-  theCone->set_B_vector(
-    cone_b_vec->get_x_Point(),
-    cone_b_vec->get_y_Point(),
-    cone_b_vec->get_z_Point()
-  );
+  theCone->set_B_vector(theCylinder->get_center_top_vector());
 
 
 
@@ -127,8 +122,8 @@ int main() {
   //theScenery->addObjectToTheScene(thePlane);
   //theScenery->addObjectToTheScene(backgrnd_plan);
   //theScenery->addObjectToTheScene(theSphere2);
-  //theScenery->addObjectToTheScene(theCylinder);
-  theScenery->addObjectToTheScene(theCone);
+  theScenery->addObjectToTheScene(theCylinder);
+  //theScenery->addObjectToTheScene(theCone);
 
 
 
