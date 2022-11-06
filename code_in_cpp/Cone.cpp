@@ -26,11 +26,6 @@ void Cone::set_B_vector(double x, double y, double z){
 
 void Cone::set_B_vector(Vector *B){
     this->B_vector = B;
-
-    //cout  << (this->B_vector)->get_x_Point() << '\n';
-    //cout  << (this->B_vector)->get_y_Point() << '\n';
-    //cout  << (this->B_vector)->get_z_Point() << '\n';
-
     this->vertice_vector = B_vector->sum_with_the_vector(unitary_vector->multiply_by_a_scalar(this->height));
 };
 
