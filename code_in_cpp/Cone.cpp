@@ -255,10 +255,11 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
         } else if ( Ti1_verification) {
             returnType T2_lid_verif = didThePointIntercepted(dir, P_o);
             if (T2_lid_verif.doesIntersect && (T2_lid_verif.point_of_intersection <= Ti_1)) {
-                result.point_of_intersection = Ti_2;
+                result.point_of_intersection = T2_lid_verif.point_of_intersection;
                 result.doesIntersect = true;
                 this->setInterception(true);
             }else {
+                this->set_T_i(Ti_1);
                 result.point_of_intersection = Ti_1;
                 result.doesIntersect = true;
                 this->setInterception(false);
@@ -266,10 +267,11 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
         }else if (Ti2_verification) {
             returnType T1_lid_verif = didThePointIntercepted(dir, P_o);
             if (T1_lid_verif.doesIntersect && (T1_lid_verif.point_of_intersection <= Ti_2)) {
-                result.point_of_intersection = Ti_1;
+                result.point_of_intersection = T1_lid_verif.point_of_intersection;
                 result.doesIntersect = true;
                 this->setInterception(true);
             }else {
+                this->set_T_i(Ti_2);
                 result.point_of_intersection = Ti_2;
                 result.doesIntersect = true;
                 this->setInterception(false);
