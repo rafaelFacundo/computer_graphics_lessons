@@ -4,12 +4,17 @@
 
 class Edge {
     private:
-        Point *pointOne;
-        Point *pointTwo;
+        int idVerticeOne;
+        int idVerticeTwo;
     public:
-        Edge(Point *pointone, Point *pointtwo);
-        Point* gimmePointOne();
-        Point* gimmePointTwo();
+
+
+
+
+    
+        Edge(int idverticeone, int idverticetwo);
+        int gimmeIdverticeOne();
+        int gimmeIdverticeTwo();
         Vector* gimmeCoordiPointOne();
         Vector* gimmeCoordiPointTwo();
 };

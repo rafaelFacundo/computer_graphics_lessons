@@ -3,16 +3,22 @@
 #include "Point.h"
 #include "Edge.h"
 #include "Face.h"
+#include <iostream>
+#include <vector>
+using namespace std;
 
 class Mesh : public Object {
     private:
-        Point *listOfPoints;
-        Edge *listOfEdges;
-        Face *listOfFaces;
+        int typeOfThisObject = 4;
+        vector<Point*> listOfPoints;
+        vector<Edge*> listOfEdges;
+        vector<Face*> listOfFaces;
 
     public:
 
-        returnType calculateIntersectionForFaces();
+        int getSizeOfFacesList();
+
+        returnType calculateIntersectionForEachFace(Vector *dir, Vector *P_o);
         Vector *calculateTheComunPointe(Face *faceToCalculate);
 
         void gime_your_color(
@@ -24,5 +30,5 @@ class Mesh : public Object {
             double *addressToPutTheColor
         );
 
-        virtual returnType does_the_point_intercept(Vector *dir, Vector *P_o);
+        returnType does_the_point_intercept(Vector *dir, Vector *P_o);
 };

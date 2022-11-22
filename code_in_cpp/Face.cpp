@@ -1,15 +1,17 @@
 #include "Face.h"
 
-Edge *Face::gimeeEdgeOne(){
-    return this->edgeOne;
+int Face::gimmeIdEdgeOne() {
+    return this->idEdgeOne;
 };
-Edge *Face::gimeeEdgeTwo(){
-    return this->edgeTwo;
+int Face::gimmeIdEdgeTwo(){
+    return this->idEdgeTwo;
 };
-Edge *Face::gimeeEdgeThree(){
-    return this->edgeThree;
+int Face::gimmeIdEdgeThree(){
+    return this->idEdgeThree;
 };
 
-int Face::gimmeIndice(){
-    return this->indice;
+Face::Face(int idedgeone, int idedgetwo, int idedgethree) {
+    this->idEdgeOne = idedgeone;
+    this->idEdgeTwo = idedgetwo;
+    this->idEdgeThree = idedgethree;
 };

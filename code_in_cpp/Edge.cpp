@@ -1,18 +1,14 @@
 #include "Edge.h"
 
-Edge::Edge(Point *pointone, Point *pointtwo) {
-    this->pointOne = pointone;
-    this->pointTwo = pointTwo;
+
+Edge::Edge (int idverticeone, int idverticetwo) {
+    this->idVerticeOne = idverticeone;
+    this->idVerticeTwo = idverticetwo;
+}
+
+int Edge::gimmeIdverticeOne() {
+    return this->idVerticeOne;
 };
-Point* Edge::gimmePointOne(){
-    return this->pointOne;
-};
-Point* Edge::gimmePointTwo(){
-    return this->pointTwo;
-};
-Vector* Edge::gimmeCoordiPointOne(){
-    return this->pointOne->gimmeTheCoordinateVector();
-};
-Vector* Edge::gimmeCoordiPointTwo(){
-    return this->pointTwo->gimmeTheCoordinateVector();
+int Edge::gimmeIdverticeTwo() {
+    return this->idVerticeTwo;
 };

@@ -3,15 +3,15 @@
 
 class Face {
     private:
-        int indice;
-        Edge *edgeOne;
-        Edge *edgeTwo;
-        Edge *edgeThree;
+        int idEdgeOne;
+        int idEdgeTwo;
+        int idEdgeThree;
 
     public:
-        Edge *gimeeEdgeOne();
-        Edge *gimeeEdgeTwo();
-        Edge *gimeeEdgeThree();
+        Face(int idedgeone, int idedgetwo, int idedgethree);
+        int gimmeIdEdgeOne();
+        int gimmeIdEdgeTwo();
+        int gimmeIdEdgeThree();
         int gimmeIndice();
 
 
