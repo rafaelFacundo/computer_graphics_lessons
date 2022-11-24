@@ -130,20 +130,197 @@ int main() {
   );
   theSphere->set_K_a(K_d);
 
-
+  /* the cube */
+  double edgeLeng = 40.0;
+  Vector *baseVector = new Vector(0.0, -150.0, -165.0);
+  double mesh_ks[3] = {1.0, 0.078, 0.576};
   Mesh *theMesh = new Mesh();
-  theMesh->insertApoint(new Point());
+  theMesh->set_K_a(mesh_ks);
+  theMesh->set_K_e(mesh_ks);
+  theMesh->set_K_d(mesh_ks);
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() - (edgeLeng/2),
+    baseVector->get_y_Point(),
+    baseVector->get_z_Point() - (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() - (edgeLeng/2),
+    baseVector->get_y_Point(),
+    baseVector->get_z_Point() + (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() + (edgeLeng/2),
+    baseVector->get_y_Point(),
+    baseVector->get_z_Point() + (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() + (edgeLeng/2),
+    baseVector->get_y_Point(),
+    baseVector->get_z_Point() - (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() - (edgeLeng/2),
+    baseVector->get_y_Point() + edgeLeng,
+    baseVector->get_z_Point() - (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() - (edgeLeng/2),
+    baseVector->get_y_Point() + edgeLeng,
+    baseVector->get_z_Point() + (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() + (edgeLeng/2),
+    baseVector->get_y_Point() + edgeLeng,
+    baseVector->get_z_Point() + (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() + (edgeLeng/2),
+    baseVector->get_y_Point() + edgeLeng,
+    baseVector->get_z_Point() - (edgeLeng/2)
+  ));
+
+  theMesh->insertAEdge(
+    new Edge(0,1)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(1,2)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(2,3)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(3,0)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(4,5)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(5,6)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(6,7)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(7,4)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(0,4)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(1,5)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(2,6)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(3,7)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(2,7)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(5,7)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(5,2)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(1,4)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(1,3)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(3,4)
+  );
+
+  theMesh->insertAFace(
+    new Face(6, 10, 12)
+  );
+
+  theMesh->insertAFace(
+    new Face(12, 2, 11)
+  );
+
+  theMesh->insertAFace(
+    new Face(7, 4, 13)
+  );
+
+  theMesh->insertAFace(
+    new Face(13, 5, 6)
+  );
+
+  theMesh->insertAFace(
+    new Face(5, 14, 10)
+  );
+
+  theMesh->insertAFace(
+    new Face(9, 1, 14)
+  );
+
+  theMesh->insertAFace(
+    new Face(4, 15, 9)
+  );
+
+  theMesh->insertAFace(
+    new Face(8, 0, 15)
+  );
+
+  theMesh->insertAFace(
+    new Face(1, 16, 2)
+  );
+
+  theMesh->insertAFace(
+    new Face(3, 16, 10)
+  );
+
+  theMesh->insertAFace(
+    new Face(11, 17, 7)
+  );
+
+  theMesh->insertAFace(
+    new Face(3, 8, 17)
+  );
+
+
 
 
   /* adding an object to the scenery */
-  theScenery->addObjectToTheScene(theSphere);
+
+  /* theScenery->addObjectToTheScene(theSphere);
   theScenery->addObjectToTheScene(Floor);
   theScenery->addObjectToTheScene(ceiling);
   theScenery->addObjectToTheScene(right_side_wall);
   theScenery->addObjectToTheScene(left_side_wall);
   theScenery->addObjectToTheScene(front_wall);
   theScenery->addObjectToTheScene(theCone);
-  theScenery->addObjectToTheScene(theCylinder);
+  theScenery->addObjectToTheScene(theCylinder); */
+  theScenery->addObjectToTheScene(theMesh);
 
 
 

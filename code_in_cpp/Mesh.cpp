@@ -39,22 +39,22 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
         int idEdgeTwo = this->listOfFaces[i]->gimmeIdEdgeTwo();
         int idEdgeThree = this->listOfFaces[i]->gimmeIdEdgeThree();
 
-        int idVerticeOne_edg1 = this->listOfEdges[idEdgeOne]->gimmeIdverticeOne() + 1;
-        int idVerticeTwo_edg1 = this->listOfEdges[idEdgeOne]->gimmeIdverticeTwo() + 1;
+        int idVerticeOne_edg1 = this->listOfEdges[idEdgeOne]->gimmeIdverticeOne();
+        int idVerticeTwo_edg1 = this->listOfEdges[idEdgeOne]->gimmeIdverticeTwo();
 
-        int idVerticeOne_edg2 = this->listOfEdges[idEdgeTwo]->gimmeIdverticeOne() + 1;
-        int idVerticeTwo_edg2 = this->listOfEdges[idEdgeTwo]->gimmeIdverticeTwo() + 1;
+        int idVerticeOne_edg2 = this->listOfEdges[idEdgeTwo]->gimmeIdverticeOne();
+        int idVerticeTwo_edg2 = this->listOfEdges[idEdgeTwo]->gimmeIdverticeTwo();
 
-        int n1 = idVerticeOne_edg1 * idVerticeOne_edg2;
-        double n = n1 / idVerticeTwo_edg1;
-        if ( n == idVerticeOne_edg1 || n == idVerticeOne_edg2 ) {
-            v1 = idVerticeTwo_edg1 - 1;
-            v2 = idVerticeTwo_edg2 - 1;
+        int n1 = (idVerticeOne_edg1 + 1) * (idVerticeOne_edg2 + 1);
+        double n = n1 / (idVerticeTwo_edg1 + 1);
+        if ( n == (idVerticeOne_edg1 + 1) || n == (idVerticeOne_edg2 + 1) ) {
+            v1 = idVerticeTwo_edg1;
+            v2 = idVerticeTwo_edg2;
             v3 = n - 1;
         }else {
-            v1 = idVerticeTwo_edg2 - 1;
-            v2 = idVerticeTwo_edg1 - 1;
-            v3 = (n1/ v1) - 1;
+            v1 = idVerticeTwo_edg2;
+            v2 = idVerticeTwo_edg1;
+            v3 = (n1/ (v1+1)) - 1;
         }
 
         Vector *P1_vector = this->listOfPoints[v1]->gimmeTheCoordinateVector();
