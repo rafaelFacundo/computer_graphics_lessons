@@ -5,6 +5,7 @@
 #include "scenery.h"
 #include "Cylinder.h"
 #include "Cone.h"
+#include "Mesh.h"
 #include <iostream>
 using namespace std;
 
@@ -19,12 +20,11 @@ int main() {
   double dJ = 30.0;
   double z = -dJ;
   double cJan[3] = {0.0,0.0,-dJ};
-  double centroEsfera[3] = {0.0,0.0,-100};
-  double K_d[3] = {0.7, 0.2, 0.2};
+
 
   Vector *ambient_light = new Vector(0.3,0.3,0.3);
   Vector *light_intensity = new Vector(0.7,0.7,0.7);
-  Vector *light_position = new Vector(0.0,60.0,-60.0);
+  Vector *light_position = new Vector(-100.0,140.0,-20.0);
   Vector *P_o = new Vector(0.0,0.0,0.0);
 
   /* initing the sdl window */
@@ -49,80 +49,101 @@ int main() {
     renderer
   );
 
-  double color_dChao[3] = {0.2, 0.7, 0.2};
-  double color_eChao[3] = {0.2, 0.7, 0.2};
-  /* instance of a sphere */
-  Plan *thePlane = new Plan();
-  thePlane->set_PI_Point(0.0, -40.0, 0.0);
-  thePlane->set_N_vector(0.0, 1.0, 0.0);
-  thePlane->set_K_d(color_dChao);
-  thePlane->set_K_e(color_eChao);
-  thePlane->set_K_a(color_dChao);
-  thePlane->set_shine(1.0);
 
+  /* Plan 1 */
   double K_e_plan_backgrnd[3] = {0.3,0.3,0.7};
-  double K_d_plan_backgrnd[3] = {0.3,0.3,0.7};
+  Plan *Floor = new Plan();
+  Floor->set_PI_Point(0.0,-150.0,0.0);
+  Floor->set_N_vector(0.0,1.0,0.0);
+  Floor->set_K_a(K_e_plan_backgrnd);
+  Floor->set_K_d(K_e_plan_backgrnd);
+  Floor->set_K_e(K_e_plan_backgrnd);
 
-  Plan *backgrnd_plan = new Plan();
-  backgrnd_plan->set_PI_Point(0.0,0.0,-200.0);
-  backgrnd_plan->set_N_vector(0.0,0.0,1.0);
-  backgrnd_plan->set_K_d(K_d_plan_backgrnd);
-  backgrnd_plan->set_K_e(K_e_plan_backgrnd);
-  backgrnd_plan->set_K_a(K_d_plan_backgrnd);
-  backgrnd_plan->set_shine(1.0);
+  /* Plan 2 */
+  double K_plan2[3] = {0.686,0.933,0.933};
+  Plan *right_side_wall = new Plan();
+  right_side_wall->set_PI_Point(200.0, -150.0, 0.0);
+  right_side_wall->set_N_vector(-1.0,0.0,0.0);
+  right_side_wall->set_K_a(K_plan2);
+  right_side_wall->set_K_d(K_plan2);
+  right_side_wall->set_K_e(K_plan2);
 
-  /* instance of a sphere */
+  /* Plan 3 */
+  double K_plan3[3] = {0.686,0.933,0.933};
+  Plan *front_wall = new Plan();
+  front_wall->set_PI_Point(200.0,-150.0,-400.0);
+  front_wall->set_N_vector(0.0,0.0,1.0);
+  front_wall->set_K_a(K_plan3);
+  front_wall->set_K_e(K_plan3);
+  front_wall->set_K_d(K_plan3);
+
+  /* Plan 4 */
+  double K_plan4[3] = {0.686,0.933,0.933};
+  Plan *left_side_wall = new Plan();
+  left_side_wall->set_PI_Point(-200.0,-150.0,0.0);
+  left_side_wall->set_N_vector(1.0,0.0,0.0);
+  left_side_wall->set_K_a(K_plan4);
+  left_side_wall->set_K_d(K_plan4);
+  left_side_wall->set_K_e(K_plan4);
+
+  /* Plan 5 */
+  double K_plan5[3] = {0.933,0.933,0.933};
+  Plan *ceiling = new Plan();
+  ceiling->set_PI_Point(0.0,150.0,0.0);
+  ceiling->set_N_vector(0.0,-1.0,0.0);
+  ceiling->set_K_a(K_plan5);
+  ceiling->set_K_d(K_plan5);
+  ceiling->set_K_e(K_plan5);
+
+  /* The cylinder */
+  double cylinder_ks[3] = {0.824, 0.706, 0.549};
+  Cylinder *theCylinder = new Cylinder();
+  theCylinder->set_B_vector(0.0,-150.0,-200.0);
+  theCylinder->set_height(90);
+  theCylinder->set_K_a(cylinder_ks);
+  theCylinder->set_K_d(cylinder_ks);
+  theCylinder->set_K_e(cylinder_ks);
+  theCylinder->set_shine(1);
+  theCylinder->set_radius(5);
+  theCylinder->set_unitary_vector(0.0,1.0,0.0);
+
+  /* The cone */
+  double cone_ks[3] = {0.0,1.0,0.498};
+  Cone *theCone = new Cone();
+  theCone->set_K_a(cone_ks);
+  theCone->set_K_d(cone_ks);
+  theCone->set_K_e(cone_ks);
+  theCone->set_radius(90);
+  theCone->set_height(150);
+  theCone->set_direction_vector(0.0,1.0,0.0);
+  theCone->set_B_vector(0.0,-60.0,-200.0);
+
+  /* The sphere */
+  double centroEsfera[3] = {0.0,95.0,-200};
+  double K_d[3] = {0.845, 0.647, 0.125};
   Sphere *theSphere = new Sphere(
     centroEsfera,
     K_d,
     K_d,
-    10.0,
-    40.0
+    1.0,
+    5.0
   );
   theSphere->set_K_a(K_d);
 
-  double centroEsfera2[3] = {50.0,0.0,-100};
-  double K_d2[3] = {0.7, 0.2, 0.2};
-  Sphere *theSphere2 = new Sphere(
-    centroEsfera2,
-    K_d2,
-    K_d2,
-    10.0,
-    40.0
-  );
-  theSphere2->set_K_a(K_d2);
 
-  double cylinderCoeficients[3] =  {0.2, 0.3, 0.8};
-  Cylinder *theCylinder = new Cylinder();
-  theCylinder->set_B_vector(0.0,0.0,-100.0);
-  theCylinder->set_height(120);
-  theCylinder->set_K_a(cylinderCoeficients);
-  theCylinder->set_K_d(cylinderCoeficients);
-  theCylinder->set_K_e(cylinderCoeficients);
-  theCylinder->set_shine(5);
-  theCylinder->set_radius(40.0/3.0);
-  theCylinder->set_unitary_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3) );
-
-  double coeficients_Cone[3] = {0.8, 0.3, 0.2};
-  Cone *theCone = new Cone();
-  theCone->set_K_a(coeficients_Cone);
-  theCone->set_K_d(coeficients_Cone);
-  theCone->set_K_e(coeficients_Cone);
-  theCone->set_radius(60);
-  theCone->set_height(30);
-  /* -1/sqrt(3), 1/sqrt(3), -1/sqrt(3) */
-  theCone->set_direction_vector(-1/sqrt(3), 1/sqrt(3), -1/sqrt(3));
-  theCone->set_B_vector(theCylinder->get_center_top_vector());
-
+  Mesh *theMesh = new Mesh();
+  theMesh->insertApoint(new Point());
 
 
   /* adding an object to the scenery */
   theScenery->addObjectToTheScene(theSphere);
-  theScenery->addObjectToTheScene(thePlane);
-  theScenery->addObjectToTheScene(backgrnd_plan);
-  //theScenery->addObjectToTheScene(theSphere2);
-  theScenery->addObjectToTheScene(theCylinder);
+  theScenery->addObjectToTheScene(Floor);
+  theScenery->addObjectToTheScene(ceiling);
+  theScenery->addObjectToTheScene(right_side_wall);
+  theScenery->addObjectToTheScene(left_side_wall);
+  theScenery->addObjectToTheScene(front_wall);
   theScenery->addObjectToTheScene(theCone);
+  theScenery->addObjectToTheScene(theCylinder);
 
 
 

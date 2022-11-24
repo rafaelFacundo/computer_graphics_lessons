@@ -8,10 +8,6 @@ class Edge {
         int idVerticeTwo;
     public:
 
-
-
-
-    
         Edge(int idverticeone, int idverticetwo);
         int gimmeIdverticeOne();
         int gimmeIdverticeTwo();

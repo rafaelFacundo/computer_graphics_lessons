@@ -1,5 +1,5 @@
-main: main.o Sphere.o Scenery.o Objects.o Vector.o SdlFunctions.o Cylinder.o Cone.o Plan.o
-	g++ SdlFunctions.o Scenery.o Plan.o Vector.o Objects.o Cylinder.o Sphere.o Cone.o main.o -lSDL2 -o main
+main: main.o Sphere.o Scenery.o Objects.o Vector.o SdlFunctions.o Cylinder.o Cone.o Plan.o Edge.o Face.o Point.o Mesh.o
+	g++ SdlFunctions.o Scenery.o Plan.o Vector.o Objects.o Cylinder.o Sphere.o Cone.o Face.o Edge.o Point.o Mesh.o main.o -lSDL2 -o main
 
 main.o: Sphere.h SdlFunction.h
 	g++ -c main.cpp -o main.o
@@ -16,17 +16,29 @@ Cylinder.o: Cylinder.h
 Sphere.o: Sphere.cpp Sphere.h returnType.h
 	g++ -c Sphere.cpp -o Sphere.o
 
-Plan.o: Plan.cpp Plan.h 
+Plan.o: Plan.cpp Plan.h
 	g++ -c Plan.cpp -o Plan.o
 
 Objects.o: Objects.cpp Objects.h returnType.h
 	g++ -c Objects.cpp -o Objects.o
 
 Vector.o: Vector.cpp Vector.h
-	g++ -c Vector.cpp -o Vector.o 
+	g++ -c Vector.cpp -o Vector.o
 
 SdlFunctions.o: SdlFunction.h
 	g++ -c SdlFunctions.cpp -o SdlFunctions.o
+
+Mesh.o: Mesh.h
+	g++ -c Mesh.cpp -o Mesh.o
+
+Face.o: Face.h
+	g++ -c Face.cpp -o Face.o
+
+Edge.o: Edge.h
+	g++ -c Edge.cpp -o Edge.o
+
+Point.o: Point.h
+	g++ -c Point.cpp -o Point.o
 
 clean:
 	rm *.o
