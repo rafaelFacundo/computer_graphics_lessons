@@ -138,7 +138,9 @@ int main() {
   theMesh->set_K_a(mesh_ks);
   theMesh->set_K_e(mesh_ks);
   theMesh->set_K_d(mesh_ks);
+  theMesh->set_shine(1);
 
+  /* Vertices */
   theMesh->insertApoint(new Point(
     baseVector->get_x_Point() - (edgeLeng/2),
     baseVector->get_y_Point(),
@@ -187,62 +189,81 @@ int main() {
     baseVector->get_z_Point() - (edgeLeng/2)
   ));
 
+  /* Arestas */
+  /* 0 */
   theMesh->insertAEdge(
     new Edge(0,1)
   );
 
+  /* 1 */
   theMesh->insertAEdge(
     new Edge(1,2)
   );
 
+  /* 2 */
   theMesh->insertAEdge(
     new Edge(2,3)
   );
 
+  /* 3 */
   theMesh->insertAEdge(
     new Edge(3,0)
   );
 
+  /* 4 */
   theMesh->insertAEdge(
     new Edge(4,5)
   );
 
+  /* aaaaaaa */
+  /* 5 */
   theMesh->insertAEdge(
     new Edge(5,6)
   );
 
+  /* 6 */
   theMesh->insertAEdge(
     new Edge(6,7)
   );
 
+  /* 7 */
   theMesh->insertAEdge(
     new Edge(7,4)
   );
 
+  /* 8 */
   theMesh->insertAEdge(
     new Edge(0,4)
   );
 
+  /* 9 */
   theMesh->insertAEdge(
     new Edge(1,5)
   );
 
+  /* aaaaa */
+  /* 10 */
   theMesh->insertAEdge(
     new Edge(2,6)
   );
 
+  /* 11 */
   theMesh->insertAEdge(
     new Edge(3,7)
   );
 
+  /* 12 */
   theMesh->insertAEdge(
     new Edge(2,7)
   );
 
+  /* 13 */
   theMesh->insertAEdge(
     new Edge(5,7)
   );
 
+  /* aaaaa */
+  /* 14 */
   theMesh->insertAEdge(
     new Edge(5,2)
   );
@@ -258,6 +279,8 @@ int main() {
   theMesh->insertAEdge(
     new Edge(3,4)
   );
+
+  /* faces */
 
   theMesh->insertAFace(
     new Face(6, 10, 12)
@@ -334,7 +357,7 @@ int main() {
           if(event.type == SDL_QUIT)
           isRunning = 0;
       }
-  SDL_UpdateWindowSurface (window);
+  SDL_UpdateWindowSurface(window);
   }
   SDL_DestroyWindow (window);
   SDL_Quit ();

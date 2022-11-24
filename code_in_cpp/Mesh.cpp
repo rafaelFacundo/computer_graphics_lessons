@@ -1,4 +1,6 @@
 #include "Mesh.h"
+#include <iostream>
+using namespace std;
 
 
 int Mesh::getSizeOfFacesList(){
@@ -26,6 +28,7 @@ void Mesh::insertAFace(Face *face){
 
 
 returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
+
     int numberOfFaces = this->getSizeOfFacesList();
     returnType result;
     result.point_of_intersection = -1.0;
@@ -35,34 +38,36 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
 
     double v1, v2, v3;
     for (int i = 0; i < numberOfFaces; i++ ) {
+
         int idEdgeOne = this->listOfFaces[i]->gimmeIdEdgeOne();
         int idEdgeTwo = this->listOfFaces[i]->gimmeIdEdgeTwo();
-        int idEdgeThree = this->listOfFaces[i]->gimmeIdEdgeThree();
 
-        int idVerticeOne_edg1 = this->listOfEdges[idEdgeOne]->gimmeIdverticeOne();
-        int idVerticeTwo_edg1 = this->listOfEdges[idEdgeOne]->gimmeIdverticeTwo();
+        int idVertice11 = this->listOfEdges[idEdgeOne]->gimmeIdverticeOne();
+        int idVertice21 = this->listOfEdges[idEdgeTwo]->gimmeIdverticeOne();
 
-        int idVerticeOne_edg2 = this->listOfEdges[idEdgeTwo]->gimmeIdverticeOne();
-        int idVerticeTwo_edg2 = this->listOfEdges[idEdgeTwo]->gimmeIdverticeTwo();
+        int idVertice12 = this->listOfEdges[idEdgeOne]->gimmeIdverticeTwo();
+        int idVertice22 = this->listOfEdges[idEdgeTwo]->gimmeIdverticeTwo();
 
-        int n1 = (idVerticeOne_edg1 + 1) * (idVerticeOne_edg2 + 1);
-        double n = n1 / (idVerticeTwo_edg1 + 1);
-        if ( n == (idVerticeOne_edg1 + 1) || n == (idVerticeOne_edg2 + 1) ) {
-            v1 = idVerticeTwo_edg1;
-            v2 = idVerticeTwo_edg2;
+        int n1 = (idVertice11 + 1) * (idVertice12 + 1);
+        double n = ((double)n1) / ((double)idVertice21 + 1);
+        if ( n == (idVertice11 + 1)  || n == (idVertice12 + 1)  ) {
+            v1 = idVertice21;
+            v2 = idVertice22;
             v3 = n - 1;
         }else {
-            v1 = idVerticeTwo_edg2;
-            v2 = idVerticeTwo_edg1;
+            v1 = idVertice22;
+            v2 = idVertice21;
             v3 = (n1/ (v1+1)) - 1;
-        }
+        };
+        
+/* OLHA A PARTIR DAQUI*/        
 
         Vector *P1_vector = this->listOfPoints[v1]->gimmeTheCoordinateVector();
         Vector *P2_vector = this->listOfPoints[v2]->gimmeTheCoordinateVector();
         Vector *P3_vector = this->listOfPoints[v3]->gimmeTheCoordinateVector();
 
-
         Vector *R1_vector = P2_vector->minus_with_the_vector(P1_vector);
+
         Vector *R2_vector = P3_vector->minus_with_the_vector(P1_vector);
 
         Vector *normal = R1_vector->vectorProductWith(R2_vector);
@@ -166,7 +171,7 @@ void Mesh::gime_your_color(
     vectorWithColors = vectorWithColors->sum_with_the_vector(Ambient_light_intensity->at_sign_with(this->get_K_a()));
 
 
-    addressToPutTheColor[0] = vectorWithColors->get_x_Point() * 255;
-    addressToPutTheColor[1] = vectorWithColors->get_y_Point() * 255;
-    addressToPutTheColor[2] = vectorWithColors->get_z_Point() * 255;
+    addressToPutTheColor[0] = 205;
+    addressToPutTheColor[1] = 145;
+    addressToPutTheColor[2] = 105;
 };
