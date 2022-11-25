@@ -28,7 +28,7 @@ void Mesh::insertAFace(Face *face){
 
 
 returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
-
+    double C1, C2, C3;
     int numberOfFaces = this->getSizeOfFacesList();
     returnType result;
     result.point_of_intersection = -1.0;
@@ -72,35 +72,59 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
 
         Vector *normal = R1_vector->vectorProductWith(R2_vector);
 
-        double Po_minus_P1_scalar_normal = (P_o->minus_with_the_vector(P1_vector))->scalar_with(normal);
-        double Dir_scalar_normal = dir->scalar_with(normal);
-        double Ti_point = -Po_minus_P1_scalar_normal / Dir_scalar_normal;
+        Vector *normalUnitary = normal->get_this_vector_unitary();
 
-        /* Pi point */
-        Vector *Pi = P_o->sum_with_the_vector(dir->multiply_by_a_scalar(Ti_point));
+        Vector *w = P_o->minus_with_the_vector(P1_vector);
 
-        /* Calculating the C1, C2 e C3 */
-        double R1_vetorial_R2_scalar_normal = (R1_vector->vectorProductWith(R2_vector))->scalar_with(normal);
+        //double Po_minus_P1_scalar_normal = (P_o->minus_with_the_vector(P1_vector))->scalar_with(normal);
+        
+        double Dir_scalar_normal = dir->scalar_with(normalUnitary);
+        double Ti_point = (-w->scalar_with(normalUnitary)) / Dir_scalar_normal; 
 
-        /* C1 */
-        double P3_Pi_vetorial_P1_Pi_scalarNormal = ( (P3_vector->minus_with_the_vector(Pi))->vectorProductWith( P1_vector->minus_with_the_vector(Pi) ) )->scalar_with(normal);
-        double C1 = P3_Pi_vetorial_P1_Pi_scalarNormal / R1_vetorial_R2_scalar_normal;
+        if ( Dir_scalar_normal != 0 && Ti_point > 0 ) {
+            /* Pi point */
+            Vector *Pi = P_o->sum_with_the_vector(dir->multiply_by_a_scalar(Ti_point));
 
-        /* C2 */
-        double P1_Pi_vetorial_P2_Pi_scalarNormal = ( (P1_vector->minus_with_the_vector(Pi))->vectorProductWith(P2_vector->minus_with_the_vector(Pi)) )->scalar_with(normal);
-        double C2 = P1_Pi_vetorial_P2_Pi_scalarNormal / R1_vetorial_R2_scalar_normal;
+            Vector *distance_vector = Pi->minus_with_the_vector(P_o);
 
-        /* C3 */
-        double P2_Pi_vetorial_P3_Pi_scalarNormal = ( (P2_vector->minus_with_the_vector(Pi))->vectorProductWith(P3_vector->minus_with_the_vector(Pi)) )->scalar_with(normal);
-        double C3 = P2_Pi_vetorial_P3_Pi_scalarNormal / R1_vetorial_R2_scalar_normal;
+            double distanceFromP_o = distance_vector->getNormOfThisVector();
 
-        if ((C1 + C2 + C3) == 1) {
+            Vector *V = Pi->minus_with_the_vector(P_o);
+
+            /* Calculating the C1, C2 e C3 */
+            double R1_vetorial_R2_scalar_normal = (R1_vector->vectorProductWith(R2_vector))->scalar_with(normal);
+
+            /* C1 */
+            double P3_Pi_vetorial_P1_Pi_scalarNormal = ( (P3_vector->minus_with_the_vector(Pi))->vectorProductWith( P1_vector->minus_with_the_vector(Pi) ) )->scalar_with(normal);
+            C1 = P3_Pi_vetorial_P1_Pi_scalarNormal / R1_vetorial_R2_scalar_normal;
+
+            /* C2 */
+            double P1_Pi_vetorial_P2_Pi_scalarNormal = ( (P1_vector->minus_with_the_vector(Pi))->vectorProductWith(P2_vector->minus_with_the_vector(Pi)) )->scalar_with(normal);
+            C2 = P1_Pi_vetorial_P2_Pi_scalarNormal / R1_vetorial_R2_scalar_normal;
+
+            /* C3 */
+            //double P2_Pi_vetorial_P3_Pi_scalarNormal = ( (P2_vector->minus_with_the_vector(Pi))->vectorProductWith(P3_vector->minus_with_the_vector(Pi)) )->scalar_with(normal);
+            C3 = 1 - C1 - C2;  
+
+            if ((C1 >= 0 && C2 >= 0 && C3 >= 0) && ((C1 + C2 + C3) == 1)) {
+                result.doesIntersect = true;
+                result.point_of_intersection = Ti_point;
+                this->set_T_i(Ti_point);
+                this->setNormal(normalUnitary);
+            }
+
+        }
+
+        
+
+        /* if ((C1 + C2 + C3) == 1) {
+            cout << "blblblb\n";
             result.doesIntersect = true;
             result.point_of_intersection = Ti_point;
             this->set_T_i(Ti_point);
             this->setNormal(normal);
         }
-
+ */
 
 
     }
