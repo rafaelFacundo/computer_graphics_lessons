@@ -8,8 +8,8 @@ using namespace std;
 
 class Scenery {
     vector<Object*> list_Of_Objects;
-    Vector* Light_position;
-    Vector* Light_intensity;
+    vector<Vector*> Light_position;
+    vector<Vector*> Light_intensity;
     Vector* Ambient_Light_intesity;
     Vector* observer_point;
     double n_lines;
@@ -31,7 +31,7 @@ class Scenery {
             int indexOfObject
         );
 
-        void set_Light_position(Vector *light);
+        void set_Light_position(Vector *light, Vector *intensityOfLight);
         void set_Light_intensity(Vector *intensityOfLight);
         void set_ambient_light_intensity(Vector *light);
         void set_observer_postion(Vector *observer);
@@ -41,11 +41,13 @@ class Scenery {
         void set_z(int z);
         void set_renderer(SDL_Renderer *renderer);
 
+
+        void calculateTheColor(int indexOfObject, Vector *dir);
         double get_minimun(double num1, double num2);
         double get_z();
-        Vector* get_light_position();
+        Vector* get_light_position(int index);
         Vector* get_ambient_light_intensity();
-        Vector* get_light_intensity();
+        Vector* get_light_intensity(int index);
         Vector* get_observer_position();
         int get_Object_list_lenght();
         SDL_Renderer* get_sceneryRender();

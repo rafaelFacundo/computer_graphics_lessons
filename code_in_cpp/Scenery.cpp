@@ -4,8 +4,8 @@
 using namespace std; 
 
 
-Vector* Scenery::get_light_position(){
-    return this->Light_position;
+Vector* Scenery::get_light_position(int index){
+    return this->Light_position[index];
 };
 
 
@@ -14,8 +14,8 @@ Vector* Scenery::get_ambient_light_intensity() {
 };
 
 
-Vector* Scenery::get_light_intensity(){
-    return this->Light_intensity;
+Vector* Scenery::get_light_intensity(int index){
+    return this->Light_intensity[index];
 };
 
 Vector* Scenery::get_observer_position(){
@@ -26,12 +26,13 @@ int Scenery::get_Object_list_lenght() {
     return this->list_Of_Objects.size();
 };
 
-void Scenery::set_Light_position(Vector *light){
-    this->Light_position = light;
+void Scenery::set_Light_position(Vector *light, Vector *intensityOfLight){
+    this->Light_position.push_back(light);
+    this->set_ambient_light_intensity(intensityOfLight);
 };
 
 void Scenery::set_Light_intensity(Vector *intensityOfLight){
-    this->Light_intensity = intensityOfLight;
+    this->Light_intensity.push_back(intensityOfLight);
 };
 
 
@@ -95,8 +96,8 @@ Scenery::Scenery(
     double z,
     SDL_Renderer *renderer
 ) {
-    this->set_Light_position(Light_position);
-    this->set_Light_intensity(Light_intensity);
+    this->set_Light_position(Light_position, Light_intensity);
+    //this->set_Light_intensity(Light_intensity);
     this->set_ambient_light_intensity(Ambient_Light_intesity);
     this->set_observer_postion(observer_point);
     this->set_n_lines_and_columns(n_lines, n_collumns);
@@ -151,7 +152,13 @@ void Scenery::ray_tracing_algorithm() {
             Vector *dir = new Vector(Xj, Yj, this->get_z());
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
             if ( objePosiInList > -1) {
-                bool doesHaveShadow = verify_the_shadow(
+                /* new way to calculate the color */
+                calculateTheColor(objePosiInList, dir);
+
+
+                /* old way to calculate the color */
+                
+                /* bool doesHaveShadow = verify_the_shadow(
                     this->get_light_position(),
                     dir,
                     this->get_observer_position(),
@@ -171,7 +178,7 @@ void Scenery::ray_tracing_algorithm() {
                         this->get_ambient_light_intensity(),
                         this->colorToDraw
                     );
-                };
+                }; */
             }else{
                 this->colorToDraw[0] = 0.0;
                 this->colorToDraw[1] = 0.0;
@@ -210,7 +217,7 @@ bool Scenery::verify_the_shadow(
     int indexOfInterceptedObje = -1;
     Vector *L_vector = this->list_Of_Objects[indexOfObject]->get_L_vector(dir, P_o, Light_source_position);
     Vector *P_i = this->list_Of_Objects[indexOfObject]->get_Pi(dir, P_o);
-    Vector *Pf_pi = this->get_light_position()->minus_with_the_vector(P_i);
+    Vector *Pf_pi = Light_source_position->minus_with_the_vector(P_i);
     double Pf_pi_norm = sqrt(Pf_pi->scalar_with(Pf_pi));
 
     for (int i = 0; i < numberOfObjects; i++) {
@@ -255,4 +262,42 @@ bool Scenery::verify_the_shadow(
         return true;
     }
     
+};
+
+
+void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
+    this->colorToDraw[0] = 0.0;
+    this->colorToDraw[1] = 0.0;
+    this->colorToDraw[2] = 0.0;
+    cout << this->Light_intensity.size() << '\n';
+    for (int i = 0; i < this->Light_intensity.size(); i++) {
+        Vector *LightIntensity = this->Light_intensity[i];
+        Vector *LightPosition = this->Light_position[i];
+        
+        bool doesHaveShadowForThisLight = verify_the_shadow(
+            LightPosition,
+            dir,
+            this->get_observer_position(),
+            indexOfObject
+        );
+
+        if (!doesHaveShadowForThisLight) {
+            
+            this->list_Of_Objects[indexOfObject]->gime_your_color(
+                this->get_observer_position(),
+                dir,
+                LightPosition,
+                LightIntensity,
+                this->get_ambient_light_intensity(), 
+                this->colorToDraw
+            );
+        }else {
+            this->list_Of_Objects[indexOfObject]->gimme_your_ambientColor(
+                this->get_ambient_light_intensity(),
+                this->colorToDraw
+            );
+        }
+
+        
+    }
 };

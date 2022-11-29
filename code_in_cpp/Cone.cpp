@@ -156,9 +156,9 @@ void Cone::gime_your_color(
     Vector *vectorWithColors = I_eye_d->sum_with_the_vector(I_eye_e);
     vectorWithColors = vectorWithColors->sum_with_the_vector(Ambient_light_intensity->at_sign_with(this->get_K_a()));
 
-    addressToPutTheColor[0] = vectorWithColors->get_x_Point() * 255;
-    addressToPutTheColor[1] = vectorWithColors->get_y_Point() * 255;
-    addressToPutTheColor[2] = vectorWithColors->get_z_Point() * 255;
+    addressToPutTheColor[0] += vectorWithColors->get_x_Point() * 255;
+    addressToPutTheColor[1] += vectorWithColors->get_y_Point() * 255;
+    addressToPutTheColor[2] += vectorWithColors->get_z_Point() * 255;
 };
 
 bool Cone::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti){

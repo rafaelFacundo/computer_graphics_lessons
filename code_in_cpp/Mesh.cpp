@@ -186,7 +186,7 @@ void Mesh::gime_your_color(
     vectorWithColors = vectorWithColors->sum_with_the_vector(Ambient_light_intensity->at_sign_with(this->get_K_a()));
 
 
-    addressToPutTheColor[0] = vectorWithColors->get_x_Point() * 255;
-    addressToPutTheColor[1] = vectorWithColors->get_y_Point() * 255;
-    addressToPutTheColor[2] = vectorWithColors->get_z_Point() * 255;
+    addressToPutTheColor[0] += vectorWithColors->get_x_Point() * 255;
+    addressToPutTheColor[1] += vectorWithColors->get_y_Point() * 255;
+    addressToPutTheColor[2] += vectorWithColors->get_z_Point() * 255;
 };
