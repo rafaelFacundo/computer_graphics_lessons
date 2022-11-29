@@ -138,7 +138,7 @@ int main() {
   theMesh->set_K_a(mesh_ks);
   theMesh->set_K_e(mesh_ks);
   theMesh->set_K_d(mesh_ks);
-  theMesh->set_shine(1);
+  theMesh->set_shine(5);
 
   /* Vertices */
   theMesh->insertApoint(new Point(

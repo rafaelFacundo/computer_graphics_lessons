@@ -140,3 +140,192 @@ Vector::Vector( double x, double y, double z ) {
 Vector::Vector() {
     this->setPoints(0.0,0.0,0.0);
 }
+
+
+Vector* Vector::rotateX(Vector *vector, double angle) {
+    return new Vector(
+        vector->get_x_Point(),
+        vector->get_y_Point() * cos(angle) - vector->get_z_Point() * sin(angle),
+        vector->get_y_Point() * sin(angle) + vector->get_z_Point() * cos(angle)
+    );
+};
+
+Vector* Vector::rotateY(Vector *vector, double angle) {
+    return new Vector(
+        vector->get_x_Point() * cos(angle) + vector->get_z_Point() * sin(angle),
+        vector->get_y_Point(),
+        -(vector->get_x_Point()) * sin(angle) + vector->get_z_Point() * cos(angle)
+    );
+};
+
+Vector* Vector::rotateZ(Vector *vector, double angle) {
+    return new Vector(
+        vector->get_x_Point() * cos(angle) - vector->get_y_Point() * sin(angle),
+        vector->get_x_Point() * sin(angle) + vector->get_y_Point() * cos(angle),
+        vector->get_z_Point()
+    );
+};
+
+Vector* Vector::translate(Vector *vector, double x, double y, double z) {
+    return new Vector(
+        vector->get_x_Point() + x,
+        vector->get_y_Point() + y,
+        vector->get_z_Point() + z
+    );
+};
+
+Vector* Vector::scale(Vector *vector, double sx, double sy, double sz) {
+    return new Vector(
+        vector->get_x_Point() * sx,
+        vector->get_y_Point() * sy,
+        vector->get_z_Point() * sz
+    );
+};
+
+Vector* Vector::reflectXY(Vector *vector){
+    return new Vector(
+        vector->get_x_Point(),
+        vector->get_y_Point(),
+        -(vector->get_z_Point())
+    );
+};
+
+Vector* Vector::reflectXZ(Vector *vector){
+    return new Vector(
+        vector->get_x_Point(),
+        -(vector->get_y_Point()),
+        vector->get_z_Point()
+    );
+};
+
+Vector* Vector::reflectYZ(Vector *vector){
+    return new Vector(
+        -(vector->get_x_Point()),
+        vector->get_y_Point(),
+        vector->get_z_Point()
+    );
+};
+
+
+Vector* Vector::shearYX(Vector *vector, double angle){
+    return new Vector(
+        vector->get_x_Point() + vector->get_y_Point() * tan(angle),
+        vector->get_y_Point(),
+        vector->get_z_Point()
+    );
+};
+
+Vector* Vector::shearXY(Vector *vector, double angle){
+    return new Vector(
+        vector->get_x_Point(),
+        vector->get_y_Point() + vector->get_x_Point() * tan(angle),
+        vector->get_z_Point()
+    );
+};
+
+Vector* Vector::shearXZ(Vector *vector, double angle){
+    return new Vector(
+        vector->get_x_Point(),
+        vector->get_y_Point(),
+        vector->get_z_Point() + vector->get_x_Point() * tan(angle)
+    );
+};
+
+Vector* Vector::shearZX(Vector *vector, double angle){
+    return new Vector(
+        vector->get_x_Point()  + vector->get_z_Point() * tan(angle),
+        vector->get_y_Point(),
+        vector->get_z_Point()
+    );
+};
+
+Vector* Vector::shearYZ(Vector *vector, double angle){
+    return new Vector(
+        vector->get_x_Point(),
+        vector->get_y_Point(),
+        vector->get_z_Point() + vector->get_y_Point() * tan(angle)
+    );
+};
+
+Vector* Vector::shearZY(Vector *vector, double angle){
+    return new Vector(
+        vector->get_x_Point(),
+        vector->get_y_Point() + vector->get_z_Point() * tan(angle),
+        vector->get_z_Point()
+    );
+};
+
+/* Methods that modifies the values of the own vector, without return */
+
+void Vector::rotateX(double angle){
+    //this->get_x_Point(),
+    this->set_y_Point(this->get_y_Point() * cos(angle) - this->get_z_Point() * sin(angle));
+    this->set_z_Point(this->get_y_Point() * sin(angle) + this->get_z_Point() * cos(angle));
+};
+void Vector::rotateY(double angle){
+    this->set_x_Point(this->get_x_Point() * cos(angle) + this->get_z_Point() * sin(angle));
+    //this->get_y_Point(),
+    this->set_z_Point(-(this->get_x_Point()) * sin(angle) + this->get_z_Point() * cos(angle));
+};
+void Vector::rotateZ(double angle){
+    this->set_x_Point(this->get_x_Point() * cos(angle) - this->get_y_Point() * sin(angle));
+    this->set_y_Point(this->get_x_Point() * sin(angle) + this->get_y_Point() * cos(angle));
+    //vector->get_z_Point()
+};
+void Vector::translate(double x, double y, double z) {
+    this->set_x_Point(get_x_Point() + x);
+    this->set_y_Point(get_y_Point() + y);
+    this->set_z_Point(get_z_Point() + z);
+};
+void Vector::scale(double sx, double sy, double sz){
+    this->set_x_Point(get_x_Point() * sx);
+    this->set_y_Point(get_y_Point() * sy);
+    this->set_z_Point(get_z_Point() * sz);
+};
+
+void Vector::reflectXY(){
+    //this->get_x_Point(),
+    //this->get_y_Point(),
+    this->set_z_Point(-(this->get_z_Point()));
+};
+void Vector::reflectXZ(){
+    //vector->get_x_Point(),
+    this->set_y_Point(-(this->get_y_Point()));
+    //vector->get_z_Point()
+};
+void Vector::reflectYZ(){
+    this->set_x_Point(-(this->get_x_Point()));
+    //this->get_y_Point();
+    //this->get_z_Point();
+};
+
+void Vector::shearYX(double angle){
+    this->set_x_Point(this->get_x_Point() + this->get_y_Point() * tan(angle));
+    //this->get_y_Point();
+    //this->get_z_Point();
+};
+void Vector::shearXY(double angle){
+    //this->get_x_Point(),
+    this->set_y_Point(this->get_y_Point() + this->get_x_Point() * tan(angle));
+    //this->get_z_Point()
+};
+void Vector::shearXZ(double angle){
+    //this->get_x_Point(),
+    //this->get_y_Point(),
+    this->set_z_Point(this->get_z_Point() + this->get_x_Point() * tan(angle));
+};
+void Vector::shearZX(double angle){
+    this->set_x_Point(this->get_x_Point()  + this->get_z_Point() * tan(angle));
+    //this->get_y_Point(),
+    //this->get_z_Point()
+};
+void Vector::shearYZ(double angle){
+    //this->get_x_Point();
+    //this->get_y_Point();
+    this->set_z_Point(this->get_z_Point() + this->get_y_Point() * tan(angle));
+};
+void Vector::shearZY(double angle){
+    //this->get_x_Point(),
+    this->set_y_Point(this->get_y_Point() + this->get_z_Point() * tan(angle));
+    //this->get_z_Point()
+};

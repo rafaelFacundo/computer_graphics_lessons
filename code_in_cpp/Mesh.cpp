@@ -59,8 +59,6 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
             v2 = idVertice21;
             v3 = (n1/ (v1+1)) - 1;
         };
-        
-/* OLHA A PARTIR DAQUI*/        
 
         Vector *P1_vector = this->listOfPoints[v1]->gimmeTheCoordinateVector();
         Vector *P2_vector = this->listOfPoints[v2]->gimmeTheCoordinateVector();
@@ -77,9 +75,9 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
         Vector *w = P_o->minus_with_the_vector(P1_vector);
 
         //double Po_minus_P1_scalar_normal = (P_o->minus_with_the_vector(P1_vector))->scalar_with(normal);
-        
+
         double Dir_scalar_normal = dir->scalar_with(normalUnitary);
-        double Ti_point = (-w->scalar_with(normalUnitary)) / Dir_scalar_normal; 
+        double Ti_point = (-w->scalar_with(normalUnitary)) / Dir_scalar_normal;
 
         if ( Dir_scalar_normal != 0 && Ti_point > 0 ) {
             /* Pi point */
@@ -104,9 +102,14 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
 
             /* C3 */
             //double P2_Pi_vetorial_P3_Pi_scalarNormal = ( (P2_vector->minus_with_the_vector(Pi))->vectorProductWith(P3_vector->minus_with_the_vector(Pi)) )->scalar_with(normal);
-            C3 = 1 - C1 - C2;  
+            C3 = 1 - C1 - C2;
 
-            if ((C1 >= 0 && C2 >= 0 && C3 >= 0) && ((C1 + C2 + C3) == 1)) {
+            if ( result.point_of_intersection == -1 && (C1 >= 0 && C2 >= 0 && C3 >= 0) && ((C1 + C2 + C3) == 1)) {
+                result.doesIntersect = true;
+                result.point_of_intersection = Ti_point;
+                this->set_T_i(Ti_point);
+                this->setNormal(normalUnitary);
+            }else if ( (C1 >= 0 && C2 >= 0 && C3 >= 0) && ((C1 + C2 + C3) == 1) && Ti_point < result.point_of_intersection ) {
                 result.doesIntersect = true;
                 result.point_of_intersection = Ti_point;
                 this->set_T_i(Ti_point);
@@ -114,18 +117,6 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
             }
 
         }
-
-        
-
-        /* if ((C1 + C2 + C3) == 1) {
-            cout << "blblblb\n";
-            result.doesIntersect = true;
-            result.point_of_intersection = Ti_point;
-            this->set_T_i(Ti_point);
-            this->setNormal(normal);
-        }
- */
-
 
     }
 
@@ -195,7 +186,7 @@ void Mesh::gime_your_color(
     vectorWithColors = vectorWithColors->sum_with_the_vector(Ambient_light_intensity->at_sign_with(this->get_K_a()));
 
 
-    addressToPutTheColor[0] = 205;
-    addressToPutTheColor[1] = 145;
-    addressToPutTheColor[2] = 105;
+    addressToPutTheColor[0] = vectorWithColors->get_x_Point() * 255;
+    addressToPutTheColor[1] = vectorWithColors->get_y_Point() * 255;
+    addressToPutTheColor[2] = vectorWithColors->get_z_Point() * 255;
 };
