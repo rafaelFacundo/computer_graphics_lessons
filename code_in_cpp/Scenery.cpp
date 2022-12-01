@@ -1,7 +1,7 @@
 #include "scenery.h"
 #include "Vector.h"
 #include <iostream>
-using namespace std; 
+using namespace std;
 
 
 Vector* Scenery::get_light_position(int index){
@@ -28,11 +28,12 @@ int Scenery::get_Object_list_lenght() {
 
 void Scenery::set_Light_position(Vector *light, Vector *intensityOfLight){
     this->Light_position.push_back(light);
-    this->set_ambient_light_intensity(intensityOfLight);
+    this->set_Light_intensity(intensityOfLight);
 };
 
 void Scenery::set_Light_intensity(Vector *intensityOfLight){
     this->Light_intensity.push_back(intensityOfLight);
+
 };
 
 
@@ -81,7 +82,7 @@ double Scenery::get_minimun(double num1, double num2) {
 };
 
 Scenery::Scenery() {
-    
+
 }
 
 Scenery::Scenery(
@@ -105,19 +106,19 @@ Scenery::Scenery(
     this->set_z(z);
     this->set_renderer(renderer);
 }
-/* 
-    method that run through the list of objects and take the object point 
+/*
+    method that run through the list of objects and take the object point
     that is near of the observer's position
 */
 int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
     int numberOfObjects = this->get_Object_list_lenght();
     double nearPoint = 0;
     int indexToReturn = -1;
-    
+
     for (int i = 0; i < numberOfObjects; i++) {
         returnType result = this->list_Of_Objects[i]->does_the_point_intercept(dir, P_o);
         if (result.doesIntersect && indexToReturn == -1) {
-    
+
             nearPoint =  result.point_of_intersection;
             indexToReturn = i;
         }else if (result.doesIntersect && result.point_of_intersection < nearPoint) {
@@ -144,7 +145,7 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
 void Scenery::ray_tracing_algorithm() {
     double Dx = this->width/this->n_lines;
     double Dy = this->height/this->n_collumns;
-    
+
     for (int l = 0; l < this->n_lines; l++) {
         double Yj = this->height/2 - Dy/2 - l*Dy;
         for (int c = 0; c < this->n_collumns; c++ ) {
@@ -157,7 +158,7 @@ void Scenery::ray_tracing_algorithm() {
 
 
                 /* old way to calculate the color */
-                
+
                 /* bool doesHaveShadow = verify_the_shadow(
                     this->get_light_position(),
                     dir,
@@ -170,7 +171,7 @@ void Scenery::ray_tracing_algorithm() {
                         dir,
                         this->get_light_position(),
                         this->get_light_intensity(),
-                        this->get_ambient_light_intensity(), 
+                        this->get_ambient_light_intensity(),
                         this->colorToDraw
                     );
                 }else {
@@ -188,7 +189,7 @@ void Scenery::ray_tracing_algorithm() {
             /* if (this->colorToDraw[0] == 241.0) {
                 cout << this->colorToDraw[0] << '\n';
             } */
-            
+
             /* this->colorToDraw[0] */
             SDL_SetRenderDrawColor(
                 this->renderer,
@@ -198,8 +199,8 @@ void Scenery::ray_tracing_algorithm() {
                 255
             );
             SDL_RenderDrawPoint(this->renderer, c, l);
-            
-            
+
+
         }
     }
 
@@ -232,7 +233,7 @@ bool Scenery::verify_the_shadow(
                     indexOfInterceptedObje = i;
                 }
             }
-            
+
             /* if ( i == 0 && thisPoint == -1 ) {
                 nearPoint = thisPoint;
                 indexOfInterceptedObje = -1;
@@ -253,7 +254,7 @@ bool Scenery::verify_the_shadow(
             }
 
         }
-        
+
     }
 
     if ( indexOfInterceptedObje == -1 ) {
@@ -261,7 +262,7 @@ bool Scenery::verify_the_shadow(
     }else {
         return true;
     }
-    
+
 };
 
 
@@ -269,11 +270,11 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
     this->colorToDraw[0] = 0.0;
     this->colorToDraw[1] = 0.0;
     this->colorToDraw[2] = 0.0;
-    cout << this->Light_intensity.size() << '\n';
+
     for (int i = 0; i < this->Light_intensity.size(); i++) {
         Vector *LightIntensity = this->Light_intensity[i];
         Vector *LightPosition = this->Light_position[i];
-        
+
         bool doesHaveShadowForThisLight = verify_the_shadow(
             LightPosition,
             dir,
@@ -282,13 +283,13 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
         );
 
         if (!doesHaveShadowForThisLight) {
-            
+
             this->list_Of_Objects[indexOfObject]->gime_your_color(
                 this->get_observer_position(),
                 dir,
                 LightPosition,
                 LightIntensity,
-                this->get_ambient_light_intensity(), 
+                this->get_ambient_light_intensity(),
                 this->colorToDraw
             );
         }else {
@@ -298,6 +299,6 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
             );
         }
 
-        
+
     }
 };

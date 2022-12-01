@@ -338,8 +338,8 @@ int main() {
   theScenery->addObjectToTheScene(theSphere);
   theScenery->addObjectToTheScene(Floor);
   theScenery->addObjectToTheScene(ceiling);
-  theScenery->addObjectToTheScene(right_side_wall);
-  theScenery->addObjectToTheScene(left_side_wall);
+  //theScenery->addObjectToTheScene(right_side_wall);
+  //theScenery->addObjectToTheScene(left_side_wall);
   theScenery->addObjectToTheScene(front_wall);
   theScenery->addObjectToTheScene(theCone);
   theScenery->addObjectToTheScene(theCylinder);
