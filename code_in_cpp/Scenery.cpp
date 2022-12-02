@@ -4,6 +4,11 @@
 using namespace std;
 
 
+Scenery::Scenery() {
+
+}
+
+
 Vector* Scenery::get_light_position(int index){
     return this->Light_position[index];
 };
@@ -81,9 +86,16 @@ double Scenery::get_minimun(double num1, double num2) {
     return num2;
 };
 
-Scenery::Scenery() {
+double Scenery::get_max_rgb(double num1, double num2, double num3) {
+    if (num1 > num2 && num1 > num3) {
+        return num1;
+    }else if (num2 > num1 && num2 > num3) {
+        return num2;
+    }else {
+        return num3;
+    }   
+};
 
-}
 
 Scenery::Scenery(
     Vector* Light_position,
@@ -191,11 +203,21 @@ void Scenery::ray_tracing_algorithm() {
             } */
 
             /* this->colorToDraw[0] */
+
+            if (this->colorToDraw[0] > 1 || this->colorToDraw[1] > 1 || this->colorToDraw[2] > 1) {
+                double maxValue = this->get_max_rgb(this->colorToDraw[0], this->colorToDraw[1], this->colorToDraw[2]);
+                this->colorToDraw[0] /= maxValue; 
+                this->colorToDraw[1] /= maxValue;
+                this->colorToDraw[2] /= maxValue;
+            }
+
+            
+
             SDL_SetRenderDrawColor(
                 this->renderer,
-                this->get_minimun(this->colorToDraw[0], 255.0),
-                this->get_minimun(this->colorToDraw[1], 255.0),
-                this->get_minimun(this->colorToDraw[2], 255.0),
+                this->get_minimun((this->colorToDraw[0] * 255), 255.0),
+                this->get_minimun((this->colorToDraw[1] * 255), 255.0),
+                this->get_minimun((this->colorToDraw[2] * 255), 255.0),
                 255
             );
             SDL_RenderDrawPoint(this->renderer, c, l);
@@ -275,6 +297,7 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
         Vector *LightIntensity = this->Light_intensity[i];
         Vector *LightPosition = this->Light_position[i];
 
+
         bool doesHaveShadowForThisLight = verify_the_shadow(
             LightPosition,
             dir,
@@ -283,7 +306,6 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
         );
 
         if (!doesHaveShadowForThisLight) {
-
             this->list_Of_Objects[indexOfObject]->gime_your_color(
                 this->get_observer_position(),
                 dir,

@@ -21,10 +21,13 @@ int main() {
   double z = -dJ;
   double cJan[3] = {0.0,0.0,-dJ};
 
+  /*  Fonte pontual: Intensidade da fonte  I_F = (0.7, 0.7, 0.7),  
+  posição da fonte P_F = (0, 60cm, -30cm)
+11) Luz ambiente: Intensidade I_A = (0.3, 0.3, 0.3) */
 
   Vector *ambient_light = new Vector(0.3,0.3,0.3);
   Vector *light_intensity = new Vector(0.7,0.7,0.7);
-  Vector *light_position = new Vector(-100.0,140.0,-20.0);
+  Vector *light_position = new Vector(-100,140.0,-20.0);
   Vector *P_o = new Vector(0.0,0.0,0.0);
 
   /* initing the sdl window */
@@ -51,7 +54,7 @@ int main() {
 
 
   /* Plan 1 */
-  double K_e_plan_backgrnd[3] = {0.3,0.3,0.7};
+  double K_e_plan_backgrnd[3] = {0.686,0.933,0.933};
   Plan *Floor = new Plan();
   Floor->set_PI_Point(0.0,-150.0,0.0);
   Floor->set_N_vector(0.0,1.0,0.0);
@@ -126,7 +129,7 @@ int main() {
     K_d,
     K_d,
     1.0,
-    5.0
+    20.0
   );
   theSphere->set_K_a(K_d);
 
@@ -337,12 +340,13 @@ int main() {
 
   theScenery->addObjectToTheScene(theSphere);
   theScenery->addObjectToTheScene(Floor);
-  theScenery->addObjectToTheScene(ceiling);
-  //theScenery->addObjectToTheScene(right_side_wall);
-  //theScenery->addObjectToTheScene(left_side_wall);
+  /* theScenery->addObjectToTheScene(ceiling);
+  theScenery->addObjectToTheScene(right_side_wall);
+  theScenery->addObjectToTheScene(left_side_wall);
   theScenery->addObjectToTheScene(front_wall);
   theScenery->addObjectToTheScene(theCone);
-  theScenery->addObjectToTheScene(theCylinder);
+  theScenery->addObjectToTheScene(theCylinder); */
+  
   //theScenery->addObjectToTheScene(theMesh);
 
 

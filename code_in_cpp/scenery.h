@@ -44,6 +44,7 @@ class Scenery {
 
         void calculateTheColor(int indexOfObject, Vector *dir);
         double get_minimun(double num1, double num2);
+        double get_max_rgb(double num1, double num2, double num3);
         double get_z();
         Vector* get_light_position(int index);
         Vector* get_ambient_light_intensity();

@@ -84,7 +84,6 @@ void Plan::gime_your_color(
     addressToPutTheColor[1] += vectorWithColors->get_y_Point() * 255;
     addressToPutTheColor[2] += vectorWithColors->get_z_Point() * 255;
 
-
 };
 
 returnType Plan::does_the_point_intercept(Vector *dir, Vector *P_o) {
