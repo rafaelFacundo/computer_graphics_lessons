@@ -11,7 +11,7 @@ class Cylinder : public Object {
     bool intercepted = false;
     bool intercepBase = false;
     bool intercepLid = false;
-    int typeOfThisObject = 2;
+
 
     public:
         void set_B_vector(double x, double y, double z);

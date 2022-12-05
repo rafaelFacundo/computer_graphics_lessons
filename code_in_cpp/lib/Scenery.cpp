@@ -130,26 +130,12 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
     for (int i = 0; i < numberOfObjects; i++) {
         returnType result = this->list_Of_Objects[i]->does_the_point_intercept(dir, P_o);
         if (result.doesIntersect && indexToReturn == -1) {
-
             nearPoint =  result.point_of_intersection;
             indexToReturn = i;
         }else if (result.doesIntersect && result.point_of_intersection < nearPoint) {
             nearPoint =  result.point_of_intersection;
             indexToReturn = i;
         }
-        /* if ( i == 0 && thisPoint == -1 ) {
-            nearPoint = thisPoint;
-            indexToReturn = -1;
-        }else if ( i == 0 && thisPoint != -1 ) {
-            nearPoint = thisPoint;
-            indexToReturn = i;
-        }else if (thisPoint > -1  && nearPoint == -1) {
-            nearPoint = thisPoint;
-            indexToReturn = i;
-        }else if (nearPoint > -1 && thisPoint > -1 && nearPoint > thisPoint){
-            nearPoint = thisPoint;
-            indexToReturn = i;
-        } */
     }
     return indexToReturn;
 }
@@ -158,15 +144,20 @@ void Scenery::ray_tracing_algorithm() {
     double Dx = this->width/this->n_lines;
     double Dy = this->height/this->n_collumns;
 
+    cout << "aaaaaaaaa\n";
+
     for (int l = 0; l < this->n_lines; l++) {
         double Yj = this->height/2 - Dy/2 - l*Dy;
         for (int c = 0; c < this->n_collumns; c++ ) {
             double Xj = -this->width/2 + Dx/2 + c*Dx;
             Vector *dir = new Vector(Xj, Yj, this->get_z());
+
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
             if ( objePosiInList > -1) {
                 /* new way to calculate the color */
+
                 calculateTheColor(objePosiInList, dir);
+
 
 
                 /* old way to calculate the color */
@@ -322,4 +313,57 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
 
 
     }
+};
+
+
+int Scenery::verifyIfClickHitsSomeObjetc(int x, int y) {
+    double Dx = this->width/this->n_lines;
+    double Dy = this->height/this->n_collumns;
+    double Yj = this->height/2 - Dy/2 - y*Dy;
+    double Xj = -this->width/2 + Dx/2 + x*Dx;
+    Vector *dir = new Vector(Xj, Yj, this->get_z());
+    int indexOfObjectIntercepted = -1;
+
+    indexOfObjectIntercepted = call_the_intersections_verifications(dir, this->observer_point);
+    if ( indexOfObjectIntercepted > -1) {
+        cout << this->list_Of_Objects[indexOfObjectIntercepted]->get_object_type() << '\n';
+    }else{
+        cout << "não atingiu um objeto\n";
+    }
+    return indexOfObjectIntercepted;
+};
+
+
+void Scenery::makeModificationOnObject(int indexOfObj) {
+    Object* interceptedObject = this->list_Of_Objects[indexOfObj];
+    Vector* Ka = interceptedObject->get_K_a();
+    Vector* Kd = interceptedObject->get_K_d();
+    Vector* Ke = interceptedObject->get_K_e();
+    double *newCoeficients = (double*)malloc(sizeof(double) * 3);
+
+    cout << "Coeficientes do objeto: \n";
+    cout << "Ka: ";
+    Ka->printValues();
+    cout << '\n';
+
+    cout << "Kd: ";
+    Kd->printValues();
+    cout << '\n';
+
+    cout << "Ke: ";
+    Ke->printValues();
+    cout << '\n';
+
+    cout << "Digite o novo valor do primeiro campo do Kd: ";
+    cin >> newCoeficients[0];
+    cout << "Digite o novo valor do segundo campo do Kd: ";
+    cin >> newCoeficients[1];
+    cout << "Digite o novo valor do terceiro campo do Kd: ";
+    cin >> newCoeficients[2];
+
+    interceptedObject->set_K_d(newCoeficients);
+    interceptedObject->set_K_e(newCoeficients);
+    interceptedObject->set_K_a(newCoeficients);
+
+    this->ray_tracing_algorithm();
 };

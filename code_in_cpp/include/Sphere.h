@@ -5,7 +5,6 @@
 class Sphere : public Object {
     private:
         double Sphere_radius;
-        int typeOfThisObject = 0;        
     public:
         void set_radius(double radius);
         double get_radius();
@@ -33,5 +32,5 @@ class Sphere : public Object {
 
 
 
-        
+
 };

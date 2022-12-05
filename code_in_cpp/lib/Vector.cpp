@@ -1,4 +1,6 @@
 #include "../include/Vector.h"
+#include <iostream>
+using namespace std;
 #include <math.h>
 
 void Vector::setPoints(double x, double y, double z) {
@@ -259,17 +261,26 @@ Vector* Vector::shearZY(Vector *vector, double angle){
 
 void Vector::ThisRotateX(double angle){
     //this->get_x_Point(),
-    this->set_y_Point(this->get_y_Point() * cos(angle) - this->get_z_Point() * sin(angle));
-    this->set_z_Point(this->get_y_Point() * sin(angle) + this->get_z_Point() * cos(angle));
+    double y = this->get_y_Point();
+    double z = this->get_z_Point();
+    this->set_y_Point( (y * cos(angle)) - (z * sin(angle)) );
+    this->set_z_Point( (y * sin(angle)) + (z * cos(angle)) );
+
+
+
 };
 void Vector::ThisRotateY(double angle){
-    this->set_x_Point(this->get_x_Point() * cos(angle) + this->get_z_Point() * sin(angle));
+    double x = this->get_x_Point();
+    double z = this->get_z_Point();
+    this->set_x_Point((x * cos(angle)) + (z * sin(angle)));
     //this->get_y_Point(),
-    this->set_z_Point(-(this->get_x_Point()) * sin(angle) + this->get_z_Point() * cos(angle));
+    this->set_z_Point((-(x) * sin(angle)) + (z * cos(angle)));
 };
 void Vector::ThisRotateZ(double angle){
-    this->set_x_Point(this->get_x_Point() * cos(angle) - this->get_y_Point() * sin(angle));
-    this->set_y_Point(this->get_x_Point() * sin(angle) + this->get_y_Point() * cos(angle));
+    double x = this->get_x_Point();
+    double y = this->get_y_Point();
+    this->set_x_Point( (x * cos(angle)) - (y * sin(angle) ));
+    this->set_y_Point( (x * sin(angle)) + (y * cos(angle) ));
     //vector->get_z_Point()
 };
 void Vector::ThisTranslate(double x, double y, double z) {
@@ -278,9 +289,9 @@ void Vector::ThisTranslate(double x, double y, double z) {
     this->set_z_Point(get_z_Point() + z);
 };
 void Vector::ThisScale(double sx, double sy, double sz){
-    this->set_x_Point(get_x_Point() * sx);
-    this->set_y_Point(get_y_Point() * sy);
-    this->set_z_Point(get_z_Point() * sz);
+    this->set_x_Point(this->get_x_Point() * sx);
+    this->set_y_Point(this->get_y_Point() * sy);
+    this->set_z_Point(this->get_z_Point() * sz);
 };
 
 void Vector::ThisReflectXY(){
@@ -328,4 +339,9 @@ void Vector::ThisShearZY(double angle){
     //this->get_x_Point(),
     this->set_y_Point(this->get_y_Point() + this->get_z_Point() * tan(angle));
     //this->get_z_Point()
+};
+
+
+void Vector::printValues() {
+    printf("[%f, %f, %f]", this->get_x_Point(), this->get_y_Point(), this->get_z_Point());
 };

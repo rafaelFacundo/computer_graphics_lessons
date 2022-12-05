@@ -16,6 +16,7 @@ Sphere::Sphere(
     double shine,
     double radius
 ):Object() {
+    this->typeOfThisObject = 0;
     this->set_Center_of_Object(center);
     this->set_K_e(K_e);
     this->set_K_d(K_d);

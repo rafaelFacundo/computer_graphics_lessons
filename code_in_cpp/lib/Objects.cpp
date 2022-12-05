@@ -28,6 +28,10 @@ void Object::set_T_i(double point) {
     this->T_i = point;
 };
 
+int Object::get_object_type(){
+    return this->typeOfThisObject;
+};
+
 Vector* Object::get_K_e(){
     return this->K_e_of_object;
 };

@@ -4,7 +4,7 @@
 using namespace std;
 
 Plan::Plan() {
-
+    this->typeOfThisObject = 1;
 };
 
 void Plan::set_PI_Point(double x, double y, double z){

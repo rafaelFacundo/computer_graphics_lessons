@@ -1,6 +1,6 @@
 #pragma once
 #include "Objects.h"
-#include "SdlFunction.h"
+#include "sdlFunctionsToPaint.h"
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <vector>
@@ -21,6 +21,21 @@ class Scenery {
     SDL_Renderer *renderer;
 
     public:
+        Scenery();
+
+        Scenery(
+            Vector* Light_position,
+            Vector* Light_intensity,
+            Vector* Ambient_Light_intesity,
+            Vector* observer_point,
+            double n_lines,
+            double n_collumns,
+            double height,
+            double width,
+            double z,
+            SDL_Renderer *renderer
+        );
+
         int  call_the_intersections_verifications(Vector *dir, Vector *P_o);
         void ray_tracing_algorithm();
         void draw_pixel();
@@ -53,18 +68,8 @@ class Scenery {
         int get_Object_list_lenght();
         SDL_Renderer* get_sceneryRender();
 
-        Scenery();
 
-        Scenery(
-            Vector* Light_position,
-            Vector* Light_intensity,
-            Vector* Ambient_Light_intesity,
-            Vector* observer_point,
-            double n_lines,
-            double n_collumns,
-            double height,
-            double width,
-            double z,
-            SDL_Renderer *renderer
-        );
+
+        int verifyIfClickHitsSomeObjetc(int x, int y);
+        void makeModificationOnObject(int indexOfObj);
 };

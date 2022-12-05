@@ -75,6 +75,8 @@ class Vector {
         void ThisShearYZ(double angle);
         void ThisShearZY(double angle);
 
+        void printValues();
+
 
 
 };

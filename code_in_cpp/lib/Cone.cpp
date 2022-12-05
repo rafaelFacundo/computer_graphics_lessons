@@ -4,7 +4,7 @@
 using namespace std;;
 
 Cone::Cone():Object(){
-
+    this->typeOfThisObject = 3;
 };
 
 void Cone::putOrRemoveLid(bool put){

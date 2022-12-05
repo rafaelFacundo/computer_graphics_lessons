@@ -20,6 +20,8 @@ class Object {
         void set_K_a(double K_d[3]);
         void set_shine(double shine);
         void set_T_i(double point);
+
+        int get_object_type();
         Vector *get_K_e();
         Vector *get_K_d();
         Vector *get_K_a();

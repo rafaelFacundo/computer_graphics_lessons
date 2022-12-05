@@ -336,36 +336,27 @@ int main() {
 
 
 
-
   /* adding an object to the scenery */
 
-  /* theScenery->addObjectToTheScene(theSphere);
-  theScenery->addObjectToTheScene(Floor);
+  theScenery->addObjectToTheScene(theSphere);
+  /* theScenery->addObjectToTheScene(Floor);
   theScenery->addObjectToTheScene(ceiling);
   theScenery->addObjectToTheScene(right_side_wall);
   theScenery->addObjectToTheScene(left_side_wall);
   theScenery->addObjectToTheScene(front_wall);
   theScenery->addObjectToTheScene(theCone);
   theScenery->addObjectToTheScene(theCylinder); */
-
   //theScenery->addObjectToTheScene(theMesh);
-
-
+  theScenery->addObjectToTheScene(theCone);
 
   /* calling the ray tracing algorithm */
   theScenery->ray_tracing_algorithm();
 
-  /* this code below is treating the window's */
-  int isRunning = 1;
-  while (isRunning) {
-      while (SDL_PollEvent (&event) != 0) {
-          if(event.type == SDL_QUIT)
-          isRunning = 0;
-      }
-  SDL_UpdateWindowSurface(window);
-  }
-  SDL_DestroyWindow (window);
-  SDL_Quit ();
+
+
+  SDL_events(theScenery, &event, window);
+
+
 
 
 

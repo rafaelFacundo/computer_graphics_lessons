@@ -4,7 +4,7 @@
 using namespace std;
 
 Cylinder::Cylinder():Object(){
-
+    this->typeOfThisObject = 2;
 }
 
 
