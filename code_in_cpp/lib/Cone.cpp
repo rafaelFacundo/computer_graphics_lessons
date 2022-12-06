@@ -166,10 +166,10 @@ bool Cone::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti){
     Vector *Pi = P_o->sum_with_the_vector(Dr_times_ti);
     /* Pi_m_B = Pi_minus_B_vector  */
     Vector *Pi_m_B = Pi->minus_with_the_vector(this->get_B_vector());
-    double Pi_m_b_Scalar_U = Pi_m_B->scalar_with(this->get_direction_vector());
+    double Pi_m_b_Scalar_U = Pi_m_B->scalar_with(this->get_unitary_vector());
     //cout << Pi_m_b_Scalar_U << '\n';
     /* Vector_UpB = U_times_Pi_m_b_ScalarU  */
-    Vector *Vector_UpB = this->get_direction_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U);
+    Vector *Vector_UpB = this->get_unitary_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U);
     if ( Pi_m_b_Scalar_U >= 0 && Pi_m_b_Scalar_U <= this->get_height()) {
         return true;
     }else {
@@ -208,14 +208,11 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
     result.doesTheRayInterceptSomeLid = false;
     result.typeOfTheInterceptedObject = this->getTypeOfThisObject();
 
-
     this->cos_angle = pow(this->height,2)/(pow(this->height,2) + pow(this->radius,2));
     double nearPoint;
     bool Ti_verification = false;
     Vector *little_v_vector = this->vertice_vector->minus_with_the_vector(P_o);
     double square_of_cos = this->cos_angle;
-
-    //cout << cos(this->get_angle()) << '\n';
 
     /* A */
     double square_of_dir_scalar_unit_vector = pow(dir->scalar_with(this->get_unitary_vector()), 2);
@@ -277,24 +274,26 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
                 this->setInterception(false);
             }
         }
-
-
-
-
     }
     return result;
 };
 
 void Cone::applyRotateX(double angle){
     this->get_unitary_vector()->ThisRotateX(angle);
+    Vector *newVertice = (this->get_unitary_vector()->multiply_by_a_scalar(this->get_height()))->sum_with_the_vector(this->B_vector);
+    this->set_Vertice_vector(
+        newVertice->get_x_Point(),
+        newVertice->get_y_Point(),
+        newVertice->get_z_Point()
+    );
 };
+
 void Cone::applyRotateY(double angle){
-
-     this->get_unitary_vector()->ThisRotateY(angle);
+    this->get_unitary_vector()->ThisRotateY(angle); 
 };
-void Cone::applyRotateZ(double angle){
 
-     this->get_unitary_vector()->ThisRotateZ(angle);
+void Cone::applyRotateZ(double angle){
+    this->get_unitary_vector()->ThisRotateZ(angle);
 };
 
 void Cone::applyTranslate(double x, double y, double z){
@@ -305,6 +304,12 @@ void Cone::applyTranslate(double x, double y, double z){
 void Cone::applyScale(double sx, double sy, double sz){
     this->set_radius(this->get_radius() * sx);
     this->set_height(this->get_height() * sx);
+    Vector *newVertice = (this->get_unitary_vector()->multiply_by_a_scalar(this->get_height()))->sum_with_the_vector(this->B_vector);
+    this->set_Vertice_vector(
+        newVertice->get_x_Point(),
+        newVertice->get_y_Point(),
+        newVertice->get_z_Point()
+    );
 };
 
 void Cone::applyReflectXY(){};

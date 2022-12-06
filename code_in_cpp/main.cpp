@@ -82,6 +82,7 @@ int main() {
   front_wall->set_K_e(K_plan3);
   front_wall->set_K_d(K_plan3);
   front_wall->set_shine(1);
+  front_wall->set_TextureImage("image/madeira.bmp");
 
   /* Plan 4 */
   double K_plan4[3] = {0.686,0.933,0.933};
@@ -338,7 +339,7 @@ int main() {
 
   /* adding an object to the scenery */
 
-  theScenery->addObjectToTheScene(theSphere);
+  //theScenery->addObjectToTheScene(theSphere);
   /* theScenery->addObjectToTheScene(Floor);
   theScenery->addObjectToTheScene(ceiling);
   theScenery->addObjectToTheScene(right_side_wall);
@@ -349,7 +350,8 @@ int main() {
   //theScenery->addObjectToTheScene(theMesh);
   theScenery->addObjectToTheScene(theCone);
   theScenery->addObjectToTheScene(Floor);
-  theScenery->addObjectToTheScene(theCylinder);
+  theScenery->addObjectToTheScene(front_wall);
+  //theScenery->addObjectToTheScene(theCylinder);
 
   /* calling the ray tracing algorithm */
   theScenery->ray_tracing_algorithm();

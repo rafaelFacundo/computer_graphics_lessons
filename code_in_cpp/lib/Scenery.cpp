@@ -294,6 +294,12 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
             cout << "2 - Modificar a escala da esfera.\n";
             cout << "3 - Modificar as cores.\n";
             cin >> resposta;
+            if (cin.fail() || resposta > 3 || resposta < 1)  {
+                cout << "Entrada inválida";
+                cin.clear();
+                cin.ignore(100);
+                break;
+            }
             if (resposta == 1) {
                 cout << "Digite o valor de x: ";
                 cin >> newCoeficients[0];
@@ -326,6 +332,12 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
             cout << "4 - Rotacionar o plano em z.\n";
             cout << "5 - Modificar as cores.\n";
             cin >> resposta;
+            if (cin.fail() || resposta > 5 || resposta < 1)  {
+                cout << "Entrada inválida\n";
+                cin.clear();
+                cin.ignore(1000, '\n');
+                break;
+            }
             if (resposta == 1) {
                 cout << "Digite o valor de x: ";
                 cin >> newCoeficients[0];
@@ -367,6 +379,12 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
             cout << "5 - Modificar a escala do cilindro.\n";
             cout << "6 - Modificar as cores.\n";
             cin >> resposta;
+            if (cin.fail() || resposta > 6 || resposta < 1)  {
+                cout << "Entrada inválida\n";
+                cin.clear();
+                cin.ignore(1000, '\n');
+                break;
+            }
             if (resposta == 1) {
                 cout << "Digite o valor de x: ";
                 cin >> newCoeficients[0];
@@ -411,6 +429,12 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
             cout << "5 - Modificar a escala do cone.\n";
             cout << "6 - Modificar as cores.\n";
             cin >> resposta;
+            if (cin.fail() || resposta > 6 || resposta < 1)  {
+                cout << "Entrada inválida\n";
+                cin.clear();
+                cin.ignore(1000, '\n');
+                break;
+            }
             if (resposta == 1) {
                 cout << "Digite o valor de x: ";
                 cin >> newCoeficients[0];
@@ -450,7 +474,7 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
         case 4:
             break;
         default:
-            cout << "blalalbalb\n";
+            cout << "Não atingiu nenhum objeto.";
             break;
     };
 

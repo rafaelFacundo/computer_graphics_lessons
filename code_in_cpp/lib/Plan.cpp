@@ -1,4 +1,5 @@
 #include "../include/Plan.h"
+#include "../include/TextureImage.h"
 #include <math.h>
 #include <iostream>
 using namespace std;
@@ -138,3 +139,15 @@ void Plan::applyShearXZ(double angle){};
 void Plan::applyShearZX(double angle){};
 void Plan::applyShearYZ(double angle){};
 void Plan::applyShearZY(double angle){};
+
+
+
+void Plan::set_TextureImage(string filename){  
+    
+    TextureImage *texture = new TextureImage();
+    bool imageLoaded = texture->LoadImage(filename);
+    if(imageLoaded){
+        this->TextureImg = filename;
+        cout << "ok"; 
+    }
+};
