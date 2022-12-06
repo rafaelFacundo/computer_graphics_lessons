@@ -323,3 +323,35 @@ returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
 
     return result;
 };
+
+
+void Cylinder::applyRotateX(double angle){
+    this->get_unitary_vector()->ThisRotateX(angle);
+};
+void Cylinder::applyRotateY(double angle){
+    this->get_unitary_vector()->ThisRotateY(angle);
+};
+void Cylinder::applyRotateZ(double angle){
+    this->get_unitary_vector()->ThisRotateZ(angle);
+};
+
+void Cylinder::applyTranslate(double x, double y, double z){
+    this->get_B_vector()->ThisTranslate(x,y,z);
+
+};
+
+void Cylinder::applyScale(double sx, double sy, double sz){
+    this->set_radius(this->get_radius() * sx);
+    this->set_height(this->get_height() * sx);
+};
+
+void Cylinder::applyReflectXY(){};
+void Cylinder::applyReflectXZ(){};
+void Cylinder::applyReflectYZ(){};
+
+void Cylinder::applyShearYX(double angle){};
+void Cylinder::applyShearXY(double angle){};
+void Cylinder::applyShearXZ(double angle){};
+void Cylinder::applyShearZX(double angle){};
+void Cylinder::applyShearYZ(double angle){};
+void Cylinder::applyShearZY(double angle){};

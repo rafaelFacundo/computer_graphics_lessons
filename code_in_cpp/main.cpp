@@ -348,6 +348,8 @@ int main() {
   theScenery->addObjectToTheScene(theCylinder); */
   //theScenery->addObjectToTheScene(theMesh);
   theScenery->addObjectToTheScene(theCone);
+  theScenery->addObjectToTheScene(Floor);
+  theScenery->addObjectToTheScene(theCylinder);
 
   /* calling the ray tracing algorithm */
   theScenery->ray_tracing_algorithm();

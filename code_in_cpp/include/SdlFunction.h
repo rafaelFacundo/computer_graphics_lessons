@@ -17,4 +17,4 @@ void SDL_events( Scenery *scenery, SDL_Event *event, SDL_Window* window);
 
 void handleMouseEvent(SDL_Window* window, Scenery *scenery, SDL_MouseButtonEvent &event);
 
-void updateWindow(SDL_Window * window) ;
+void updateWindow(SDL_Window * window);

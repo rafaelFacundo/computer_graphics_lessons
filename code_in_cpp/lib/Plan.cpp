@@ -108,3 +108,33 @@ returnType Plan::does_the_point_intercept(Vector *dir, Vector *P_o) {
     }
     return result;
 };
+
+
+void Plan::applyRotateX(double angle){
+    this->N_vector->ThisRotateX(angle);
+};
+void Plan::applyRotateY(double angle){
+    this->N_vector->ThisRotateY(angle);
+};
+void Plan::applyRotateZ(double angle){
+    this->N_vector->ThisRotateZ(angle);
+};
+
+void Plan::applyTranslate(double x, double y, double z){
+    this->Ppi_Point->ThisTranslate(x,y,z);
+};
+
+void Plan::applyScale(double sx, double sy, double sz){
+
+};
+
+void Plan::applyReflectXY(){};
+void Plan::applyReflectXZ(){};
+void Plan::applyReflectYZ(){};
+
+void Plan::applyShearYX(double angle){};
+void Plan::applyShearXY(double angle){};
+void Plan::applyShearXZ(double angle){};
+void Plan::applyShearZX(double angle){};
+void Plan::applyShearYZ(double angle){};
+void Plan::applyShearZY(double angle){};

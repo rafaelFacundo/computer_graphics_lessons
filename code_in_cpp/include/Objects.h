@@ -13,6 +13,17 @@ class Object {
         int typeOfThisObject;
 
     public:
+        /* Constructor of the class */
+        Object();
+
+        Object(
+            double center[3],
+            double K_e[3],
+            double K_d[3],
+            double shine,
+            double radius
+        );
+
         /* sets and gets of the object atributtes */
         void set_Center_of_Object(double center[3]);
         void set_K_e(double K_e[3]);
@@ -34,16 +45,7 @@ class Object {
 
         int teste ();
 
-        /* Constructor of the class */
-        Object();
 
-        Object(
-            double center[3],
-            double K_e[3],
-            double K_d[3],
-            double shine,
-            double radius
-        );
 
         virtual void gime_your_color(
             Vector *Eye_position,
@@ -55,4 +57,23 @@ class Object {
         ) = 0;
 
         virtual returnType does_the_point_intercept(Vector *dir, Vector *P_o) = 0;
+
+        /* Methods to aplly the transformations */
+        virtual void applyRotateX(double angle) = 0;
+        virtual void applyRotateY(double angle) = 0;
+        virtual void applyRotateZ(double angle) = 0;
+
+        virtual void applyTranslate(double x, double y, double z) = 0;
+        virtual void applyScale(double sx, double sy, double sz) = 0;
+
+        virtual void applyReflectXY() = 0;
+        virtual void applyReflectXZ() = 0;
+        virtual void applyReflectYZ() = 0;
+
+        virtual void applyShearYX(double angle) = 0;
+        virtual void applyShearXY(double angle) = 0;
+        virtual void applyShearXZ(double angle) = 0;
+        virtual void applyShearZX(double angle) = 0;
+        virtual void applyShearYZ(double angle) = 0;
+        virtual void applyShearZY(double angle) = 0;
 };

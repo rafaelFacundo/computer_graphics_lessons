@@ -144,8 +144,6 @@ void Scenery::ray_tracing_algorithm() {
     double Dx = this->width/this->n_lines;
     double Dy = this->height/this->n_collumns;
 
-    cout << "aaaaaaaaa\n";
-
     for (int l = 0; l < this->n_lines; l++) {
         double Yj = this->height/2 - Dy/2 - l*Dy;
         for (int c = 0; c < this->n_collumns; c++ ) {
@@ -154,46 +152,12 @@ void Scenery::ray_tracing_algorithm() {
 
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
             if ( objePosiInList > -1) {
-                /* new way to calculate the color */
-
                 calculateTheColor(objePosiInList, dir);
-
-
-
-                /* old way to calculate the color */
-
-                /* bool doesHaveShadow = verify_the_shadow(
-                    this->get_light_position(),
-                    dir,
-                    this->get_observer_position(),
-                    objePosiInList
-                );
-                if ( !doesHaveShadow ) {
-                    this->list_Of_Objects[objePosiInList]->gime_your_color(
-                        this->get_observer_position(),
-                        dir,
-                        this->get_light_position(),
-                        this->get_light_intensity(),
-                        this->get_ambient_light_intensity(),
-                        this->colorToDraw
-                    );
-                }else {
-                    this->list_Of_Objects[objePosiInList]->gimme_your_ambientColor(
-                        this->get_ambient_light_intensity(),
-                        this->colorToDraw
-                    );
-                }; */
             }else{
                 this->colorToDraw[0] = 0.0;
                 this->colorToDraw[1] = 0.0;
                 this->colorToDraw[2] = 0.0;
             }
-
-            /* if (this->colorToDraw[0] == 241.0) {
-                cout << this->colorToDraw[0] << '\n';
-            } */
-
-            /* this->colorToDraw[0] */
 
             if (this->colorToDraw[0] > 1 || this->colorToDraw[1] > 1 || this->colorToDraw[2] > 1) {
                 double maxValue = this->get_max_rgb(this->colorToDraw[0], this->colorToDraw[1], this->colorToDraw[2]);
@@ -245,21 +209,6 @@ bool Scenery::verify_the_shadow(
                 }
             }
 
-            /* if ( i == 0 && thisPoint == -1 ) {
-                nearPoint = thisPoint;
-                indexOfInterceptedObje = -1;
-            }else if ( i == 0 && thisPoint != -1 ) {
-                nearPoint = thisPoint;
-                indexOfInterceptedObje = i;
-            }else if (thisPoint > -1  && nearPoint == -1) {
-                nearPoint = thisPoint;
-                indexOfInterceptedObje = i;
-            }else if (nearPoint > -1 && thisPoint > -1 && nearPoint > thisPoint){
-                nearPoint = thisPoint;
-                indexOfInterceptedObje = i;
-            } */
-
-
             if(result.point_of_intersection > Pf_pi_norm){
                 indexOfInterceptedObje = -1;
             }
@@ -286,7 +235,6 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
         Vector *LightIntensity = this->Light_intensity[i];
         Vector *LightPosition = this->Light_position[i];
 
-
         bool doesHaveShadowForThisLight = verify_the_shadow(
             LightPosition,
             dir,
@@ -310,11 +258,8 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
             );
 
         }
-
-
     }
 };
-
 
 int Scenery::verifyIfClickHitsSomeObjetc(int x, int y) {
     double Dx = this->width/this->n_lines;
@@ -333,37 +278,181 @@ int Scenery::verifyIfClickHitsSomeObjetc(int x, int y) {
     return indexOfObjectIntercepted;
 };
 
-
 void Scenery::makeModificationOnObject(int indexOfObj) {
     Object* interceptedObject = this->list_Of_Objects[indexOfObj];
     Vector* Ka = interceptedObject->get_K_a();
     Vector* Kd = interceptedObject->get_K_d();
     Vector* Ke = interceptedObject->get_K_e();
     double *newCoeficients = (double*)malloc(sizeof(double) * 3);
+    int objectType = interceptedObject->get_object_type();
+    int resposta;
 
-    cout << "Coeficientes do objeto: \n";
-    cout << "Ka: ";
-    Ka->printValues();
-    cout << '\n';
+    cout << "Digite a opção que deseja fazer: \n";
+    switch (objectType) {
+        case 0:
+            cout << "1 - Transladar a esfera.\n";
+            cout << "2 - Modificar a escala da esfera.\n";
+            cout << "3 - Modificar as cores.\n";
+            cin >> resposta;
+            if (resposta == 1) {
+                cout << "Digite o valor de x: ";
+                cin >> newCoeficients[0];
+                cout << "Digite o valor de y: ";
+                cin >> newCoeficients[1];
+                cout << "Digite o valor de z: ";
+                cin >> newCoeficients[2];
+                interceptedObject->applyTranslate(newCoeficients[0],newCoeficients[1],newCoeficients[2]);
+            }else if (resposta == 2) {
+                cout << "Digite o valor de multiplicação do raio: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyScale(newCoeficients[0],0,0);
+            }else {
+                cout << "Digite o novo valor do Kd: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_d(newCoeficients);
+                cout << "Digite o novo valor do Ke: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+                cout << "Digite o novo valor do Ka: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+            }
+            break;
 
-    cout << "Kd: ";
-    Kd->printValues();
-    cout << '\n';
+        case 1:
+            cout << "1 - Transladar o plano.\n";
+            cout << "2 - Rotacionar o plano em x.\n";
+            cout << "3 - Rotacionar o plano em y.\n";
+            cout << "4 - Rotacionar o plano em z.\n";
+            cout << "5 - Modificar as cores.\n";
+            cin >> resposta;
+            if (resposta == 1) {
+                cout << "Digite o valor de x: ";
+                cin >> newCoeficients[0];
+                cout << "Digite o valor de y: ";
+                cin >> newCoeficients[1];
+                cout << "Digite o valor de z: ";
+                cin >> newCoeficients[2];
+                interceptedObject->applyTranslate(newCoeficients[0],newCoeficients[1],newCoeficients[2]);
+            }else if (resposta == 2) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateX(newCoeficients[0]);
+            }else if (resposta == 3) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateY(newCoeficients[0]);
+            }else if (resposta == 4) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateZ(newCoeficients[0]);
+            }else {
+                cout << "Digite o novo valor do Kd: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_d(newCoeficients);
+                cout << "Digite o novo valor do Ke: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+                cout << "Digite o novo valor do Ka: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+            }
+            break;
 
-    cout << "Ke: ";
-    Ke->printValues();
-    cout << '\n';
-
-    cout << "Digite o novo valor do primeiro campo do Kd: ";
-    cin >> newCoeficients[0];
-    cout << "Digite o novo valor do segundo campo do Kd: ";
-    cin >> newCoeficients[1];
-    cout << "Digite o novo valor do terceiro campo do Kd: ";
-    cin >> newCoeficients[2];
-
-    interceptedObject->set_K_d(newCoeficients);
-    interceptedObject->set_K_e(newCoeficients);
-    interceptedObject->set_K_a(newCoeficients);
+        case 2:
+            cout << "1 - Transladar o cilindro.\n";
+            cout << "2 - Rotacionar o cilindro em x.\n";
+            cout << "3 - Rotacionar o cilindro em y.\n";
+            cout << "4 - Rotacionar o cilindro em z.\n";
+            cout << "5 - Modificar a escala do cilindro.\n";
+            cout << "6 - Modificar as cores.\n";
+            cin >> resposta;
+            if (resposta == 1) {
+                cout << "Digite o valor de x: ";
+                cin >> newCoeficients[0];
+                cout << "Digite o valor de y: ";
+                cin >> newCoeficients[1];
+                cout << "Digite o valor de z: ";
+                cin >> newCoeficients[2];
+                interceptedObject->applyTranslate(newCoeficients[0],newCoeficients[1],newCoeficients[2]);
+            }else if (resposta == 2) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateX(newCoeficients[0]);
+            }else if (resposta == 3) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateY(newCoeficients[0]);
+            }else if (resposta == 4) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateZ(newCoeficients[0]);
+            }else if (resposta == 5) {
+                cout << "Digite o valor da escala: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyScale(newCoeficients[0], 0, 0);
+            }else {
+                cout << "Digite o novo valor do Kd: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_d(newCoeficients);
+                cout << "Digite o novo valor do Ke: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+                cout << "Digite o novo valor do Ka: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+            }
+            break;
+        case 3:
+            cout << "1 - Transladar o cone.\n";
+            cout << "2 - Rotacionar o cone em x.\n";
+            cout << "3 - Rotacionar o cone em y.\n";
+            cout << "4 - Rotacionar o cone em z.\n";
+            cout << "5 - Modificar a escala do cone.\n";
+            cout << "6 - Modificar as cores.\n";
+            cin >> resposta;
+            if (resposta == 1) {
+                cout << "Digite o valor de x: ";
+                cin >> newCoeficients[0];
+                cout << "Digite o valor de y: ";
+                cin >> newCoeficients[1];
+                cout << "Digite o valor de z: ";
+                cin >> newCoeficients[2];
+                interceptedObject->applyTranslate(newCoeficients[0],newCoeficients[1],newCoeficients[2]);
+            }else if (resposta == 2) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateX(newCoeficients[0]);
+            }else if (resposta == 3) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateY(newCoeficients[0]);
+            }else if (resposta == 4) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateZ(newCoeficients[0]);
+            }else if (resposta == 5) {
+                cout << "Digite o valor da escala: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyScale(newCoeficients[0], 0, 0);
+            }else {
+                cout << "Digite o novo valor do Kd: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_d(newCoeficients);
+                cout << "Digite o novo valor do Ke: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+                cout << "Digite o novo valor do Ka: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+            }
+            break;
+        case 4:
+            break;
+        default:
+            cout << "blalalbalb\n";
+            break;
+    };
 
     this->ray_tracing_algorithm();
 };

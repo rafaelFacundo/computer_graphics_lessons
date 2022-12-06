@@ -284,3 +284,36 @@ returnType Cone::does_the_point_intercept(Vector *dir, Vector *P_o){
     }
     return result;
 };
+
+void Cone::applyRotateX(double angle){
+    this->get_unitary_vector()->ThisRotateX(angle);
+};
+void Cone::applyRotateY(double angle){
+
+     this->get_unitary_vector()->ThisRotateY(angle);
+};
+void Cone::applyRotateZ(double angle){
+
+     this->get_unitary_vector()->ThisRotateZ(angle);
+};
+
+void Cone::applyTranslate(double x, double y, double z){
+    this->get_Vertice_vector()->ThisTranslate(x,y,z);
+    this->get_B_vector()->ThisTranslate(x,y,z);
+};
+
+void Cone::applyScale(double sx, double sy, double sz){
+    this->set_radius(this->get_radius() * sx);
+    this->set_height(this->get_height() * sx);
+};
+
+void Cone::applyReflectXY(){};
+void Cone::applyReflectXZ(){};
+void Cone::applyReflectYZ(){};
+
+void Cone::applyShearYX(double angle){};
+void Cone::applyShearXY(double angle){};
+void Cone::applyShearXZ(double angle){};
+void Cone::applyShearZX(double angle){};
+void Cone::applyShearYZ(double angle){};
+void Cone::applyShearZY(double angle){};

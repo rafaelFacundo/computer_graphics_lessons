@@ -28,9 +28,26 @@ class Sphere : public Object {
             double *addressToPutTheColor
         );
 
+        Vector* get_center_vector();
         returnType does_the_point_intercept( Vector *dir, Vector *w);
 
+        void applyRotateX(double angle);
+        void applyRotateY(double angle);
+        void applyRotateZ(double angle);
 
+        void applyTranslate(double x, double y, double z);
+        void applyScale(double sx, double sy, double sz);
+
+        void applyReflectXY();
+        void applyReflectXZ();
+        void applyReflectYZ();
+
+        void applyShearYX(double angle);
+        void applyShearXY(double angle);
+        void applyShearXZ(double angle);
+        void applyShearZX(double angle);
+        void applyShearYZ(double angle);
+        void applyShearZY(double angle);
 
 
 };

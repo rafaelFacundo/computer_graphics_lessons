@@ -96,30 +96,9 @@ void Sphere::gime_your_color(
         -(Direction->get_z_Point())/dr_nom
     );
 
-
-
-
-
-    /* double I_eye_d[3] = {
-        I_f[0] * K_d[0]*F_d,
-        I_f[1] * K_d[1]*F_d,
-        I_f[2] * K_d[2]*F_d
-    }; */
-
-    /* double scalarLn = prod_Esc(l_vector, normal); */
-    /* Reaproveitando o valor de F_d, pois é L escalar normal */
-
     Vector* R_vector = normal->multiply_by_a_scalar(2.0);
     R_vector = R_vector->multiply_by_a_scalar(l_vector->scalar_with(normal));
     R_vector = R_vector->minus_with_the_vector(l_vector);
-
-    /* double r[3] = {
-        2 * scalarLn * normal[0] - l_vector[0],
-        2 * scalarLn * normal[1] - l_vector[1],
-        2 * scalarLn * normal[2] - l_vector[2],
-    }; */
-
-    /* double F_e = prod_Esc(r, vector_v); */
 
     double F_d = l_vector->scalar_with(normal);
 
@@ -138,11 +117,6 @@ void Sphere::gime_your_color(
 
     F_e = pow(F_e, this->get_shiness());
 
-    /* double I_eye_e[3] = {
-        I_f[0] * K_d[0]*F_e,
-        I_f[1] * K_d[1]*F_e,
-        I_f[2] * K_d[2]*F_e
-    }; */
 
     Vector *I_eye_e = Light_source_intesity->at_sign_with(this->get_K_e());
     I_eye_e = I_eye_e->multiply_by_a_scalar(F_e);
@@ -155,21 +129,31 @@ void Sphere::gime_your_color(
     addressToPutTheColor[2] += vectorWithColors->get_z_Point();
 
 
-    /* double and[3] = {
-        vectorWithColors->get_x_Point(),
-        vectorWithColors->get_y_Point(),
-        vectorWithColors->get_z_Point()
-    }; */
-
-
-
-
-    /* double color[3] = {
-        I_eye_d[0] + I_eye_e[0] + L_amb[0],
-        I_eye_d[1] + I_eye_e[1] + L_amb[1],
-        I_eye_d[1] + I_eye_e[1] + L_amb[2],
-    }; */
-
-
 };
 
+Vector* Sphere::get_center_vector() {
+    return this->center_Of_Object;
+};
+
+void Sphere::applyRotateX(double angle){};
+void Sphere::applyRotateY(double angle){};
+void Sphere::applyRotateZ(double angle){};
+
+void Sphere::applyTranslate(double x, double y, double z){
+    this->get_center_vector()->ThisTranslate(x,y,z);
+};
+
+void Sphere::applyScale(double sx, double sy, double sz){
+    this->set_radius(this->get_radius() * sx);
+};
+
+void Sphere::applyReflectXY(){};
+void Sphere::applyReflectXZ(){};
+void Sphere::applyReflectYZ(){};
+
+void Sphere::applyShearYX(double angle){};
+void Sphere::applyShearXY(double angle){};
+void Sphere::applyShearXZ(double angle){};
+void Sphere::applyShearZX(double angle){};
+void Sphere::applyShearYZ(double angle){};
+void Sphere::applyShearZY(double angle){};
