@@ -62,4 +62,6 @@ class Cylinder : public Object {
         void applyShearYZ(double angle);
         void applyShearZY(double angle);
 
+        void applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up);
+
 };

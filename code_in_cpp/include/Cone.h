@@ -65,4 +65,7 @@ class Cone : public Object {
         void applyShearZX(double angle);
         void applyShearYZ(double angle);
         void applyShearZY(double angle);
+
+
+        void applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up);
 };

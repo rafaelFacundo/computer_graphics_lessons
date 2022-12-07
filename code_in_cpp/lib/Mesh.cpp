@@ -267,3 +267,8 @@ void Mesh::applyShearZY(double angle){
         point->gimmeTheCoordinateVector()->ThisShearZY(angle);
     };
 };
+
+
+void Mesh::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up) {
+    
+};

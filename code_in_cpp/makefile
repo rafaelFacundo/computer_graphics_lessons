@@ -40,8 +40,6 @@ main: ./build/main.o ./build/Sphere.o ./build/Scenery.o ./build/Objects.o ./buil
 ./build/Point.o: ./include/Point.h
 	g++ -c ./lib/Point.cpp -o ./build/Point.o
 
-./build/TextureImage.o: ./include/TextureImage.h
-	g++ -c ./lib/TextureImage.cpp -o ./build/TextureImage.o
 
 clean:
 	rm ./build/*.o

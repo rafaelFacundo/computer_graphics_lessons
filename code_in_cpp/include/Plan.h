@@ -1,14 +1,12 @@
 #pragma once
 #include "Objects.h"
 #include "Vector.h"
-#include "TextureImage.h"
 #include <string>
 #include <iostream>
 using namespace std;
 
 class Plan : public Object {
     private:
-        string TextureImg = NULL;
         Vector* Ppi_Point;
         Vector* N_vector;
     public:
@@ -51,6 +49,7 @@ class Plan : public Object {
     void applyShearYZ(double angle);
     void applyShearZY(double angle);
 
-    void set_TextureImage(string filename);
+   
 
+    void applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up);
 };

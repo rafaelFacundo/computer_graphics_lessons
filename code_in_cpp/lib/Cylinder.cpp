@@ -355,3 +355,9 @@ void Cylinder::applyShearXZ(double angle){};
 void Cylinder::applyShearZX(double angle){};
 void Cylinder::applyShearYZ(double angle){};
 void Cylinder::applyShearZY(double angle){};
+
+
+
+void Cylinder::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up) {
+    
+};

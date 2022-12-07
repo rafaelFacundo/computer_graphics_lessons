@@ -76,4 +76,7 @@ class Object {
         virtual void applyShearZX(double angle) = 0;
         virtual void applyShearYZ(double angle) = 0;
         virtual void applyShearZY(double angle) = 0;
+
+
+        virtual void applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up) = 0;
 };
