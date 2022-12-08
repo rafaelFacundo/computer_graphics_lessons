@@ -261,6 +261,16 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
     }
 };
 
+
+
+void Scenery::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up) {
+    for (Object* obj : this->list_Of_Objects) {
+        obj->applyConvertWordVectoToCanvas(P_o, P_Look, Up);
+    }
+    
+    
+}
+
 int Scenery::verifyIfClickHitsSomeObjetc(int x, int y) {
     double Dx = this->width/this->n_lines;
     double Dy = this->height/this->n_collumns;
@@ -480,3 +490,53 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
 
     this->ray_tracing_algorithm();
 };
+
+
+
+
+void Scenery::modifyScenery() {
+    int resposta;
+    double *newCoeficients = (double*)malloc(sizeof(double) * 3);
+    cout << "Digite oque você deseja fazer: ";
+    cout << "1 - mudar o observador de lugar: ";
+    cout << "2 - mudar a intensidade da luz ambiente.\n";
+    cout << "3 - mudar o número de linhas e colunas.\n";
+    cout << "4 - mudar a intensidade de uma luz especifica.\n";
+    cin >> resposta;
+    if ( cin.fail() || resposta > 4 || resposta < 1 ) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "entrada inválida.";
+        return;
+    }
+    switch (resposta) {
+        case 1:
+            {
+            cout << "Digite o vetor P_o arbitrario: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            Vector *P_o = new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]);
+            cout << "Digite o vetor do ponto Look at: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            Vector *P_look = new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]);
+            cout << "Digite o vetor do ponto Up: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            Vector *up = new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]);
+            this->applyConvertWordVectoToCanvas(P_o, P_look, up);
+            }
+            break;
+        case 2:
+            cout << "Digite o vetor da nova intensidade: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            this->get_ambient_light_intensity()->set_x_Point(newCoeficients[0]);
+            this->get_ambient_light_intensity()->set_y_Point(newCoeficients[1]);
+            this->get_ambient_light_intensity()->set_z_Point(newCoeficients[2]);
+            break;
+        default:
+            break;
+    }
+    this->ray_tracing_algorithm();
+};
+
+
+
+

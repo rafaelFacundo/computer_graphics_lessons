@@ -22,6 +22,8 @@ void Cone::set_direction_vector(double x, double y, double z){
 void Cone::set_B_vector(double x, double y, double z){
     this->B_vector = new Vector(x,y,z);
     this->vertice_vector = B_vector->sum_with_the_vector(unitary_vector->multiply_by_a_scalar(this->height));
+    this->B_vectorIni = new Vector(x,y,z);
+    this->vertice_vectorIni = this->vertice_vector;
 };
 
 void Cone::set_B_vector(Vector *B){
@@ -348,9 +350,9 @@ void Cone::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up
     double minusJcPlusEye = -(Jc->scalar_with(P_o));
     double minusKcPlusEye = -(Kc->scalar_with(P_o));
 
-    double x = this->get_Vertice_vector()->get_x_Point();
-    double y = this->get_Vertice_vector()->get_y_Point();
-    double z = this->get_Vertice_vector()->get_z_Point();
+    double x = this->vertice_vectorIni->get_x_Point();
+    double y = this->vertice_vectorIni->get_y_Point();
+    double z = this->vertice_vectorIni->get_z_Point();
 
     double newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
     double newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
@@ -360,9 +362,9 @@ void Cone::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up
     this->get_Vertice_vector()->set_y_Point(newY);
     this->get_Vertice_vector()->set_z_Point(newZ);
 
-    x = this->get_B_vector()->get_x_Point();
-    y = this->get_B_vector()->get_y_Point();
-    z = this->get_B_vector()->get_z_Point();
+    x = this->B_vectorIni->get_x_Point();
+    y = this->B_vectorIni->get_y_Point();
+    z = this->B_vectorIni->get_z_Point();
 
     newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
     newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;

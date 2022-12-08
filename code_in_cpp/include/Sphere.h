@@ -5,6 +5,7 @@
 class Sphere : public Object {
     private:
         double Sphere_radius;
+        Vector *centerIni;
     public:
         void set_radius(double radius);
         double get_radius();

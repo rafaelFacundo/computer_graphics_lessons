@@ -5,6 +5,8 @@
 class Cylinder : public Object {
     Vector *unitary_vector;
     Vector *B_vector;
+    Vector *B_vectorIni;
+    Vector *top_ini;
 
     double height;
     double radius;

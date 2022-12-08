@@ -22,6 +22,7 @@ void show_the_window( SDL_Renderer *renderer) {
 
 void handleMouseEvent(SDL_Window* window, Scenery *scenery, SDL_MouseButtonEvent &event) {
     int yMouse, xMouse;
+    int resposta;
     switch (event.button) {
         case SDL_BUTTON_LEFT:
             SDL_GetMouseState(&xMouse, &yMouse);
@@ -29,7 +30,20 @@ void handleMouseEvent(SDL_Window* window, Scenery *scenery, SDL_MouseButtonEvent
     };
     int indexIntercObj = scenery->verifyIfClickHitsSomeObjetc(xMouse, yMouse);
     if (indexIntercObj > -1) {
-        scenery->makeModificationOnObject(indexIntercObj);
+        cout << "Você deseja alterar o cenário ou o objeto selecionado? \n";
+        cout << "1 - alterar objeto.\n";
+        cout << "2 - alterar cenário.\n";
+        cin >> resposta;
+        if ( cin.fail() || resposta > 2 || resposta < 1 ) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "entrada inválida.";
+        } else if (resposta == 1) {
+            scenery->makeModificationOnObject(indexIntercObj);
+        }else {
+            scenery->modifyScenery();
+        }
+        
     };
     SDL_UpdateWindowSurface(window);
 

@@ -22,6 +22,7 @@ Sphere::Sphere(
     this->set_K_d(K_d);
     this->set_shine(shine);
     this->set_radius(radius);
+    this->centerIni = new Vector(center[0], center[1], center[2]);
 };
 
 /* Method that says if the ray intersect the sphere */
@@ -173,7 +174,7 @@ void Sphere::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *
     double minusJcPlusEye = -(Jc->scalar_with(P_o));
     double minusKcPlusEye = -(Kc->scalar_with(P_o));
 
-    Vector *worldVector = this->get_center_vector();
+    Vector *worldVector = this->centerIni;
     double x = worldVector->get_x_Point();
     double y = worldVector->get_y_Point();
     double z = worldVector->get_z_Point();

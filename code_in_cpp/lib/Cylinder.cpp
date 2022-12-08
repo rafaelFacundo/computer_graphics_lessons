@@ -11,10 +11,12 @@ Cylinder::Cylinder():Object(){
 
 void Cylinder::set_unitary_vector(double x, double y, double z){
     this->unitary_vector = new Vector(x,y,z);
+    this->top_ini = this->get_center_top_vector();
 };
 
 void Cylinder::set_B_vector(double x, double y, double z){
     this->B_vector = new Vector(x,y,z);
+    this->B_vectorIni = this->B_vector;
 };
 
 void Cylinder::set_radius(double radius) {
@@ -45,6 +47,7 @@ Vector *Cylinder::get_center_top_vector() {
     Vector *unitary_vector = (this->get_unitary_vector())->get_this_vector_unitary();
     return B_vector->sum_with_the_vector(unitary_vector->multiply_by_a_scalar(this->height));
 }
+
 
 
 returnType Cylinder::didThePointIntercepted(Vector *dir, Vector *P_o, Vector *base){
@@ -359,7 +362,7 @@ void Cylinder::applyShearZY(double angle){};
 
 
 void Cylinder::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up) {
-    Vector *top_vector = this->get_center_top_vector();
+    Vector *top_vector = new Vector(this->top_ini->get_x_Point(), this->top_ini->get_y_Point(), this->top_ini->get_z_Point());
 
     Vector *K = P_o->minus_with_the_vector(P_Look);
     Vector *Kc = K->get_this_vector_unitary();
@@ -374,9 +377,9 @@ void Cylinder::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector
     double minusJcPlusEye = -(Jc->scalar_with(P_o));
     double minusKcPlusEye = -(Kc->scalar_with(P_o));
 
-    double x = this->get_B_vector()->get_x_Point();
-    double y = this->get_B_vector()->get_y_Point();
-    double z = this->get_B_vector()->get_z_Point();
+    double x = this->B_vectorIni->get_x_Point();
+    double y = this->B_vectorIni->get_y_Point();
+    double z = this->B_vectorIni->get_z_Point();
 
     double newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
     double newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;

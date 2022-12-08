@@ -351,15 +351,15 @@ int main() {
   //theScenery->addObjectToTheScene(Floor);
   //theScenery->addObjectToTheScene(front_wall);
   //theScenery->addObjectToTheScene(theCylinder);
+  
+  Vector *P_oArb = new Vector(0,0,0);
+  Vector *P_look = new Vector(0.0,-150.0,0.0);
+  Vector *P_up = new Vector(15, 10,0);
 
-  Vector *P_oArb = new Vector(0, 0,0);
-  Vector *P_look = new Vector(0.0,-150.0,-200.0);
-  Vector *P_up = new Vector(0,10,0);
 
-
-  theScenery->addObjectToTheScene(theCylinder);
-  theCylinder->applyConvertWordVectoToCanvas(P_oArb, P_look, P_up);
-  theCone->applyConvertWordVectoToCanvas(P_oArb, P_look, P_up);
+  theScenery->addObjectToTheScene(Floor);
+  Floor->applyConvertWordVectoToCanvas(P_oArb, P_look, P_up);
+  
 
 
   /* calling the ray tracing algorithm */

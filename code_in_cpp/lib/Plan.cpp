@@ -9,10 +9,12 @@ Plan::Plan() {
 
 void Plan::set_PI_Point(double x, double y, double z){
     this->Ppi_Point = new Vector(x,y,z);
+    this->Ppi_PointIni = new Vector(x,y,z);
 };
 
 void Plan::set_N_vector(double x, double y, double z){
     this->N_vector = new Vector(x,y,z);
+    this->N_vectorIni = new Vector(x,y,z);
 };
 
 Vector* Plan::get_PI_Point() {
@@ -140,4 +142,46 @@ void Plan::applyShearYZ(double angle){};
 void Plan::applyShearZY(double angle){};
 
 
-void Plan::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up){};
+void Plan::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up){
+    Vector *K = P_o->minus_with_the_vector(P_Look);
+    Vector *Kc = K->get_this_vector_unitary();
+
+    Vector *Vup = Up->minus_with_the_vector(P_o);
+    Vector *I = Vup->vectorProductWith(Kc);
+    Vector *Ic = I->get_this_vector_unitary();
+
+    Vector *Jc = Kc->vectorProductWith(Ic);
+
+    double minusIcPlusEye = -(Ic->scalar_with(P_o));
+    double minusJcPlusEye = -(Jc->scalar_with(P_o));
+    double minusKcPlusEye = -(Kc->scalar_with(P_o));
+
+    Vector *worldVector = this->Ppi_PointIni;
+    double x = worldVector->get_x_Point();
+    double y = worldVector->get_y_Point();
+    double z = worldVector->get_z_Point();
+
+    double newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
+    double newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
+    double newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
+
+    this->get_PI_Point()->set_x_Point(newX);
+    this->get_PI_Point()->set_y_Point(newY);
+    this->get_PI_Point()->set_z_Point(newZ);
+
+
+    x = this->N_vectorIni->get_x_Point();
+    y = this->N_vectorIni->get_y_Point();
+    z = this->N_vectorIni->get_z_Point();
+
+    newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
+    newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
+    newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
+
+    Vector *newNvector = new Vector(newX, newY, newZ);
+    newNvector = newNvector->get_this_vector_unitary();
+
+    this->get_N_vector()->set_x_Point(newNvector->get_x_Point());
+    this->get_N_vector()->set_y_Point(newNvector->get_y_Point());
+    this->get_N_vector()->set_z_Point(newNvector->get_z_Point());
+};

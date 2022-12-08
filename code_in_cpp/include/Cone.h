@@ -5,6 +5,8 @@ class Cone : public Object {
     private:
         Vector *vertice_vector;
         Vector *direction_vector;
+        Vector *B_vectorIni;
+        Vector *vertice_vectorIni;
         Vector *unitary_vector;
         Vector *B_vector;
         double T_i;

@@ -72,4 +72,7 @@ class Scenery {
 
         int verifyIfClickHitsSomeObjetc(int x, int y);
         void makeModificationOnObject(int indexOfObj);
+
+        void modifyScenery();
+        void applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up);
 };
