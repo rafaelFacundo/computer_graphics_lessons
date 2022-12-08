@@ -338,7 +338,7 @@ int main() {
 
   /* adding an object to the scenery */
 
-  theScenery->addObjectToTheScene(theSphere);
+  //theScenery->addObjectToTheScene(theSphere);
   /* theScenery->addObjectToTheScene(Floor);
   theScenery->addObjectToTheScene(ceiling);
   theScenery->addObjectToTheScene(right_side_wall);
@@ -352,11 +352,13 @@ int main() {
   //theScenery->addObjectToTheScene(front_wall);
   //theScenery->addObjectToTheScene(theCylinder);
 
-  Vector *P_oArb = new Vector(0,40,-200);
-  Vector *P_look = new Vector(0.0,-60.0, -200.0);
+  Vector *P_oArb = new Vector(0, 0,0);
+  Vector *P_look = new Vector(0.0,-150.0,-200.0);
   Vector *P_up = new Vector(0,10,0);
-  theScenery->addObjectToTheScene(theCone);
-  theSphere->applyConvertWordVectoToCanvas(P_oArb, P_look, P_up);
+
+
+  theScenery->addObjectToTheScene(theCylinder);
+  theCylinder->applyConvertWordVectoToCanvas(P_oArb, P_look, P_up);
   theCone->applyConvertWordVectoToCanvas(P_oArb, P_look, P_up);
 
 

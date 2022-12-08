@@ -359,5 +359,48 @@ void Cylinder::applyShearZY(double angle){};
 
 
 void Cylinder::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up) {
-    
+    Vector *top_vector = this->get_center_top_vector();
+
+    Vector *K = P_o->minus_with_the_vector(P_Look);
+    Vector *Kc = K->get_this_vector_unitary();
+
+    Vector *Vup = Up->minus_with_the_vector(P_o);
+    Vector *I = Vup->vectorProductWith(Kc);
+    Vector *Ic = I->get_this_vector_unitary();
+
+    Vector *Jc = Kc->vectorProductWith(Ic);
+
+    double minusIcPlusEye = -(Ic->scalar_with(P_o));
+    double minusJcPlusEye = -(Jc->scalar_with(P_o));
+    double minusKcPlusEye = -(Kc->scalar_with(P_o));
+
+    double x = this->get_B_vector()->get_x_Point();
+    double y = this->get_B_vector()->get_y_Point();
+    double z = this->get_B_vector()->get_z_Point();
+
+    double newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
+    double newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
+    double newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
+
+    this->get_B_vector()->set_x_Point(newX);
+    this->get_B_vector()->set_y_Point(newY);
+    this->get_B_vector()->set_z_Point(newZ);
+
+    x = top_vector-> get_x_Point();
+    y = top_vector-> get_y_Point();
+    z = top_vector-> get_z_Point();
+
+    newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
+    newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
+    newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
+
+    top_vector->set_x_Point(newX);
+    top_vector->set_y_Point(newY);
+    top_vector->set_z_Point(newZ);
+
+    Vector *newUni = top_vector->minus_with_the_vector(this->get_B_vector());
+    newUni = newUni->get_this_vector_unitary();
+    this->unitary_vector = newUni;
+
+
 };

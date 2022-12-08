@@ -5,6 +5,7 @@
 class Cylinder : public Object {
     Vector *unitary_vector;
     Vector *B_vector;
+
     double height;
     double radius;
     bool haveLid = false;

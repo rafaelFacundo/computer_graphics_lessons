@@ -289,7 +289,7 @@ void Cone::applyRotateX(double angle){
 };
 
 void Cone::applyRotateY(double angle){
-    this->get_unitary_vector()->ThisRotateY(angle); 
+    this->get_unitary_vector()->ThisRotateY(angle);
 };
 
 void Cone::applyRotateZ(double angle){
