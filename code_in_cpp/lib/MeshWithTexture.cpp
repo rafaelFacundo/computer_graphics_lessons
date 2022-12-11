@@ -1,34 +1,77 @@
-#include "../include/Mesh.h"
+#include "../include/MeshWithTexture.h"
 
 #include <iostream>
 using namespace std;
 
 
-int Mesh::getSizeOfFacesList(){
+MeshWithTexture::MeshWithTexture(Vector *baseVector, double width, double height) {
+    this->insertApoint( new Point(
+        baseVector->get_x_Point(),
+        baseVector->get_y_Point(),
+        baseVector->get_z_Point()
+    ));
+
+    this->insertApoint( new Point(
+        baseVector->get_x_Point(),
+        baseVector->get_y_Point(),
+        (baseVector->get_z_Point() + height)
+    ));
+
+    this->insertApoint( new Point(
+        baseVector->get_x_Point() + width,
+        baseVector->get_y_Point(),
+        (baseVector->get_z_Point() + height)
+    ));
+
+
+    this->insertApoint( new Point(
+        baseVector->get_x_Point() + width,
+        baseVector->get_y_Point(),
+        baseVector->get_z_Point()
+    ));
+
+    this->insertAEdge(new Edge(0,1));
+    this->insertAEdge(new Edge(1,2));
+    this->insertAEdge(new Edge(2,3));
+    this->insertAEdge(new Edge(3,0));
+    this->insertAEdge(new Edge(1,3));
+
+    this->insertAFace(new Face(3,4,0));
+    this->insertAFace(new Face(1,4,2));
+
+
+
+
+
+
+};
+
+int MeshWithTexture::getSizeOfFacesList(){
     return this->listOfFaces.size();
 };
 
-void Mesh::setNormal(Vector *normal){
+void MeshWithTexture::setNormal(Vector *normal){
     this->normal = normal;
 };
 
-Vector* Mesh::get_N_vector(){
+Vector* MeshWithTexture::get_N_vector(){
     return this->normal;
 };
 
 
-void Mesh::insertApoint(Point *point){
+void MeshWithTexture::insertApoint(Point *point){
     this->listOfPoints.push_back(point);
 };
-void Mesh::insertAEdge(Edge *edge){
+void MeshWithTexture::insertAEdge(Edge *edge){
     this->listOfEdges.push_back(edge);
 };
-void Mesh::insertAFace(Face *face){
+void MeshWithTexture::insertAFace(Face *face){
     this->listOfFaces.push_back(face);
 };
 
 
-returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
+returnType MeshWithTexture::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
+
     double C1, C2, C3;
     int numberOfFaces = this->getSizeOfFacesList();
     returnType result;
@@ -125,18 +168,20 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
 };
 
 
-returnType Mesh::does_the_point_intercept(Vector *dir, Vector *P_o) {
+returnType MeshWithTexture::does_the_point_intercept(Vector *dir, Vector *P_o) {
     return this->calculateIntersectionForEachFace(dir, P_o);
 };
 
 
-void Mesh::gime_your_color(
+void MeshWithTexture::gime_your_color(
     Vector *Eye_position,
     Vector *Direction,
     Light *light,
     Vector *Ambient_light_intensity,
     double *addressToPutTheColor
 ) {
+
+
     Vector *Pf_Pi;
     Vector *Light_source_position;
     Vector *intensity;
@@ -159,6 +204,26 @@ void Mesh::gime_your_color(
     }
 
     double Pf_pi_norm = sqrt(Pf_Pi->scalar_with(Pf_Pi));
+
+    if(this->imageLoaded){
+        Pixel color;
+        if(this->planHorizontalAxis){
+            color = this->texture->getPixel(P_i->get_x_Point(), P_i->get_z_Point());
+        }
+        else{
+            color = this->texture->getPixel(P_i->get_x_Point(), P_i->get_y_Point());
+        }
+
+        double newColor[3] = {
+            ((double)color.r)/255,
+            ((double)color.g)/255,
+            ((double)color.b)/255
+        };
+
+        this->set_K_a(newColor);
+        this->set_K_d(newColor);
+        this->set_K_e(newColor);
+    }
 
     Vector *l_vector = new Vector(
         (Pf_Pi->get_x_Point())/Pf_pi_norm,
@@ -219,83 +284,83 @@ void Mesh::gime_your_color(
 
 /* Matrix transformations application */
 
-void Mesh::applyRotateX(double angle){
+void MeshWithTexture::applyRotateX(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisRotateX(angle);
     };
 
 };
-void Mesh::applyRotateY(double angle){
+void MeshWithTexture::applyRotateY(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisRotateY(angle);
     };
 };
-void Mesh::applyRotateZ(double angle){
+void MeshWithTexture::applyRotateZ(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisRotateZ(angle);
     };
 };
 
-void Mesh::applyTranslate(double x, double y, double z){
+void MeshWithTexture::applyTranslate(double x, double y, double z){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisTranslate(x,y,z);
     };
 };
-void Mesh::applyScale(double sx, double sy, double sz){
+void MeshWithTexture::applyScale(double sx, double sy, double sz){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisScale(sx,sy,sz);
     };
 };
 
-void Mesh::applyReflectXY(){
+void MeshWithTexture::applyReflectXY(){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisReflectXY();
     };
 };
-void Mesh::applyReflectXZ(){
+void MeshWithTexture::applyReflectXZ(){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisReflectXZ();
     };
 };
-void Mesh::applyReflectYZ(){
+void MeshWithTexture::applyReflectYZ(){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisReflectYZ();
     };
 };
 
-void Mesh::applyShearYX(double angle){
+void MeshWithTexture::applyShearYX(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearYX(angle);
     };
 };
-void Mesh::applyShearXY(double angle){
+void MeshWithTexture::applyShearXY(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearXY(angle);
     };
 };
-void Mesh::applyShearXZ(double angle){
+void MeshWithTexture::applyShearXZ(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearXZ(angle);
     };
 };
-void Mesh::applyShearZX(double angle){
+void MeshWithTexture::applyShearZX(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearZX(angle);
     };
 };
-void Mesh::applyShearYZ(double angle){
+void MeshWithTexture::applyShearYZ(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearYZ(angle);
     };
 };
-void Mesh::applyShearZY(double angle){
+void MeshWithTexture::applyShearZY(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearZY(angle);
     };
 };
 
 
-void Mesh::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up) {
+void MeshWithTexture::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up) {
     Vector *K = P_o->minus_with_the_vector(P_Look);
     Vector *Kc = K->get_this_vector_unitary();
 
@@ -324,4 +389,11 @@ void Mesh::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up
         point->gimmeTheCoordinateVector()->set_y_Point(newY);
         point->gimmeTheCoordinateVector()->set_z_Point(newZ);
     };
+};
+
+
+void MeshWithTexture::set_TextureImage(string filename, bool horizontalAxis){
+    this->texture = new Image();
+    this->imageLoaded = texture->loadImage(filename);
+    this->planHorizontalAxis = horizontalAxis;
 };

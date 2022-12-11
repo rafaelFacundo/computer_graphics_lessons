@@ -9,19 +9,17 @@ Scenery::Scenery() {
 }
 
 
-Vector* Scenery::get_light_position(int index){
-    return this->Light_position[index];
-};
+/* Vector* Scenery::get_light_position(int index){
+    if (this->list_of_light[index]->getType() != 2) {
+        return ((PointLight)this->list_of_light[index]).getPosition();
+    };
+}; */
 
 
 Vector* Scenery::get_ambient_light_intensity() {
     return this->Ambient_Light_intesity;
 };
 
-
-Vector* Scenery::get_light_intensity(int index){
-    return this->Light_intensity[index];
-};
 
 Vector* Scenery::get_observer_position(){
     return this->observer_point;
@@ -31,16 +29,16 @@ int Scenery::get_Object_list_lenght() {
     return this->list_Of_Objects.size();
 };
 
-void Scenery::set_Light_position(Vector *light, Vector *intensityOfLight){
-    this->Light_position.push_back(light);
-    this->set_Light_intensity(intensityOfLight);
+void Scenery::addLight(Light *light){
+    this->list_of_light.push_back(light);
 };
 
-void Scenery::set_Light_intensity(Vector *intensityOfLight){
-    this->Light_intensity.push_back(intensityOfLight);
+void Scenery::addLights(Light **lights, int lenght){
+    for (int i = 0; i < lenght; i++) {
+        this->list_of_light.push_back(lights[i]);
+    }
 
 };
-
 
 void Scenery::set_ambient_light_intensity(Vector *light){
     this->Ambient_Light_intesity = light;
@@ -98,8 +96,8 @@ double Scenery::get_max_rgb(double num1, double num2, double num3) {
 
 
 Scenery::Scenery(
-    Vector* Light_position,
-    Vector* Light_intensity,
+    Light** lights,
+    int numberOfLights,
     Vector* Ambient_Light_intesity,
     Vector* observer_point,
     double n_lines,
@@ -109,8 +107,9 @@ Scenery::Scenery(
     double z,
     SDL_Renderer *renderer
 ) {
-    this->set_Light_position(Light_position, Light_intensity);
+
     //this->set_Light_intensity(Light_intensity);
+    this->addLights(lights, numberOfLights);
     this->set_ambient_light_intensity(Ambient_Light_intesity);
     this->set_observer_postion(observer_point);
     this->set_n_lines_and_columns(n_lines, n_collumns);
@@ -141,17 +140,20 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
 }
 
 void Scenery::ray_tracing_algorithm() {
-    double Dx = this->width/this->n_lines;
-    double Dy = this->height/this->n_collumns;
+    double Dx = this->width/this->n_collumns;
+    double Dy = this->height/this->n_lines;
 
     for (int l = 0; l < this->n_lines; l++) {
         double Yj = this->height/2 - Dy/2 - l*Dy;
         for (int c = 0; c < this->n_collumns; c++ ) {
             double Xj = -this->width/2 + Dx/2 + c*Dx;
             Vector *dir = new Vector(Xj, Yj, this->get_z());
+            //Vector *dir = new Vector(0,0,-1);
+            //Vector *observer = new Vector(Xj, Yj, 0);
 
             int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
             if ( objePosiInList > -1) {
+
                 calculateTheColor(objePosiInList, dir);
             }else{
                 this->colorToDraw[0] = 0.0;
@@ -183,17 +185,23 @@ void Scenery::ray_tracing_algorithm() {
 }
 
 bool Scenery::verify_the_shadow(
-    Vector *Light_source_position,
+    Light *light,
     Vector *dir,
     Vector *P_o,
     int indexOfObject
 ){
+    Vector *L_vector;
+    Vector *Pf_pi;
     int numberOfObjects = this->get_Object_list_lenght();
     double nearPoint = 0;
     int indexOfInterceptedObje = -1;
-    Vector *L_vector = this->list_Of_Objects[indexOfObject]->get_L_vector(dir, P_o, Light_source_position);
+
     Vector *P_i = this->list_Of_Objects[indexOfObject]->get_Pi(dir, P_o);
-    Vector *Pf_pi = Light_source_position->minus_with_the_vector(P_i);
+    if (light->getType() != 2) {
+        L_vector = this->list_Of_Objects[indexOfObject]->get_L_vector(dir, P_o, ((PointLight*)light)->getPosition());
+        Pf_pi = ((PointLight*)light)->getPosition()->minus_with_the_vector(P_i);
+    }
+
     double Pf_pi_norm = sqrt(Pf_pi->scalar_with(Pf_pi));
 
     for (int i = 0; i < numberOfObjects; i++) {
@@ -231,12 +239,12 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
     this->colorToDraw[1] = 0.0;
     this->colorToDraw[2] = 0.0;
 
-    for (int i = 0; i < this->Light_intensity.size(); i++) {
-        Vector *LightIntensity = this->Light_intensity[i];
-        Vector *LightPosition = this->Light_position[i];
-
+    for (int i = 0; i < this->list_of_light.size(); i++) {
+        /* Vector *LightIntensity = this->Light_intensity[i];
+        Vector *LightPosition = this->Light_position[i]; */
+        Light *light = list_of_light[i];
         bool doesHaveShadowForThisLight = verify_the_shadow(
-            LightPosition,
+            light,
             dir,
             this->get_observer_position(),
             indexOfObject
@@ -246,8 +254,7 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
             this->list_Of_Objects[indexOfObject]->gime_your_color(
                 this->get_observer_position(),
                 dir,
-                LightPosition,
-                LightIntensity,
+                light,
                 this->get_ambient_light_intensity(),
                 this->colorToDraw
             );
@@ -267,8 +274,8 @@ void Scenery::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector 
     for (Object* obj : this->list_Of_Objects) {
         obj->applyConvertWordVectoToCanvas(P_o, P_Look, Up);
     }
-    
-    
+
+
 }
 
 int Scenery::verifyIfClickHitsSomeObjetc(int x, int y) {
@@ -388,6 +395,7 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
             cout << "4 - Rotacionar o cilindro em z.\n";
             cout << "5 - Modificar a escala do cilindro.\n";
             cout << "6 - Modificar as cores.\n";
+
             cin >> resposta;
             if (cin.fail() || resposta > 6 || resposta < 1)  {
                 cout << "Entrada inválida\n";
@@ -498,12 +506,13 @@ void Scenery::modifyScenery() {
     int resposta;
     double *newCoeficients = (double*)malloc(sizeof(double) * 3);
     cout << "Digite oque você deseja fazer: ";
-    cout << "1 - mudar o observador de lugar: ";
+    cout << "1 - mudar o observador de lugar: \n";
     cout << "2 - mudar a intensidade da luz ambiente.\n";
     cout << "3 - mudar o número de linhas e colunas.\n";
     cout << "4 - mudar a intensidade de uma luz especifica.\n";
+    cout << "5 - mudar a distância d.\n";
     cin >> resposta;
-    if ( cin.fail() || resposta > 4 || resposta < 1 ) {
+    if ( cin.fail() || resposta > 5 || resposta < 1 ) {
         cin.clear();
         cin.ignore(1000, '\n');
         cout << "entrada inválida.";
@@ -530,6 +539,39 @@ void Scenery::modifyScenery() {
             this->get_ambient_light_intensity()->set_x_Point(newCoeficients[0]);
             this->get_ambient_light_intensity()->set_y_Point(newCoeficients[1]);
             this->get_ambient_light_intensity()->set_z_Point(newCoeficients[2]);
+            break;
+        case 3:
+            cout << "Digite o número de linhas: \n";
+            cin >> newCoeficients[0];
+            if ( cin.fail() ) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "entrada inválida.";
+                return;
+            }
+            cout << "Digite o número de colunas: \n";
+            cin >> newCoeficients[1];
+            if ( cin.fail() ) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "entrada inválida.";
+                return;
+            }
+            this->n_collumns = newCoeficients[1];
+            this->n_lines = newCoeficients[0];
+            break;
+        case 4:
+            break;
+        case 5:
+            cout << "Digite o valor do novo z (o valor será somado): \n";
+            cin >> newCoeficients[0];
+            if ( cin.fail() ) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "entrada inválida.";
+                return;
+            }
+            this->set_z(this->get_z() + newCoeficients[0]);
             break;
         default:
             break;

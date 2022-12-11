@@ -39,8 +39,7 @@ class Cylinder : public Object {
         void gime_your_color(
             Vector *Eye_position,
             Vector *Direction,
-            Vector *Light_source_position,
-            Vector *Light_source_intesity,
+            Light *light,
             Vector *Ambient_light_intensity,
             double *addressToPutTheColor
         );

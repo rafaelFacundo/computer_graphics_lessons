@@ -1,5 +1,5 @@
-main: ./build/main.o ./build/Sphere.o ./build/Scenery.o ./build/Objects.o ./build/Vector.o ./build/SdlFunctions.o ./build/Cylinder.o ./build/Cone.o ./build/Plan.o ./build/Edge.o ./build/Face.o ./build/Point.o ./build/Mesh.o
-	g++ ./build/SdlFunctions.o ./build/Scenery.o ./build/Plan.o ./build/Vector.o ./build/Objects.o ./build/Cylinder.o ./build/Sphere.o ./build/Cone.o ./build/Face.o ./build/Edge.o ./build/Point.o ./build/Mesh.o ./build/main.o -lSDL2 -o main
+main: ./build/main.o ./build/Sphere.o ./build/Scenery.o ./build/MeshWithTexture.o ./build/Light.o ./build/Objects.o ./build/Vector.o ./build/SdlFunctions.o ./build/Cylinder.o ./build/Cone.o ./build/Plan.o ./build/Edge.o ./build/Face.o ./build/Point.o ./build/Mesh.o ./build/Image.o
+	g++ ./build/SdlFunctions.o ./build/Scenery.o ./build/MeshWithTexture.o ./build/Light.o ./build/Plan.o ./build/Vector.o ./build/Objects.o ./build/Cylinder.o ./build/Sphere.o ./build/Cone.o ./build/Face.o ./build/Edge.o ./build/Point.o ./build/Mesh.o ./build/main.o ./build/Image.o -lSDL2 -lSDL2_image -o main
 
 ./build/main.o: ./include/Sphere.h ./include/SdlFunction.h
 	g++ -c main.cpp -o ./build/main.o
@@ -39,6 +39,15 @@ main: ./build/main.o ./build/Sphere.o ./build/Scenery.o ./build/Objects.o ./buil
 
 ./build/Point.o: ./include/Point.h
 	g++ -c ./lib/Point.cpp -o ./build/Point.o
+
+./build/Image.o: ./include/Image.h
+	g++ -c ./lib/Image.cpp -o ./build/Image.o
+
+./build/Light.o: ./include/Light.h
+	g++ -c ./lib/Light.cpp -o ./build/Light.o
+
+./build/MeshWithTexture.o: ./include/MeshWithTexture.h
+	g++ -c ./lib/MeshWithTexture.cpp -o ./build/MeshWithTexture.o
 
 
 clean:

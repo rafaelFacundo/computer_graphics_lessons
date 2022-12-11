@@ -1,6 +1,7 @@
 #pragma once
 #include "Objects.h"
 #include "sdlFunctionsToPaint.h"
+#include "Light.h"
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <vector>
@@ -8,8 +9,7 @@ using namespace std;
 
 class Scenery {
     vector<Object*> list_Of_Objects;
-    vector<Vector*> Light_position;
-    vector<Vector*> Light_intensity;
+    vector<Light*> list_of_light;
     Vector* Ambient_Light_intesity;
     Vector* observer_point;
     double n_lines;
@@ -24,8 +24,8 @@ class Scenery {
         Scenery();
 
         Scenery(
-            Vector* Light_position,
-            Vector* Light_intensity,
+            Light** lights,
+            int numberOfLights,
             Vector* Ambient_Light_intesity,
             Vector* observer_point,
             double n_lines,
@@ -40,14 +40,17 @@ class Scenery {
         void ray_tracing_algorithm();
         void draw_pixel();
         bool verify_the_shadow(
-            Vector *Light_source_position,
+            Light *light,
             Vector *dir,
             Vector *P_o,
             int indexOfObject
         );
 
-        void set_Light_position(Vector *light, Vector *intensityOfLight);
-        void set_Light_intensity(Vector *intensityOfLight);
+        /* void set_Light_position(Vector *light, Vector *intensityOfLight);
+        void set_Light_intensity(Vector *intensityOfLight); */
+
+        void addLight(Light *light);
+        void addLights(Light **lights, int lenght);
         void set_ambient_light_intensity(Vector *light);
         void set_observer_postion(Vector *observer);
         void addObjectToTheScene(Object *object);
@@ -61,7 +64,7 @@ class Scenery {
         double get_minimun(double num1, double num2);
         double get_max_rgb(double num1, double num2, double num3);
         double get_z();
-        Vector* get_light_position(int index);
+        // Vector* get_light_position(int index);
         Vector* get_ambient_light_intensity();
         Vector* get_light_intensity(int index);
         Vector* get_observer_position();

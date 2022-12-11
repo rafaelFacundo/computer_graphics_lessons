@@ -1,4 +1,5 @@
 #include "../include/Cone.h"
+
 #include <math.h>
 #include <iostream>
 using namespace std;;
@@ -74,22 +75,34 @@ Vector* Cone::getTop(){
 void Cone::gime_your_color(
     Vector *Eye_position,
     Vector *Direction,
-    Vector *Light_source_position,
-    Vector *Light_source_intesity,
+    Light *light,
     Vector *Ambient_light_intensity,
     double *addressToPutTheColor
 ){
+    Vector *Light_source_position;
+    Vector *intensity;
+    double clds;
+    Vector *Pf_Pi;
     Vector *normal;
 
     Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
 
     Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
 
-    Vector *Pf_Pi = new Vector(
-        Light_source_position->get_x_Point() - P_i->get_x_Point(),
-        Light_source_position->get_y_Point() - P_i->get_y_Point(),
-        Light_source_position->get_z_Point() - P_i->get_z_Point()
-    );
+    if (light->getType() == 0 ) {
+        Light_source_position = ((PointLight*)light)->getPosition();
+        Pf_Pi = new Vector(
+            Light_source_position->get_x_Point() - P_i->get_x_Point(),
+            Light_source_position->get_y_Point() - P_i->get_y_Point(),
+            Light_source_position->get_z_Point() - P_i->get_z_Point()
+        );
+    }else if (light->getType() == 2) {
+        Pf_Pi = ((DirectionalLight*)light)->getDirection()->multiply_by_a_scalar(-1);
+    } else {
+        Pf_Pi = ((SpotLight*)light)->getPosition()->minus_with_the_vector(P_i);
+    }
+
+
 
     double Pf_pi_norm = sqrt(Pf_Pi->scalar_with(Pf_Pi));
 
@@ -98,6 +111,17 @@ void Cone::gime_your_color(
         (Pf_Pi->get_y_Point())/Pf_pi_norm,
         (Pf_Pi->get_z_Point())/Pf_pi_norm
     );
+
+    if (light->getType() == 1) {
+        clds = l_vector->scalar_with(((SpotLight*)light)->getDirection()->multiply_by_a_scalar(-1));
+        if (clds < cos(((SpotLight*)light)->getAngle())) {
+            intensity = new Vector(0.0,0.0,0.0);
+        }else {
+            intensity = ((SpotLight*)light)->getIntensity()->multiply_by_a_scalar(clds);
+        }
+    }else {
+        intensity = light->getIntensity();
+    };
 
     Vector *Pi_m_B = P_i->minus_with_the_vector(this->get_B_vector());
     double Pi_m_b_Scalar_U = Pi_m_B->scalar_with(this->get_unitary_vector());
@@ -137,22 +161,22 @@ void Cone::gime_your_color(
 
     double F_d = l_vector->scalar_with(normal);
 
-    if (F_d < 0 ) {
+    if (F_d < 0) {
         F_d = 0.0;
     }
 
-    Vector *I_eye_d = Light_source_intesity->at_sign_with(this->get_K_d());
+    Vector *I_eye_d = intensity->at_sign_with(this->get_K_d());
     I_eye_d = I_eye_d->multiply_by_a_scalar(F_d);
 
     double F_e = R_vector->scalar_with(vector_v);
 
-    if (F_e <0 ) {
+    if (F_e < 0) {
         F_e = 0;
     };
 
     F_e = pow(F_e, this->get_shiness());
 
-    Vector *I_eye_e = Light_source_intesity->at_sign_with(this->get_K_e());
+    Vector *I_eye_e = intensity->at_sign_with(this->get_K_e());
     I_eye_e = I_eye_e->multiply_by_a_scalar(F_e);
 
     Vector *vectorWithColors = I_eye_d->sum_with_the_vector(I_eye_e);

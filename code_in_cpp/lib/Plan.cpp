@@ -1,7 +1,6 @@
 #include "../include/Plan.h"
+
 #include <math.h>
-#include <iostream>
-using namespace std;
 
 Plan::Plan() {
     this->typeOfThisObject = 1;
@@ -28,24 +27,63 @@ Vector* Plan::get_N_vector() {
 void Plan::gime_your_color(
     Vector *Eye_position,
     Vector *Direction,
-    Vector *Light_source_position,
-    Vector *Light_source_intesity,
+    Light *light,
     Vector *Ambient_light_intensity,
     double *addressToPutTheColor
 ) {
+    Vector *Pf_Pi;
+    Vector *intensity;
+    double clds;
     Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
 
     Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
 
-    Vector *Pf_Pi = Light_source_position->minus_with_the_vector(P_i);
+    if (light->getType() == 0) {
+        Pf_Pi = ((PointLight*)light)->getPosition()->minus_with_the_vector(P_i);
+    }else if (light->getType() == 2) {
+        Pf_Pi = ((DirectionalLight*)light)->getDirection()->multiply_by_a_scalar(-1);
+    }else {
+        Pf_Pi = ((SpotLight*)light)->getPosition()->minus_with_the_vector(P_i);
+    }
 
     double Pf_pi_norm = sqrt(Pf_Pi->scalar_with(Pf_Pi));
+
+     if(this->imageLoaded){
+        Pixel color;
+        if(this->planHorizontalAxis){
+            color = this->texture->getPixel(P_i->get_x_Point(), P_i->get_z_Point());
+        }
+        else{
+            color = this->texture->getPixel(P_i->get_x_Point(), P_i->get_y_Point());
+        }
+
+        double newColor[3] = {
+            ((double)color.r)/255,
+            ((double)color.g)/255,
+            ((double)color.b)/255
+        };
+
+        this->set_K_a(newColor);
+        this->set_K_d(newColor);
+        this->set_K_e(newColor);
+    }
 
     Vector *l_vector = new Vector(
         (Pf_Pi->get_x_Point())/Pf_pi_norm,
         (Pf_Pi->get_y_Point())/Pf_pi_norm,
         (Pf_Pi->get_z_Point())/Pf_pi_norm
     );
+
+    if (light->getType() == 1) {
+        clds = l_vector->scalar_with(((SpotLight*)light)->getDirection()->multiply_by_a_scalar(-1));
+        if (clds < cos(((SpotLight*)light)->getAngle())) {
+            intensity = new Vector(0.0,0.0,0.0);
+        }else {
+            intensity = ((SpotLight*)light)->getIntensity()->multiply_by_a_scalar(clds);
+        }
+    }else {
+        intensity = light->getIntensity();
+    };
 
     double Dr_magnitude = sqrt(Direction->scalar_with(Direction));
     Vector *vector_v = new Vector(
@@ -72,10 +110,13 @@ void Plan::gime_your_color(
 
     F_e = pow(F_e, this->get_shiness());
 
-    Vector *I_eye_e = Light_source_intesity->at_sign_with(this->get_K_e());
+
+
+
+    Vector *I_eye_e = intensity->at_sign_with(this->get_K_e());
     I_eye_e = I_eye_e->multiply_by_a_scalar(F_e);
 
-    Vector *I_eye_d = Light_source_intesity->at_sign_with(this->get_K_d());
+    Vector *I_eye_d = intensity->at_sign_with(this->get_K_d());
     I_eye_d = I_eye_d->multiply_by_a_scalar(F_d);
 
     Vector *vectorWithColors = I_eye_d->sum_with_the_vector(I_eye_e);
@@ -184,4 +225,11 @@ void Plan::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up
     this->get_N_vector()->set_x_Point(newNvector->get_x_Point());
     this->get_N_vector()->set_y_Point(newNvector->get_y_Point());
     this->get_N_vector()->set_z_Point(newNvector->get_z_Point());
+};
+
+
+void Plan::set_TextureImage(string filename, bool horizontalAxis){
+    this->texture = new Image();
+    this->imageLoaded = texture->loadImage(filename);
+    this->planHorizontalAxis = horizontalAxis;
 };
