@@ -11,4 +11,5 @@ class Point {
         Point(double x, double y, double z);
         Vector* gimmeTheCoordinateVector();
         Vector* getPointIni();
+        void updatePoints(double x, double y, double z);
 };

@@ -17,3 +17,9 @@ Vector* Point::gimmeTheCoordinateVector(){
 Vector* Point::getPointIni() {
     return this->pointsIni;
 };
+
+void Point::updatePoints(double x, double y, double z){
+    Vector *actual = this->points;
+    delete actual;
+    this->points = new Vector(x,y,z);
+};

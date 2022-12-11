@@ -5,6 +5,7 @@ using namespace std;
 
 
 MeshWithTexture::MeshWithTexture(Vector *baseVector, double width, double height) {
+    this->typeOfThisObject = 4;
     this->insertApoint( new Point(
         baseVector->get_x_Point(),
         baseVector->get_y_Point(),

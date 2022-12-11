@@ -490,6 +490,93 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
             }
             break;
         case 4:
+            cout << "1  - Transladar a malha.\n";
+            cout << "2  - Rotacionar a malha em x.\n";
+            cout << "3  - Rotacionar a malha em y.\n";
+            cout << "4  - Rotacionar a malha em z.\n";
+            cout << "5  - Modificar a escala da malha.\n";
+            cout << "6  - Modificar as cores.\n";
+            cout << "7  - Aplicar Reflect XY.\n";
+            cout << "8  - Aplicar Reflect XZ.\n";
+            cout << "9  - Aplicar Reflect YZ.\n";
+            cout << "10 - Aplicar Shear YX.\n";
+            cout << "11 - Aplicar Shear XY.\n";
+            cout << "12 - Aplicar Shear XZ.\n";
+            cout << "13 - Aplicar Shear ZX.\n";
+            cout << "14 - Aplicar Shear YZ.\n";
+            cout << "15 - Aplicar Shear ZY.\n";
+            cin >> resposta;
+            if (cin.fail() || resposta > 15 || resposta < 1)  {
+                cout << "Entrada inválida\n";
+                cin.clear();
+                cin.ignore(1000, '\n');
+                break;
+            }
+            if (resposta == 1) {
+                cout << "Digite o valor de x: ";
+                cin >> newCoeficients[0];
+                cout << "Digite o valor de y: ";
+                cin >> newCoeficients[1];
+                cout << "Digite o valor de z: ";
+                cin >> newCoeficients[2];
+                interceptedObject->applyTranslate(newCoeficients[0],newCoeficients[1],newCoeficients[2]);
+            }else if (resposta == 2) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateX(newCoeficients[0]);
+            }else if (resposta == 3) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateY(newCoeficients[0]);
+            }else if (resposta == 4) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyRotateZ(newCoeficients[0]);
+            }else if (resposta == 5) {
+                cout << "Digite o valor da escala: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyScale(newCoeficients[0], 0, 0);
+            }else if (resposta == 6) {
+                cout << "Digite o novo valor do Kd: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_d(newCoeficients);
+                cout << "Digite o novo valor do Ke: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+                cout << "Digite o novo valor do Ka: ";
+                scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+                interceptedObject->set_K_e(newCoeficients);
+            }else if (resposta == 7) {
+                interceptedObject->applyReflectXY();
+            } else if (resposta == 8) {
+                interceptedObject->applyReflectXZ();
+            }else if (resposta == 9) {
+                interceptedObject->applyReflectYZ();
+            }else if (resposta == 10) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyShearYX(newCoeficients[0]);
+            }else if (resposta == 11) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyShearXY(newCoeficients[0]);
+            }else if (resposta == 12) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyShearXZ(newCoeficients[0]);
+            }else if (resposta == 13) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyShearZX(newCoeficients[0]);
+            }else if (resposta == 14) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyShearYZ(newCoeficients[0]);
+            }else if (resposta == 15) {
+                cout << "Digite o valor do angulo: ";
+                cin >> newCoeficients[0];
+                interceptedObject->applyShearZY(newCoeficients[0]);
+            }
             break;
         default:
             cout << "Não atingiu nenhum objeto.";
