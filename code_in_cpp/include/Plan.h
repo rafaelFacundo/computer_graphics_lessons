@@ -55,7 +55,7 @@ class Plan : public Object {
         void applyShearZY(double angle);
 
 
-
+        Vector *calculateWordToCanvas(Vector *P_o, Vector *P_Look, Vector *Up, Vector *worldVector);
         void applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up);
         void set_TextureImage(string filename, bool horizontalAxis);
 };

@@ -3,6 +3,320 @@
 #include <iostream>
 using namespace std;
 
+WrapperTexture::WrapperTexture(){
+
+}
+
+void WrapperTexture::set_unitary_vector(double x, double y, double z){
+    this->unitary_vector = new Vector(x,y,z);
+    this->top_ini = this->get_center_top_vector();
+};
+
+void WrapperTexture::set_B_vector(double x, double y, double z){
+    this->B_vector = new Vector(x,y,z);
+    this->B_vectorIni = this->B_vector;
+};
+
+void WrapperTexture::set_radius(double radius) {
+    this->radius = radius;
+}
+
+void WrapperTexture::set_height(double height) {
+    this->height = height;
+}
+
+double WrapperTexture::get_radius() {
+    return this->radius;
+}
+
+double WrapperTexture::get_height() {
+    return this->height;
+}
+
+Vector *WrapperTexture::get_unitary_vector() {
+    return this->unitary_vector;
+}
+
+Vector *WrapperTexture::get_B_vector() {
+    return this->B_vector;
+}
+
+Vector *WrapperTexture::get_center_top_vector() {
+    Vector *unitary_vector = (this->get_unitary_vector())->get_this_vector_unitary();
+    return B_vector->sum_with_the_vector(unitary_vector->multiply_by_a_scalar(this->height));
+}
+
+
+
+returnType WrapperTexture::didThePointIntercepted(Vector *dir, Vector *P_o, Vector *base){
+    returnType result;
+    double D_scalar_n;
+    Vector* Pi_minus_base;
+    Vector *Ppi_minus_P_o = base->minus_with_the_vector(P_o);
+    double Ppi_mns_Po_scalar_N = Ppi_minus_P_o->scalar_with(this->get_unitary_vector()->multiply_by_a_scalar(-1.0));
+
+    if (base == this->get_B_vector()) {
+        D_scalar_n = dir->scalar_with(this->get_unitary_vector()->multiply_by_a_scalar(-1.0));
+    }else {
+        D_scalar_n = dir->scalar_with(this->get_unitary_vector());
+    }
+
+
+    result.point_of_intersection = -1.0;
+    result.doesIntersect = false;
+    result.doesTheRayInterceptSomeLid = false;
+    result.typeOfTheInterceptedObject = 1;
+
+    if ( D_scalar_n == 0) {
+        return result;
+    }
+
+    double T_i = Ppi_mns_Po_scalar_N / D_scalar_n;
+    Vector* Pi = P_o->sum_with_the_vector(dir->multiply_by_a_scalar(T_i));
+
+    if(base == this->get_B_vector()) {
+        Pi_minus_base = Pi->minus_with_the_vector(this->get_B_vector());
+    }else {
+        Pi_minus_base = Pi->minus_with_the_vector(this->get_center_top_vector());
+    }
+
+    double norm = Pi_minus_base->getNormOfThisVector();
+
+    if ( T_i > 0 && norm <= this->get_radius()) {
+        result.point_of_intersection = T_i;
+        result.doesIntersect = true;
+        return result;
+    }
+    return result;
+};
+
+void WrapperTexture::putOrRemoveLid(bool put){
+    this->haveLid = put;
+};
+void WrapperTexture::setInterception(bool intercept){
+    this->intercepted = intercept;
+};
+
+void WrapperTexture::setIntercBase(bool interc){
+    this->intercepBase = interc;
+};
+void WrapperTexture::setIntercLid(bool interc){
+    this->intercepLid = interc;
+};
+
+
+bool WrapperTexture::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti) {
+    Vector *Dr_times_ti = Dr->multiply_by_a_scalar(Ti);
+    Vector *Pi = P_o->sum_with_the_vector(Dr_times_ti);
+
+    /* Pi_m_B = Pi_minus_B_vector  */
+    Vector *Pi_m_B = Pi->minus_with_the_vector(this->get_B_vector());
+    double Pi_m_b_Scalar_U = Pi_m_B->scalar_with(this->get_unitary_vector());
+
+    /* Vector_UpB = U_times_Pi_m_b_ScalarU  */
+    Vector *Vector_UpB = this->get_unitary_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U);
+    double norm_of_Vector_UpB = sqrt(Vector_UpB->scalar_with(Vector_UpB));
+
+    if ( Pi_m_b_Scalar_U > 0 && Pi_m_b_Scalar_U <= this->get_height()) {
+        return true;
+    }else {
+        return false;
+    };
+};
+
+returnType WrapperTexture::does_the_point_intercept(Vector *dir, Vector *P_o){
+    returnType result;
+    Vector *d_scalar_u = this->get_unitary_vector()->multiply_by_a_scalar(dir->scalar_with(this->get_unitary_vector()));
+    Vector *w_vector = dir->minus_with_the_vector(d_scalar_u);
+    Vector *Po_minus_B = P_o->minus_with_the_vector(this->get_B_vector());
+    Vector *Po_minus_B_scalar_u = this->get_unitary_vector()->multiply_by_a_scalar(Po_minus_B->scalar_with(this->get_unitary_vector()));
+    Vector *v_vector = Po_minus_B->minus_with_the_vector(Po_minus_B_scalar_u);
+
+    double a = w_vector->scalar_with(w_vector);
+    double b = 2 * (v_vector->scalar_with(w_vector));
+    double c = v_vector->scalar_with(v_vector) - pow(this->get_radius(), 2);
+    double delta = pow(b,2) - 4*a*c;
+
+    result.point_of_intersection = -1.0;
+    result.doesIntersect = false;
+    result.doesTheRayInterceptSomeLid = false;
+    result.typeOfTheInterceptedObject = 1;
+
+    if ( delta > 0 ) {
+
+        /* calculo os dois ti */
+        double Ti_1 = (-b + sqrt(delta))/(2*a);
+        double Ti_2 = (-b - sqrt(delta))/(2*a);
+
+
+
+        bool Ti_1_verification = this->is_Ti_a_valid_point(P_o, dir, Ti_1);
+        bool Ti_2_verification = this->is_Ti_a_valid_point(P_o, dir, Ti_2);
+
+        if (Ti_1_verification && Ti_2_verification && (Ti_1 < Ti_2)) {
+            result.point_of_intersection = Ti_1;
+            result.doesIntersect = true;
+            this->setInterception(false);
+            this->setIntercBase(false);
+            this->setIntercLid(false);
+        }else if (Ti_1_verification && Ti_2_verification && (Ti_1 >= Ti_2)) {
+            result.point_of_intersection = Ti_2;
+            result.doesIntersect = true;
+            this->setInterception(false);
+            this->setIntercBase(false);
+            this->setIntercLid(false);
+
+        }else if (Ti_1_verification) {
+            returnType T2_base = didThePointIntercepted(dir, P_o, this->get_B_vector());
+            returnType T2_top = didThePointIntercepted(dir, P_o, this->get_center_top_vector());
+
+            if (T2_base.doesIntersect && T2_base.point_of_intersection < Ti_1) {
+                result.point_of_intersection = Ti_2;
+                result.doesIntersect = true;
+                this->setInterception(true);
+                this->setIntercBase(true);
+                this->setIntercLid(false);
+            }else if (T2_top.doesIntersect && (T2_top.point_of_intersection < Ti_1)) {
+                result.point_of_intersection = Ti_2;
+                result.doesIntersect = true;
+                this->setInterception(true);
+                this->setIntercBase(false);
+                this->setIntercLid(true);
+            }else {
+                result.point_of_intersection = Ti_1;
+                result.doesIntersect = true;
+                this->setInterception(false);
+                this->setIntercBase(false);
+                this->setIntercLid(false);
+            }
+        }else if (Ti_2_verification) {
+            returnType T1_base = didThePointIntercepted(dir, P_o, this->get_B_vector());
+            returnType T1_top = didThePointIntercepted(dir, P_o, this->get_center_top_vector());
+            if (T1_base.doesIntersect && (T1_base.point_of_intersection < Ti_2)) {
+                result.point_of_intersection = Ti_1;
+                result.doesIntersect = true;
+                this->setInterception(true);
+                this->setIntercBase(true);
+                this->setIntercLid(false);
+            }else if (T1_top.doesIntersect && (T1_top.point_of_intersection < Ti_2)) {
+                result.point_of_intersection = Ti_1;
+                result.doesIntersect = true;
+                this->setInterception(true);
+                this->setIntercBase(false);
+                this->setIntercLid(true);
+            }else {
+                result.point_of_intersection = Ti_2;
+                result.doesIntersect = true;
+                this->setInterception(false);
+                this->setIntercBase(false);
+                this->setIntercLid(false);
+            }
+        } else {
+            returnType bse = didThePointIntercepted(dir, P_o, this->get_B_vector());
+            returnType tp = didThePointIntercepted(dir, P_o, this->get_center_top_vector());
+            if(bse.doesIntersect && tp.doesIntersect && (bse.point_of_intersection <= tp.point_of_intersection)) {
+                result.point_of_intersection = bse.point_of_intersection;
+                result.doesIntersect = true;
+                this->setInterception(true);
+                this->setIntercBase(true);
+                this->setIntercLid(false);
+            }else if(bse.doesIntersect && tp.doesIntersect && (bse.point_of_intersection > tp.point_of_intersection)){
+                result.point_of_intersection = tp.point_of_intersection;
+                result.doesIntersect = true;
+                this->setInterception(true);
+                this->setIntercBase(false);
+                this->setIntercLid(true);
+            }
+        }
+    }
+
+    return result;
+};
+
+
+void WrapperTexture::applyRotateX(double angle){
+    this->get_unitary_vector()->ThisRotateX(angle);
+};
+void WrapperTexture::applyRotateY(double angle){
+    this->get_unitary_vector()->ThisRotateY(angle);
+};
+void WrapperTexture::applyRotateZ(double angle){
+    this->get_unitary_vector()->ThisRotateZ(angle);
+};
+
+void WrapperTexture::applyTranslate(double x, double y, double z){
+    this->get_B_vector()->ThisTranslate(x,y,z);
+
+};
+
+void WrapperTexture::applyScale(double sx, double sy, double sz){
+    this->set_radius(this->get_radius() * sx);
+    this->set_height(this->get_height() * sx);
+};
+
+void WrapperTexture::applyReflectXY(){};
+void WrapperTexture::applyReflectXZ(){};
+void WrapperTexture::applyReflectYZ(){};
+
+void WrapperTexture::applyShearYX(double angle){};
+void WrapperTexture::applyShearXY(double angle){};
+void WrapperTexture::applyShearXZ(double angle){};
+void WrapperTexture::applyShearZX(double angle){};
+void WrapperTexture::applyShearYZ(double angle){};
+void WrapperTexture::applyShearZY(double angle){};
+
+
+
+void WrapperTexture::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up) {
+    Vector *top_vector = new Vector(this->top_ini->get_x_Point(), this->top_ini->get_y_Point(), this->top_ini->get_z_Point());
+
+    Vector *K = P_o->minus_with_the_vector(P_Look);
+    Vector *Kc = K->get_this_vector_unitary();
+
+    Vector *Vup = Up->minus_with_the_vector(P_o);
+    Vector *I = Vup->vectorProductWith(Kc);
+    Vector *Ic = I->get_this_vector_unitary();
+
+    Vector *Jc = Kc->vectorProductWith(Ic);
+
+    double minusIcPlusEye = -(Ic->scalar_with(P_o));
+    double minusJcPlusEye = -(Jc->scalar_with(P_o));
+    double minusKcPlusEye = -(Kc->scalar_with(P_o));
+
+    double x = this->B_vectorIni->get_x_Point();
+    double y = this->B_vectorIni->get_y_Point();
+    double z = this->B_vectorIni->get_z_Point();
+
+    double newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
+    double newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
+    double newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
+
+    this->get_B_vector()->set_x_Point(newX);
+    this->get_B_vector()->set_y_Point(newY);
+    this->get_B_vector()->set_z_Point(newZ);
+
+    x = top_vector-> get_x_Point();
+    y = top_vector-> get_y_Point();
+    z = top_vector-> get_z_Point();
+
+    newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
+    newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
+    newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
+
+    top_vector->set_x_Point(newX);
+    top_vector->set_y_Point(newY);
+    top_vector->set_z_Point(newZ);
+
+    Vector *newUni = top_vector->minus_with_the_vector(this->get_B_vector());
+    newUni = newUni->get_this_vector_unitary();
+    this->unitary_vector = newUni;
+
+
+};
+
+
+
+
 
 MeshWithTexture::MeshWithTexture(Vector *baseVector, double width, double height) {
     this->typeOfThisObject = 4;
@@ -72,14 +386,25 @@ void MeshWithTexture::insertAFace(Face *face){
 
 
 returnType MeshWithTexture::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
-
     double C1, C2, C3;
+    returnType wrapperResult;
+    wrapperResult.doesIntersect = true;
     int numberOfFaces = this->getSizeOfFacesList();
     returnType result;
     result.point_of_intersection = -1.0;
     result.doesIntersect = false;
     result.doesTheRayInterceptSomeLid = false;
     result.typeOfTheInterceptedObject = this->getTypeOfThisObject();
+
+    if (this->wrapper != NULL) {
+        wrapperResult = this->wrapper->does_the_point_intercept(dir, P_o);
+    }
+
+    if ( !(wrapperResult.doesIntersect) ) {
+
+        return result;
+    }
+
 
     double v1, v2, v3;
     for (int i = 0; i < numberOfFaces; i++ ) {
@@ -289,75 +614,106 @@ void MeshWithTexture::applyRotateX(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisRotateX(angle);
     };
+    if (this->wrapper != NULL) {
+        this->wrapper->applyRotateX(angle);
+    }
 
 };
 void MeshWithTexture::applyRotateY(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisRotateY(angle);
     };
+    if (this->wrapper != NULL) {
+        this->wrapper->applyRotateY(angle);
+    }
 };
 void MeshWithTexture::applyRotateZ(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisRotateZ(angle);
     };
+    if (this->wrapper != NULL) {
+        this->wrapper->applyRotateZ(angle);
+    }
 };
 
 void MeshWithTexture::applyTranslate(double x, double y, double z){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisTranslate(x,y,z);
     };
+
+    if (this->wrapper != NULL) {
+        this->wrapper->applyTranslate(x,y,z);
+    }
 };
 void MeshWithTexture::applyScale(double sx, double sy, double sz){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisScale(sx,sy,sz);
     };
+    if (this->wrapper != NULL) {
+        this->wrapper->applyScale(sx,sy,sz);
+    }
 };
 
 void MeshWithTexture::applyReflectXY(){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisReflectXY();
     };
+    if (this->wrapper != NULL) {
+        this->wrapper->applyReflectXY();
+    }
 };
 void MeshWithTexture::applyReflectXZ(){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisReflectXZ();
     };
+    if (this->wrapper != NULL) {
+        this->wrapper->applyReflectXZ();
+    }
 };
 void MeshWithTexture::applyReflectYZ(){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisReflectYZ();
     };
+    if (this->wrapper != NULL) {
+        this->wrapper->applyReflectYZ();
+    }
 };
 
 void MeshWithTexture::applyShearYX(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearYX(angle);
     };
+    this->wrapper = NULL;
 };
 void MeshWithTexture::applyShearXY(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearXY(angle);
     };
+    this->wrapper = NULL;
 };
 void MeshWithTexture::applyShearXZ(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearXZ(angle);
     };
+    this->wrapper = NULL;
 };
 void MeshWithTexture::applyShearZX(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearZX(angle);
     };
+    this->wrapper = NULL;
 };
 void MeshWithTexture::applyShearYZ(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearYZ(angle);
     };
+    this->wrapper = NULL;
 };
 void MeshWithTexture::applyShearZY(double angle){
     for (Point* point : this->listOfPoints) {
         point->gimmeTheCoordinateVector()->ThisShearZY(angle);
     };
+    this->wrapper = NULL;
 };
 
 
@@ -386,10 +742,40 @@ void MeshWithTexture::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look,
         double newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
         double newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
 
-        point->gimmeTheCoordinateVector()->set_x_Point(newX);
-        point->gimmeTheCoordinateVector()->set_y_Point(newY);
-        point->gimmeTheCoordinateVector()->set_z_Point(newZ);
+        point->updatePoints(newX, newY, newZ);
     };
+
+    if (this->wrapper != NULL) {
+        this->wrapper->applyConvertWordVectoToCanvas(P_o,P_Look,Up);
+    }
+
+};
+
+
+
+
+
+void MeshWithTexture::addWrapper(
+    Vector *B_vector,
+    double height,
+    double radius,
+    Vector *unitaryVector
+) {
+    WrapperTexture *newWrapper = new WrapperTexture();
+    newWrapper->set_B_vector(
+        B_vector->get_x_Point(),
+        B_vector->get_y_Point(),
+        B_vector->get_z_Point()
+    );
+
+    newWrapper->set_height(height);
+    newWrapper->set_radius(radius);
+    newWrapper->set_unitary_vector(
+        unitaryVector->get_x_Point(),
+        unitaryVector->get_y_Point(),
+        unitaryVector->get_z_Point()
+    );
+    this->wrapper = newWrapper;
 };
 
 
@@ -398,3 +784,5 @@ void MeshWithTexture::set_TextureImage(string filename, bool horizontalAxis){
     this->imageLoaded = texture->loadImage(filename);
     this->planHorizontalAxis = horizontalAxis;
 };
+
+

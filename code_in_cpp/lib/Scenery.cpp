@@ -108,7 +108,6 @@ Scenery::Scenery(
     SDL_Renderer *renderer
 ) {
 
-    //this->set_Light_intensity(Light_intensity);
     this->addLights(lights, numberOfLights);
     this->set_ambient_light_intensity(Ambient_Light_intesity);
     this->set_observer_postion(observer_point);
@@ -140,18 +139,31 @@ int Scenery::call_the_intersections_verifications(Vector *dir, Vector *P_o) {
 }
 
 void Scenery::ray_tracing_algorithm() {
+    Vector *dir = new Vector();
+    Vector *observer = new Vector();
     double Dx = this->width/this->n_collumns;
     double Dy = this->height/this->n_lines;
+    double z = this->get_z();
 
     for (int l = 0; l < this->n_lines; l++) {
         double Yj = this->height/2 - Dy/2 - l*Dy;
         for (int c = 0; c < this->n_collumns; c++ ) {
             double Xj = -this->width/2 + Dx/2 + c*Dx;
-            Vector *dir = new Vector(Xj, Yj, this->get_z());
-            //Vector *dir = new Vector(0,0,-1);
-            //Vector *observer = new Vector(Xj, Yj, 0);
+            if (isPerspective) {
+                dir->set_x_Point(Xj);
+                dir->set_y_Point(Yj);
+                dir->set_z_Point(z);
+                observer = this->observer_point;
+            }else {
+                dir->set_x_Point(0);
+                dir->set_y_Point(0);
+                dir->set_z_Point(-1);
+                observer->set_x_Point(Xj);
+                observer->set_y_Point(Yj);
+                observer->set_z_Point(z);
+            }
 
-            int objePosiInList = call_the_intersections_verifications(dir, this->observer_point);
+            int objePosiInList = call_the_intersections_verifications(dir, observer);
             if ( objePosiInList > -1) {
 
                 calculateTheColor(objePosiInList, dir);
@@ -180,6 +192,7 @@ void Scenery::ray_tracing_algorithm() {
 
         }
     }
+
 
     SDL_RenderPresent(this->renderer);
 }
@@ -225,6 +238,8 @@ bool Scenery::verify_the_shadow(
 
     }
 
+
+
     if ( indexOfInterceptedObje == -1 ) {
         return false;
     }else {
@@ -238,11 +253,12 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
     this->colorToDraw[0] = 0.0;
     this->colorToDraw[1] = 0.0;
     this->colorToDraw[2] = 0.0;
+    Light *light;
 
     for (int i = 0; i < this->list_of_light.size(); i++) {
         /* Vector *LightIntensity = this->Light_intensity[i];
         Vector *LightPosition = this->Light_position[i]; */
-        Light *light = list_of_light[i];
+        light = list_of_light[i];
         bool doesHaveShadowForThisLight = verify_the_shadow(
             light,
             dir,
@@ -266,6 +282,8 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
 
         }
     }
+
+
 };
 
 
@@ -274,6 +292,11 @@ void Scenery::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector 
     for (Object* obj : this->list_Of_Objects) {
         obj->applyConvertWordVectoToCanvas(P_o, P_Look, Up);
     }
+
+    for (Light* light : this->list_of_light){
+        light->applyConvertWordVectoToCanvas(P_o, P_Look, Up);
+    }
+
 
 
 }
@@ -297,9 +320,6 @@ int Scenery::verifyIfClickHitsSomeObjetc(int x, int y) {
 
 void Scenery::makeModificationOnObject(int indexOfObj) {
     Object* interceptedObject = this->list_Of_Objects[indexOfObj];
-    Vector* Ka = interceptedObject->get_K_a();
-    Vector* Kd = interceptedObject->get_K_d();
-    Vector* Ke = interceptedObject->get_K_e();
     double *newCoeficients = (double*)malloc(sizeof(double) * 3);
     int objectType = interceptedObject->get_object_type();
     int resposta;
@@ -591,15 +611,17 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
 
 void Scenery::modifyScenery() {
     int resposta;
+    int resposta2;
     double *newCoeficients = (double*)malloc(sizeof(double) * 3);
-    cout << "Digite oque você deseja fazer: ";
+    cout << "Digite oque você deseja fazer: \n";
     cout << "1 - mudar o observador de lugar: \n";
     cout << "2 - mudar a intensidade da luz ambiente.\n";
-    cout << "3 - mudar o número de linhas e colunas.\n";
+    cout << "3 - mudar o número o tamanho e altura da janela.\n";
     cout << "4 - mudar a intensidade de uma luz especifica.\n";
     cout << "5 - mudar a distância d.\n";
+    cout << "6 - mudar o tipo de projeção.\n";
     cin >> resposta;
-    if ( cin.fail() || resposta > 5 || resposta < 1 ) {
+    if ( cin.fail() || resposta > 6 || resposta < 1 ) {
         cin.clear();
         cin.ignore(1000, '\n');
         cout << "entrada inválida.";
@@ -644,10 +666,21 @@ void Scenery::modifyScenery() {
                 cout << "entrada inválida.";
                 return;
             }
-            this->n_collumns = newCoeficients[1];
-            this->n_lines = newCoeficients[0];
+            this->width = newCoeficients[1];
+            this->height = newCoeficients[0];
             break;
         case 4:
+            cout << "Digite o indice da luz correspondente: \n";
+            cin >> resposta2;
+            if ( cin.fail() || resposta2 > this->list_of_light.size() || resposta2 < 0) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "entrada inválida.";
+                return;
+            }
+            cout << "Digite o vetor da nova intensidade: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            this->list_of_light[resposta2]->setIntesity(new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]));
             break;
         case 5:
             cout << "Digite o valor do novo z (o valor será somado): \n";
@@ -660,6 +693,17 @@ void Scenery::modifyScenery() {
             }
             this->set_z(this->get_z() + newCoeficients[0]);
             break;
+        case 6:
+            cout << "Digite 1 para projeção perspectiva e digite 2 para projeção ortográfica: ";
+            cin >> resposta2;
+            if ( cin.fail() || resposta2 > 2 || resposta2 < 1) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "entrada inválida.";
+                return;
+            }
+            this->set_projection(resposta2);
+            break;
         default:
             break;
     }
@@ -668,4 +712,12 @@ void Scenery::modifyScenery() {
 
 
 
+
+void Scenery::set_projection(int type) {
+    if (type == 1) {
+        this->isPerspective = true;
+    }else {
+        this->isPerspective = false;
+    }
+};
 

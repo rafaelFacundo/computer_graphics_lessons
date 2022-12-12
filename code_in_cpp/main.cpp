@@ -27,8 +27,8 @@ int main() {
   posição da fonte P_F = (0, 60cm, -30cm)
 11) Luz ambiente: Intensidade I_A = (0.3, 0.3, 0.3) */
 
-  Vector *ambient_light = new Vector(0.9,0.9,0.9);
-  Vector *light_intensity = new Vector(0.7,0.7,0.7);
+  Vector *ambient_light = new Vector(0.3,0.3,0.3);
+  Vector *light_intensity = new Vector(0.5,0.5,0.5);
   Vector *light_position = new Vector(0.0,95.0,0);
   Vector *P_o = new Vector(0.0,0.0,0.0);
   Vector *directionLight = new Vector(0,-0.8,-1);
@@ -50,7 +50,7 @@ int main() {
   spot->setAngle(0.5);
   spot->setType(1);
 
-  Light* light_list[1] = {pLigh};
+  Light* light_list[2] = {pLigh, spot};
 
   /* initing the sdl window */
   renderer = init_sdl_window (
@@ -63,7 +63,7 @@ int main() {
   /* instanciating the scenery class */
   Scenery *theScenery = new Scenery(
     light_list,
-    1,
+    2,
     ambient_light,
     P_o,
     n_lines,
@@ -76,7 +76,7 @@ int main() {
 
 
    /* Plan 1 */
-  double K_e_plan_backgrnd[3] = {0.686,0.933,0.933};
+  double K_e_plan_backgrnd[3] = {0.501,0.501,0.501};
   Plan *Floor = new Plan();
   Floor->set_PI_Point(0.0,-150.0,0.0);
   Floor->set_N_vector(0.0,1.0,0.0);
@@ -84,20 +84,10 @@ int main() {
   Floor->set_K_d(K_e_plan_backgrnd);
   Floor->set_K_e(K_e_plan_backgrnd);
   Floor->set_shine(1);
-  Floor->set_TextureImage("./image/asphalt.jpg", true);
-
-  /* Plan 2 */
-  double K_plan2[3] = {0.686,0.933,0.933};
-  Plan *right_side_wall = new Plan();
-  right_side_wall->set_PI_Point(200.0, -150.0, 0.0);
-  right_side_wall->set_N_vector(-1.0,0.0,0.0);
-  right_side_wall->set_K_a(K_plan2);
-  right_side_wall->set_K_d(K_plan2);
-  right_side_wall->set_K_e(K_plan2);
-  right_side_wall->set_shine(1);
+  //Floor->set_TextureImage("./image/asphalt.jpg", true);
 
   /* Plan 3 */
-  double K_plan3[3] = {0.710,0.555,0.321};
+  double K_plan3[3] = {0,0.498,1};
   Plan *front_wall = new Plan();
   front_wall->set_PI_Point(200.0,-150.0,-700.0);
   front_wall->set_N_vector(0.0,0.0,1.0);
@@ -105,42 +95,9 @@ int main() {
   front_wall->set_K_e(K_plan3);
   front_wall->set_K_d(K_plan3);
   front_wall->set_shine(1);
-  front_wall->set_TextureImage("./image/back.jpg", false);
-
-  /* Plan 4 */
-  double K_plan4[3] = {0.686,0.933,0.933};
-  Plan *left_side_wall = new Plan();
-  left_side_wall->set_PI_Point(-200.0,-150.0,0.0);
-  left_side_wall->set_N_vector(1.0,0.0,0.0);
-  left_side_wall->set_K_a(K_plan4);
-  left_side_wall->set_K_d(K_plan4);
-  left_side_wall->set_K_e(K_plan4);
-  left_side_wall->set_shine(1);
-
-  /* Plan 5 */
-  double K_plan5[3] = {0.933,0.933,0.933};
-  Plan *ceiling = new Plan();
-  ceiling->set_PI_Point(0.0,150.0,0.0);
-  ceiling->set_N_vector(0.0,-1.0,0.0);
-  ceiling->set_K_a(K_plan5);
-  ceiling->set_K_d(K_plan5);
-  ceiling->set_K_e(K_plan5);
-  ceiling->set_shine(1);
+  //front_wall->set_TextureImage("./image/back.jpg", false);
 
 
-
-
-
-  double cone_ks[3] = {0.0,1.0,0.498};
-  Cone *theCone = new Cone();
-  theCone->set_K_a(cone_ks);
-  theCone->set_K_d(cone_ks);
-  theCone->set_K_e(cone_ks);
-  theCone->set_radius(90);
-  theCone->set_height(150);
-  theCone->set_direction_vector(0.0,1.0,0.0);
-  theCone->set_B_vector(0.0,-60.0,-200.0);
-  theCone->set_shine(1);
 
   /* The sphere */
 
@@ -153,10 +110,12 @@ int main() {
 
   // CENÁRIO FINAL
 
+
   double trave_ks[3] = {0.9, 0.9, 0.9};
+  double height_trave = 45;
   Cylinder *trave_1_esq = new Cylinder();
   trave_1_esq->set_B_vector(-350.0,-150.0, -484.5);
-  trave_1_esq->set_height(73);
+  trave_1_esq->set_height(height_trave);
   trave_1_esq->set_K_a(trave_ks);
   trave_1_esq->set_K_d(trave_ks);
   trave_1_esq->set_K_e(trave_ks);
@@ -166,7 +125,7 @@ int main() {
 
   Cylinder *trave_1_dir = new Cylinder();
   trave_1_dir->set_B_vector(-350.0,-150.0, -477.5);
-  trave_1_dir->set_height(73);
+  trave_1_dir->set_height(height_trave);
   trave_1_dir->set_K_a(trave_ks);
   trave_1_dir->set_K_d(trave_ks);
   trave_1_dir->set_K_e(trave_ks);
@@ -197,7 +156,7 @@ int main() {
 
   Cylinder *trave_2_esq = new Cylinder();
   trave_2_esq->set_B_vector(350.0,-150.0, -477.5);
-  trave_2_esq->set_height(73);
+  trave_2_esq->set_height(height_trave);
   trave_2_esq->set_K_a(trave_ks);
   trave_2_esq->set_K_d(trave_ks);
   trave_2_esq->set_K_e(trave_ks);
@@ -207,7 +166,7 @@ int main() {
 
   Cylinder *trave_2_dir = new Cylinder();
   trave_2_dir->set_B_vector(350.0,-150.0, -484.5);
-  trave_2_dir->set_height(73);
+  trave_2_dir->set_height(height_trave);
   trave_2_dir->set_K_a(trave_ks);
   trave_2_dir->set_K_d(trave_ks);
   trave_2_dir->set_K_e(trave_ks);
@@ -235,12 +194,20 @@ int main() {
   trave_2_travessao->set_unitary_vector(0.0,0.0,-1.0);
 
   Vector *iniPoint = new Vector(-350.0,-150.0, -600);
-  MeshWithTexture *soccerField = new MeshWithTexture(iniPoint, 700, 245);
+  double widthSoccerField = 700;
+  double heightSoccerField = 245;
+  MeshWithTexture *soccerField = new MeshWithTexture(iniPoint, widthSoccerField, heightSoccerField);
   soccerField->set_K_a(K_e_plan_backgrnd);
   soccerField->set_K_d(K_e_plan_backgrnd);
   soccerField->set_K_e(K_e_plan_backgrnd);
   soccerField->set_shine(1);
   soccerField->set_TextureImage("./image/soccerField.jpg", true);
+  soccerField->addWrapper(
+    new Vector(-350, -150, -477.5),
+    700,
+    122.5,
+    new Vector(1,0,0)
+  );
 
   double centroEsfera[3] = {0.0,-140.0, -477.5};
   double K_d[3] = {0.845, 0.647, 0.125};
@@ -249,19 +216,816 @@ int main() {
     K_d,
     K_d,
     1.0,
-    10.0
+    50.0
   );
   theSphere->set_K_a(K_d);
 
 
+  //Vector *iniPoint = new Vector(-350.0,-150.0, -600);
+  //MeshWithTexture *soccerField = new MeshWithTexture(iniPoint, 700, 245);
 
-  /*theScenery->addObjectToTheScene(Floor);
-   theScenery->addObjectToTheScene(trave_1_esq);
-  theScenery->addObjectToTheScene(trave_1_dir);
-  theScenery->addObjectToTheScene(trave_1_travessao); */
+  double comp_aresta_cubos = 50.0;
+  double cubos_ks[3] = {0.9, 0.9, 0.9};
 
-  //theScenery->addObjectToTheScene(theCylinder);
-  double mesh_ks[3] = {1.0, 0.078, 0.576};
+  Vector *base_cubo_1_esq = new Vector((iniPoint->get_x_Point()-(comp_aresta_cubos/2)),(iniPoint->get_y_Point()), (iniPoint->get_z_Point()-(comp_aresta_cubos/2)));
+  Mesh *cubo_1_esq = new Mesh();
+  cubo_1_esq->set_K_a(cubos_ks);
+  cubo_1_esq->set_K_e(cubos_ks);
+  cubo_1_esq->set_K_d(cubos_ks);
+  cubo_1_esq->set_shine(5);
+
+  Vector *base_cubo_1_dir = new Vector((iniPoint->get_x_Point()+widthSoccerField+(comp_aresta_cubos/2)),(iniPoint->get_y_Point()), (iniPoint->get_z_Point()-(comp_aresta_cubos/2)));
+  Mesh *cubo_1_dir = new Mesh();
+  cubo_1_dir->set_K_a(cubos_ks);
+  cubo_1_dir->set_K_e(cubos_ks);
+  cubo_1_dir->set_K_d(cubos_ks);
+  cubo_1_dir->set_shine(5);
+
+  Vector *base_cubo_2_esq = new Vector((iniPoint->get_x_Point()-(comp_aresta_cubos/2)),(iniPoint->get_y_Point()), (iniPoint->get_z_Point()+heightSoccerField+(comp_aresta_cubos/2)));
+  Mesh *cubo_2_esq = new Mesh();
+  cubo_2_esq->set_K_a(cubos_ks);
+  cubo_2_esq->set_K_e(cubos_ks);
+  cubo_2_esq->set_K_d(cubos_ks);
+  cubo_2_esq->set_shine(5);
+
+  Vector *base_cubo_2_dir = new Vector((iniPoint->get_x_Point()+widthSoccerField+(comp_aresta_cubos/2)),(iniPoint->get_y_Point()), (iniPoint->get_z_Point()+heightSoccerField+(comp_aresta_cubos/2)));
+  Mesh *cubo_2_dir = new Mesh();
+  cubo_2_dir->set_K_a(cubos_ks);
+  cubo_2_dir->set_K_e(cubos_ks);
+  cubo_2_dir->set_K_d(cubos_ks);
+  cubo_2_dir->set_shine(5);
+
+  Vector *iniPointRoofBack = new Vector(iniPoint->get_x_Point(),(iniPoint->get_y_Point()+comp_aresta_cubos), (iniPoint->get_z_Point()-comp_aresta_cubos));
+  MeshWithTexture *roofBack = new MeshWithTexture(iniPointRoofBack, widthSoccerField, comp_aresta_cubos);
+  roofBack->set_K_a(cubos_ks);
+  roofBack->set_K_d(cubos_ks);
+  roofBack->set_K_e(cubos_ks);
+  roofBack->set_shine(1);
+  roofBack->addWrapper(
+    new Vector(-350,-100,-625),
+    700,
+    25,
+    new Vector(1,0,0)
+  );
+  roofBack->set_TextureImage("./image/telhado.jpg", true);
+
+  Vector *iniPointRoofFront = new Vector(iniPoint->get_x_Point(),(iniPoint->get_y_Point()+comp_aresta_cubos), (iniPoint->get_z_Point()+heightSoccerField));
+  MeshWithTexture *roofFront = new MeshWithTexture(iniPointRoofFront, widthSoccerField, comp_aresta_cubos);
+  roofFront->set_K_a(cubos_ks);
+  roofFront->set_K_d(cubos_ks);
+  roofFront->set_K_e(cubos_ks);
+  roofFront->set_shine(1);
+  roofFront->addWrapper(
+    new Vector(-350,-100,-330),
+    700,
+    25,
+    new Vector(1,0,0)
+  );
+
+  roofFront->set_TextureImage("./image/telhado.jpg", true);
+
+  Vector *iniPointRoofLeft = new Vector((iniPoint->get_x_Point()-comp_aresta_cubos),(iniPoint->get_y_Point()+comp_aresta_cubos), iniPoint->get_z_Point());
+  MeshWithTexture *roofLeft = new MeshWithTexture(iniPointRoofLeft, comp_aresta_cubos, widthSoccerField);
+  roofLeft->set_K_a(cubos_ks);
+  roofLeft->set_K_d(cubos_ks);
+  roofLeft->set_K_e(cubos_ks);
+  roofLeft->set_shine(1);
+  roofLeft->addWrapper(
+    new Vector(-375,-100,-355),
+    245,
+    25,
+    new Vector(0,0,-1)
+  );
+  roofLeft->set_TextureImage("./image/telhado.jpg", true);
+
+  Vector *iniPointRoofRight = new Vector((iniPoint->get_x_Point()+widthSoccerField),(iniPoint->get_y_Point()+comp_aresta_cubos), iniPoint->get_z_Point());
+  MeshWithTexture *roofRight = new MeshWithTexture(iniPointRoofRight, comp_aresta_cubos, widthSoccerField);
+  roofRight->set_K_a(cubos_ks);
+  roofRight->set_K_d(cubos_ks);
+  roofRight->set_K_e(cubos_ks);
+  roofRight->set_shine(1);
+  roofRight->addWrapper(
+    new Vector(375,-100,-355),
+    245,
+    25,
+    new Vector(0,0,-1)
+  );
+  roofRight->set_TextureImage("./image/telhado.jpg", true);
+
+  cubo_1_esq->insertApoint(new Point(
+    base_cubo_1_esq->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_1_esq->get_y_Point(),
+    base_cubo_1_esq->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_1_esq->insertApoint(new Point(
+    base_cubo_1_esq->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_1_esq->get_y_Point(),
+    base_cubo_1_esq->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_1_esq->insertApoint(new Point(
+    base_cubo_1_esq->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_1_esq->get_y_Point(),
+    base_cubo_1_esq->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_1_esq->insertApoint(new Point(
+    base_cubo_1_esq->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_1_esq->get_y_Point(),
+    base_cubo_1_esq->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_1_esq->insertApoint(new Point(
+    base_cubo_1_esq->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_1_esq->get_y_Point() + comp_aresta_cubos,
+    base_cubo_1_esq->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_1_esq->insertApoint(new Point(
+    base_cubo_1_esq->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_1_esq->get_y_Point() + comp_aresta_cubos,
+    base_cubo_1_esq->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_1_esq->insertApoint(new Point(
+    base_cubo_1_esq->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_1_esq->get_y_Point() + comp_aresta_cubos,
+    base_cubo_1_esq->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_1_esq->insertApoint(new Point(
+    base_cubo_1_esq->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_1_esq->get_y_Point() + comp_aresta_cubos,
+    base_cubo_1_esq->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+
+  cubo_1_dir->insertApoint(new Point(
+    base_cubo_1_dir->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_1_dir->get_y_Point(),
+    base_cubo_1_dir->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_1_dir->insertApoint(new Point(
+    base_cubo_1_dir->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_1_dir->get_y_Point(),
+    base_cubo_1_dir->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_1_dir->insertApoint(new Point(
+    base_cubo_1_dir->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_1_dir->get_y_Point(),
+    base_cubo_1_dir->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_1_dir->insertApoint(new Point(
+    base_cubo_1_dir->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_1_dir->get_y_Point(),
+    base_cubo_1_dir->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_1_dir->insertApoint(new Point(
+    base_cubo_1_dir->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_1_dir->get_y_Point() + comp_aresta_cubos,
+    base_cubo_1_dir->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_1_dir->insertApoint(new Point(
+    base_cubo_1_dir->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_1_dir->get_y_Point() + comp_aresta_cubos,
+    base_cubo_1_dir->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_1_dir->insertApoint(new Point(
+    base_cubo_1_dir->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_1_dir->get_y_Point() + comp_aresta_cubos,
+    base_cubo_1_dir->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_1_dir->insertApoint(new Point(
+    base_cubo_1_dir->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_1_dir->get_y_Point() + comp_aresta_cubos,
+    base_cubo_1_dir->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+
+  cubo_2_esq->insertApoint(new Point(
+    base_cubo_2_esq->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_2_esq->get_y_Point(),
+    base_cubo_2_esq->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_2_esq->insertApoint(new Point(
+    base_cubo_2_esq->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_2_esq->get_y_Point(),
+    base_cubo_2_esq->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_2_esq->insertApoint(new Point(
+    base_cubo_2_esq->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_2_esq->get_y_Point(),
+    base_cubo_2_esq->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_2_esq->insertApoint(new Point(
+    base_cubo_2_esq->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_2_esq->get_y_Point(),
+    base_cubo_2_esq->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_2_esq->insertApoint(new Point(
+    base_cubo_2_esq->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_2_esq->get_y_Point() + comp_aresta_cubos,
+    base_cubo_2_esq->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_2_esq->insertApoint(new Point(
+    base_cubo_2_esq->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_2_esq->get_y_Point() + comp_aresta_cubos,
+    base_cubo_2_esq->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_2_esq->insertApoint(new Point(
+    base_cubo_2_esq->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_2_esq->get_y_Point() + comp_aresta_cubos,
+    base_cubo_2_esq->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_2_esq->insertApoint(new Point(
+    base_cubo_2_esq->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_2_esq->get_y_Point() + comp_aresta_cubos,
+    base_cubo_2_esq->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+
+  cubo_2_dir->insertApoint(new Point(
+    base_cubo_2_dir->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_2_dir->get_y_Point(),
+    base_cubo_2_dir->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_2_dir->insertApoint(new Point(
+    base_cubo_2_dir->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_2_dir->get_y_Point(),
+    base_cubo_2_dir->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_2_dir->insertApoint(new Point(
+    base_cubo_2_dir->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_2_dir->get_y_Point(),
+    base_cubo_2_dir->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_2_dir->insertApoint(new Point(
+    base_cubo_2_dir->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_2_dir->get_y_Point(),
+    base_cubo_2_dir->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_2_dir->insertApoint(new Point(
+    base_cubo_2_dir->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_2_dir->get_y_Point() + comp_aresta_cubos,
+    base_cubo_2_dir->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+  cubo_2_dir->insertApoint(new Point(
+    base_cubo_2_dir->get_x_Point() - (comp_aresta_cubos),
+    base_cubo_2_dir->get_y_Point() + comp_aresta_cubos,
+    base_cubo_2_dir->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_2_dir->insertApoint(new Point(
+    base_cubo_2_dir->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_2_dir->get_y_Point() + comp_aresta_cubos,
+    base_cubo_2_dir->get_z_Point() + (comp_aresta_cubos)
+  ));
+
+  cubo_2_dir->insertApoint(new Point(
+    base_cubo_2_dir->get_x_Point() + (comp_aresta_cubos),
+    base_cubo_2_dir->get_y_Point() + comp_aresta_cubos,
+    base_cubo_2_dir->get_z_Point() - (comp_aresta_cubos)
+  ));
+
+
+  cubo_1_esq->insertAEdge(
+    new Edge(0,1)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(1,2)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(2,3)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(3,0)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(4,5)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(5,6)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(6,7)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(7,4)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(0,4)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(1,5)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(2,6)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(3,7)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(2,7)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(5,7)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(5,2)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(1,4)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(1,3)
+  );
+
+  cubo_1_esq->insertAEdge(
+    new Edge(3,4)
+  );
+
+
+  cubo_1_dir->insertAEdge(
+    new Edge(0,1)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(1,2)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(2,3)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(3,0)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(4,5)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(5,6)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(6,7)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(7,4)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(0,4)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(1,5)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(2,6)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(3,7)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(2,7)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(5,7)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(5,2)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(1,4)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(1,3)
+  );
+
+  cubo_1_dir->insertAEdge(
+    new Edge(3,4)
+  );
+
+
+  cubo_2_esq->insertAEdge(
+    new Edge(0,1)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(1,2)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(2,3)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(3,0)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(4,5)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(5,6)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(6,7)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(7,4)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(0,4)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(1,5)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(2,6)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(3,7)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(2,7)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(5,7)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(5,2)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(1,4)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(1,3)
+  );
+
+  cubo_2_esq->insertAEdge(
+    new Edge(3,4)
+  );
+
+
+  cubo_2_dir->insertAEdge(
+    new Edge(0,1)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(1,2)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(2,3)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(3,0)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(4,5)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(5,6)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(6,7)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(7,4)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(0,4)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(1,5)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(2,6)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(3,7)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(2,7)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(5,7)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(5,2)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(1,4)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(1,3)
+  );
+
+  cubo_2_dir->insertAEdge(
+    new Edge(3,4)
+  );
+
+
+  cubo_1_esq->insertAFace(
+    new Face(6, 10, 12)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(12, 2, 11)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(7, 4, 13)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(13, 5, 6)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(5, 14, 10)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(9, 1, 14)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(4, 15, 9)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(8, 0, 15)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(1, 16, 2)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(3, 16, 10)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(11, 17, 7)
+  );
+
+  cubo_1_esq->insertAFace(
+    new Face(3, 8, 17)
+  );
+
+
+  cubo_1_dir->insertAFace(
+    new Face(6, 10, 12)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(12, 2, 11)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(7, 4, 13)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(13, 5, 6)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(5, 14, 10)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(9, 1, 14)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(4, 15, 9)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(8, 0, 15)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(1, 16, 2)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(3, 16, 10)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(11, 17, 7)
+  );
+
+  cubo_1_dir->insertAFace(
+    new Face(3, 8, 17)
+  );
+
+
+  cubo_2_esq->insertAFace(
+    new Face(6, 10, 12)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(12, 2, 11)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(7, 4, 13)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(13, 5, 6)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(5, 14, 10)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(9, 1, 14)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(4, 15, 9)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(8, 0, 15)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(1, 16, 2)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(3, 16, 10)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(11, 17, 7)
+  );
+
+  cubo_2_esq->insertAFace(
+    new Face(3, 8, 17)
+  );
+
+
+  cubo_2_dir->insertAFace(
+    new Face(6, 10, 12)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(12, 2, 11)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(7, 4, 13)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(13, 5, 6)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(5, 14, 10)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(9, 1, 14)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(4, 15, 9)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(8, 0, 15)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(1, 16, 2)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(3, 16, 10)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(11, 17, 7)
+  );
+
+  cubo_2_dir->insertAFace(
+    new Face(3, 8, 17)
+  );
+
+
+  cubo_1_esq->addWrapper(
+    base_cubo_1_esq,
+    50,
+    25,
+    new Vector(0,1,0)
+  );
+
+  cubo_1_dir->addWrapper(
+    base_cubo_1_dir,
+    50,
+    25,
+    new Vector(0,1,0)
+  );
+
+  cubo_2_esq->addWrapper(
+    base_cubo_2_esq,
+    50,
+    25,
+    new Vector(0,1,0)
+  );
+
+  cubo_2_dir->addWrapper(
+    base_cubo_2_dir,
+    50,
+    25,
+    new Vector(0,1,0)
+  );
+
+
+  double mesh_ks[3] = {0.845, 0.647, 0.125};
   Vector *baseVector2 = new Vector(-350.0,-150.0, -650);
   Mesh *frontStands = new Mesh();
   frontStands->set_K_a(mesh_ks);
@@ -371,7 +1135,7 @@ int main() {
   frontStands->addWrapper(
     new Vector(-350,-125,-600),
     710,
-    100,
+    30,
     new Vector(1,0,0)
   );
 
@@ -484,7 +1248,7 @@ int main() {
   leftSideStands->addWrapper(
     new Vector(-375,-125,-350),
     250,
-    100,
+    30,
     new Vector(0,0,-1)
   );
 
@@ -597,7 +1361,7 @@ int main() {
   rightSideStands->addWrapper(
     new Vector(375,-125,-350),
     250,
-    100,
+    30,
     new Vector(0,0,-1)
   );
 
@@ -710,11 +1474,9 @@ int main() {
   backStands->addWrapper(
     new Vector(-350,-125,-330),
     710,
-    100,
+    30,
     new Vector(1,0,0)
   );
-
-
 
 
   Vector *P_oArb = new Vector(0,0,0);
@@ -723,23 +1485,47 @@ int main() {
 
 
   /* theScenery->addObjectToTheScene(soccerField);
-  theScenery->addObjectToTheScene(trave_1_esq);
+  theScenery->addObjectToTheScene(theSphere); */
+
+  /* theScenery->addObjectToTheScene(trave_1_esq);
   theScenery->addObjectToTheScene(trave_1_dir);
   theScenery->addObjectToTheScene(trave_1_travessao);
   theScenery->addObjectToTheScene(trave_2_dir);
   theScenery->addObjectToTheScene(trave_2_esq);
-  theScenery->addObjectToTheScene(trave_2_travessao);
-  theScenery->addObjectToTheScene(Floor);
+  theScenery->addObjectToTheScene(trave_2_travessao); */
+
+  /* theScenery->addObjectToTheScene(Floor);
+  theScenery->addObjectToTheScene(front_wall); */
+
+  /* theScenery->addObjectToTheScene(Floor);
   theScenery->addObjectToTheScene(front_wall);
-  theScenery->addObjectToTheScene(theSphere); */
 
 
-  //theScenery->addObjectToTheScene(theMesh);
+
+  theScenery->addObjectToTheScene(soccerField);
+  theScenery->addObjectToTheScene(cubo_1_esq);
+  theScenery->addObjectToTheScene(cubo_1_dir);
+  theScenery->addObjectToTheScene(cubo_2_esq);
+  theScenery->addObjectToTheScene(cubo_2_dir); */
+
+  /* theScenery->addObjectToTheScene(roofBack);
+  theScenery->addObjectToTheScene(roofFront);
+  theScenery->addObjectToTheScene(roofLeft);
+  theScenery->addObjectToTheScene(roofRight);
+
   theScenery->addObjectToTheScene(frontStands);
   theScenery->addObjectToTheScene(leftSideStands);
   theScenery->addObjectToTheScene(rightSideStands);
   theScenery->addObjectToTheScene(backStands);
-  theScenery->addObjectToTheScene(soccerField);
+
+  theScenery->addObjectToTheScene(Floor);
+  theScenery->addObjectToTheScene(front_wall); */
+
+ //theScenery->addObjectToTheScene(cubo_1_esq);
+  theScenery->addObjectToTheScene(Floor);
+  theScenery->addObjectToTheScene(front_wall);
+  theScenery->addObjectToTheScene(theSphere);
+
 
   /* calling the ray tracing algorithm */
   theScenery->ray_tracing_algorithm();

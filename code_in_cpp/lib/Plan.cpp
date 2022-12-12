@@ -183,7 +183,33 @@ void Plan::applyShearYZ(double angle){};
 void Plan::applyShearZY(double angle){};
 
 
+Vector *Plan::calculateWordToCanvas(Vector *P_o, Vector *P_Look, Vector *Up, Vector *worldVector){
+    Vector *K = P_o->minus_with_the_vector(P_Look);
+    Vector *Kc = K->get_this_vector_unitary();
+
+    Vector *Vup = Up->minus_with_the_vector(P_o);
+    Vector *I = Vup->vectorProductWith(Kc);
+    Vector *Ic = I->get_this_vector_unitary();
+
+    Vector *Jc = Kc->vectorProductWith(Ic);
+
+    double minusIcPlusEye = -(Ic->scalar_with(P_o));
+    double minusJcPlusEye = -(Jc->scalar_with(P_o));
+    double minusKcPlusEye = -(Kc->scalar_with(P_o));
+
+    double x = worldVector->get_x_Point();
+    double y = worldVector->get_y_Point();
+    double z = worldVector->get_z_Point();
+
+    double newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
+    double newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
+    double newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
+
+    return new Vector(newX, newY, newZ);
+};
+
 void Plan::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up){
+    Vector *zero = this->calculateWordToCanvas(P_o, P_Look, Up, new Vector(0,0,0));
     Vector *K = P_o->minus_with_the_vector(P_Look);
     Vector *Kc = K->get_this_vector_unitary();
 
@@ -220,11 +246,10 @@ void Plan::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up
     newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
 
     Vector *newNvector = new Vector(newX, newY, newZ);
+    newNvector = newNvector->minus_with_the_vector(zero);
     newNvector = newNvector->get_this_vector_unitary();
 
-    this->get_N_vector()->set_x_Point(newNvector->get_x_Point());
-    this->get_N_vector()->set_y_Point(newNvector->get_y_Point());
-    this->get_N_vector()->set_z_Point(newNvector->get_z_Point());
+    this->N_vector = newNvector;
 };
 
 

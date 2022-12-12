@@ -19,6 +19,7 @@ class Scenery {
     double z;
     double* colorToDraw = (double*)malloc(sizeof(double)*3);
     SDL_Renderer *renderer;
+    bool isPerspective = true;
 
     public:
         Scenery();
@@ -58,6 +59,7 @@ class Scenery {
         void set_width_and_height(double width, double height);
         void set_z(int z);
         void set_renderer(SDL_Renderer *renderer);
+        void set_projection(int type);
 
 
         void calculateTheColor(int indexOfObject, Vector *dir);
