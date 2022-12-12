@@ -261,407 +261,456 @@ int main() {
   theScenery->addObjectToTheScene(trave_1_travessao); */
 
   //theScenery->addObjectToTheScene(theCylinder);
-
-
-  double edgeLeng = 40.0;
-  Vector *baseVector = new Vector(0.0, -150.0, -300.0);
   double mesh_ks[3] = {1.0, 0.078, 0.576};
-  Mesh *theMesh = new Mesh();
-  theMesh->set_K_a(mesh_ks);
-  theMesh->set_K_e(mesh_ks);
-  theMesh->set_K_d(mesh_ks);
-  theMesh->set_shine(5);
+  Vector *baseVector2 = new Vector(-350.0,-150.0, -650);
+  Mesh *frontStands = new Mesh();
+  frontStands->set_K_a(mesh_ks);
+  frontStands->set_K_e(mesh_ks);
+  frontStands->set_K_d(mesh_ks);
+  frontStands->set_shine(5);
+
+  frontStands->insertApoint(new Point(-350,-150,-650));
+  frontStands->insertApoint(new Point(-350,-150,-600));
+  frontStands->insertApoint(new Point(350,-150,-600));
+  frontStands->insertApoint(new Point(350,-150,-650));
+
+  frontStands->insertApoint(new Point(-350,-100,-650));
+  frontStands->insertApoint(new Point(-350,-100,-640));
+  frontStands->insertApoint(new Point(-350,-110,-640));
+  frontStands->insertApoint(new Point(-350,-110,-630));
+  frontStands->insertApoint(new Point(-350,-120,-630));
+  frontStands->insertApoint(new Point(-350,-120,-620));
+  frontStands->insertApoint(new Point(-350,-130,-620));
+  frontStands->insertApoint(new Point(-350,-130,-610));
+  frontStands->insertApoint(new Point(-350,-140,-610));
+  frontStands->insertApoint(new Point(-350,-140,-600));
+
+  frontStands->insertApoint(new Point(350, -140, -600));
+  frontStands->insertApoint(new Point(350, -140, -610));
+  frontStands->insertApoint(new Point(350, -130, -610));
+  frontStands->insertApoint(new Point(350, -130, -620));
+  frontStands->insertApoint(new Point(350, -120, -620));
+  frontStands->insertApoint(new Point(350, -120, -630));
+  frontStands->insertApoint(new Point(350, -110, -630));
+  frontStands->insertApoint(new Point(350, -110, -640));
+  frontStands->insertApoint(new Point(350, -100, -640));
+  frontStands->insertApoint(new Point(350, -100, -650));
+
+  frontStands->insertAEdge(new Edge(4,0));
+  frontStands->insertAEdge(new Edge(0,3));
+  frontStands->insertAEdge(new Edge(3,23));
+  frontStands->insertAEdge(new Edge(23,4));
+  frontStands->insertAEdge(new Edge(4,5));
+  frontStands->insertAEdge(new Edge(5,22));
+  frontStands->insertAEdge(new Edge(22,23));
+  frontStands->insertAEdge(new Edge(6,7));
+  frontStands->insertAEdge(new Edge(7,20));
+  frontStands->insertAEdge(new Edge(20,21));
+  frontStands->insertAEdge(new Edge(21,6));
+  frontStands->insertAEdge(new Edge(8,9));
+  frontStands->insertAEdge(new Edge(9,18));
+  frontStands->insertAEdge(new Edge(18,19));
+  frontStands->insertAEdge(new Edge(19,8));
+  frontStands->insertAEdge(new Edge(10,11));
+  frontStands->insertAEdge(new Edge(11,16));
+  frontStands->insertAEdge(new Edge(16,17));
+  frontStands->insertAEdge(new Edge(17,10));
+  frontStands->insertAEdge(new Edge(12,13));
+  frontStands->insertAEdge(new Edge(13,14));
+  frontStands->insertAEdge(new Edge(14,15));
+  frontStands->insertAEdge(new Edge(15,12));
+  frontStands->insertAEdge(new Edge(1,2));
+
+  frontStands->insertAEdge(new Edge(5,6));
+  frontStands->insertAEdge(new Edge(22,21));
+  frontStands->insertAEdge(new Edge(7,8));
+  frontStands->insertAEdge(new Edge(20,19));
+  frontStands->insertAEdge(new Edge(9,10));
+  frontStands->insertAEdge(new Edge(18,17));
+  frontStands->insertAEdge(new Edge(11,12));
+  frontStands->insertAEdge(new Edge(16,15));
+  frontStands->insertAEdge(new Edge(13,1));
+  frontStands->insertAEdge(new Edge(14,2));
+
+  frontStands->insertAEdge(new Edge(3,4));
+  frontStands->insertAEdge(new Edge(4,22));
+  frontStands->insertAEdge(new Edge(6,22));
+  frontStands->insertAEdge(new Edge(6,20));
+  frontStands->insertAEdge(new Edge(8,20));
+  frontStands->insertAEdge(new Edge(8,18));
+  frontStands->insertAEdge(new Edge(10,18));
+  frontStands->insertAEdge(new Edge(10,16));
+  frontStands->insertAEdge(new Edge(12,16));
+  frontStands->insertAEdge(new Edge(12,14));
+  frontStands->insertAEdge(new Edge(1,14));
 
 
-  theMesh->insertApoint(new Point(
-    baseVector->get_x_Point() - (edgeLeng),
-    baseVector->get_y_Point(),
-    baseVector->get_z_Point() - (edgeLeng)
-  ));
+  frontStands->insertAFace(new Face(0,1,34));
+  frontStands->insertAFace(new Face(3,34,2));
+  frontStands->insertAFace(new Face(6,3,35));
+  frontStands->insertAFace(new Face(4,5,35));
+  frontStands->insertAFace(new Face(25,36,10));
+  frontStands->insertAFace(new Face(5,24,36));
+  frontStands->insertAFace(new Face(9,10,37));
+  frontStands->insertAFace(new Face(7,8,37));
+  frontStands->insertAFace(new Face(27,38,14));
+  frontStands->insertAFace(new Face(8,26,38));
+  frontStands->insertAFace(new Face(13,14,39));
+  frontStands->insertAFace(new Face(11,12,39));
+  frontStands->insertAFace(new Face(12,28,40));
+  frontStands->insertAFace(new Face(29,40,18));
+  frontStands->insertAFace(new Face(17,18,41));
+  frontStands->insertAFace(new Face(41,15,16));
+  frontStands->insertAFace(new Face(31,42,22));
+  frontStands->insertAFace(new Face(16,30,42));
+  frontStands->insertAFace(new Face(21,22,43));
+  frontStands->insertAFace(new Face(19,20,43));
+  frontStands->insertAFace(new Face(23,33,44));
+  frontStands->insertAFace(new Face(20,32,44));
 
-  theMesh->insertApoint(new Point(
-    baseVector->get_x_Point() - (edgeLeng),
-    baseVector->get_y_Point(),
-    baseVector->get_z_Point() + (edgeLeng)
-  ));
-
-  theMesh->insertApoint(new Point(
-    baseVector->get_x_Point() + (edgeLeng),
-    baseVector->get_y_Point(),
-    baseVector->get_z_Point() + (edgeLeng)
-  ));
-
-  theMesh->insertApoint(new Point(
-    baseVector->get_x_Point() + (edgeLeng),
-    baseVector->get_y_Point(),
-    baseVector->get_z_Point() - (edgeLeng)
-  ));
-
-  theMesh->insertApoint(new Point(
-    baseVector->get_x_Point() - (edgeLeng),
-    baseVector->get_y_Point() + edgeLeng,
-    baseVector->get_z_Point() - (edgeLeng)
-  ));
-
-  theMesh->insertApoint(new Point(
-    baseVector->get_x_Point() - (edgeLeng),
-    baseVector->get_y_Point() + edgeLeng,
-    baseVector->get_z_Point() + (edgeLeng)
-  ));
-
-  theMesh->insertApoint(new Point(
-    baseVector->get_x_Point() + (edgeLeng),
-    baseVector->get_y_Point() + edgeLeng,
-    baseVector->get_z_Point() + (edgeLeng)
-  ));
-
-  theMesh->insertApoint(new Point(
-    baseVector->get_x_Point() + (edgeLeng),
-    baseVector->get_y_Point() + edgeLeng,
-    baseVector->get_z_Point() - (edgeLeng)
-  ));
-
-
-  theMesh->insertAEdge(
-    new Edge(0,1)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(1,2)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(2,3)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(3,0)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(4,5)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(5,6)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(6,7)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(7,4)
-  );
-
-  theMesh->insertAEdge(
-    new Edge(0,4)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(1,5)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(2,6)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(3,7)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(2,7)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(5,7)
-  );
-
-
-  theMesh->insertAEdge(
-    new Edge(5,2)
-  );
-
-  theMesh->insertAEdge(
-    new Edge(1,4)
-  );
-
-  theMesh->insertAEdge(
-    new Edge(1,3)
-  );
-
-  theMesh->insertAEdge(
-    new Edge(3,4)
-  );
-
-
-
-  theMesh->insertAFace(
-    new Face(6, 10, 12)
-  );
-
-  theMesh->insertAFace(
-    new Face(12, 2, 11)
-  );
-
-  theMesh->insertAFace(
-    new Face(7, 4, 13)
-  );
-
-  theMesh->insertAFace(
-    new Face(13, 5, 6)
-  );
-
-  theMesh->insertAFace(
-    new Face(5, 14, 10)
-  );
-
-  theMesh->insertAFace(
-    new Face(9, 1, 14)
-  );
-
-  theMesh->insertAFace(
-    new Face(4, 15, 9)
-  );
-
-  theMesh->insertAFace(
-    new Face(8, 0, 15)
-  );
-
-  theMesh->insertAFace(
-    new Face(1, 16, 2)
-  );
-
-  theMesh->insertAFace(
-    new Face(3, 16, 10)
-  );
-
-  theMesh->insertAFace(
-    new Face(11, 17, 7)
-  );
-
-  theMesh->insertAFace(
-    new Face(3, 8, 17)
-  );
-
-  theMesh->addWrapper(
-    new Vector(-40,-130,-300),
-    80,
-    40,
+  frontStands->addWrapper(
+    new Vector(-350,-125,-600),
+    710,
+    100,
     new Vector(1,0,0)
   );
 
 
+  Mesh *leftSideStands = new Mesh();
+  leftSideStands->set_K_a(mesh_ks);
+  leftSideStands->set_K_e(mesh_ks);
+  leftSideStands->set_K_d(mesh_ks);
+  leftSideStands->set_shine(5);
+
+  leftSideStands->insertApoint(new Point(-400,-150,-355));
+  leftSideStands->insertApoint(new Point(-350,-150,-355));
+  leftSideStands->insertApoint(new Point(-350,-150,-600));
+  leftSideStands->insertApoint(new Point(-400,-150,-655));
+
+  leftSideStands->insertApoint(new Point(-400,-100,-355));
+  leftSideStands->insertApoint(new Point(-390,-100,-355));
+  leftSideStands->insertApoint(new Point(-390,-110,-355));
+  leftSideStands->insertApoint(new Point(-380,-110,-355));
+  leftSideStands->insertApoint(new Point(-380,-120,-355));
+  leftSideStands->insertApoint(new Point(-370,-120,-355));
+  leftSideStands->insertApoint(new Point(-370,-130,-355));
+  leftSideStands->insertApoint(new Point(-360,-130,-355));
+  leftSideStands->insertApoint(new Point(-360,-140,-355));
+  leftSideStands->insertApoint(new Point(-350,-140,-355));
+
+  leftSideStands->insertApoint(new Point(-350,-140,-600));
+  leftSideStands->insertApoint(new Point(-360,-140,-600));
+  leftSideStands->insertApoint(new Point(-360,-130,-600));
+  leftSideStands->insertApoint(new Point(-370,-130,-600));
+  leftSideStands->insertApoint(new Point(-370,-120,-600));
+  leftSideStands->insertApoint(new Point(-380,-120,-600));
+  leftSideStands->insertApoint(new Point(-380,-110,-600));
+  leftSideStands->insertApoint(new Point(-390,-110,-600));
+  leftSideStands->insertApoint(new Point(-390,-100,-600));
+  leftSideStands->insertApoint(new Point(-400,-100,-600));
+
+  leftSideStands->insertAEdge(new Edge(4,0));
+  leftSideStands->insertAEdge(new Edge(0,3));
+  leftSideStands->insertAEdge(new Edge(3,23));
+  leftSideStands->insertAEdge(new Edge(23,4));
+  leftSideStands->insertAEdge(new Edge(4,5));
+  leftSideStands->insertAEdge(new Edge(5,22));
+  leftSideStands->insertAEdge(new Edge(22,23));
+  leftSideStands->insertAEdge(new Edge(6,7));
+  leftSideStands->insertAEdge(new Edge(7,20));
+  leftSideStands->insertAEdge(new Edge(20,21));
+  leftSideStands->insertAEdge(new Edge(21,6));
+  leftSideStands->insertAEdge(new Edge(8,9));
+  leftSideStands->insertAEdge(new Edge(9,18));
+  leftSideStands->insertAEdge(new Edge(18,19));
+  leftSideStands->insertAEdge(new Edge(19,8));
+  leftSideStands->insertAEdge(new Edge(10,11));
+  leftSideStands->insertAEdge(new Edge(11,16));
+  leftSideStands->insertAEdge(new Edge(16,17));
+  leftSideStands->insertAEdge(new Edge(17,10));
+  leftSideStands->insertAEdge(new Edge(12,13));
+  leftSideStands->insertAEdge(new Edge(13,14));
+  leftSideStands->insertAEdge(new Edge(14,15));
+  leftSideStands->insertAEdge(new Edge(15,12));
+  leftSideStands->insertAEdge(new Edge(1,2));
+
+  leftSideStands->insertAEdge(new Edge(5,6));
+  leftSideStands->insertAEdge(new Edge(22,21));
+  leftSideStands->insertAEdge(new Edge(7,8));
+  leftSideStands->insertAEdge(new Edge(20,19));
+  leftSideStands->insertAEdge(new Edge(9,10));
+  leftSideStands->insertAEdge(new Edge(18,17));
+  leftSideStands->insertAEdge(new Edge(11,12));
+  leftSideStands->insertAEdge(new Edge(16,15));
+  leftSideStands->insertAEdge(new Edge(13,1));
+  leftSideStands->insertAEdge(new Edge(14,2));
+
+  leftSideStands->insertAEdge(new Edge(3,4));
+  leftSideStands->insertAEdge(new Edge(4,22));
+  leftSideStands->insertAEdge(new Edge(6,22));
+  leftSideStands->insertAEdge(new Edge(6,20));
+  leftSideStands->insertAEdge(new Edge(8,20));
+  leftSideStands->insertAEdge(new Edge(8,18));
+  leftSideStands->insertAEdge(new Edge(10,18));
+  leftSideStands->insertAEdge(new Edge(10,16));
+  leftSideStands->insertAEdge(new Edge(12,16));
+  leftSideStands->insertAEdge(new Edge(12,14));
+  leftSideStands->insertAEdge(new Edge(1,14));
 
 
-  Vector *baseVector2 = new Vector(90.0, -150.0, -300.0);
-  Mesh *theMesh2 = new Mesh();
-  theMesh2->set_K_a(mesh_ks);
-  theMesh2->set_K_e(mesh_ks);
-  theMesh2->set_K_d(mesh_ks);
-  theMesh2->set_shine(5);
+  leftSideStands->insertAFace(new Face(0,1,34));
+  leftSideStands->insertAFace(new Face(3,34,2));
+  leftSideStands->insertAFace(new Face(6,3,35));
+  leftSideStands->insertAFace(new Face(4,5,35));
+  leftSideStands->insertAFace(new Face(25,36,10));
+  leftSideStands->insertAFace(new Face(5,24,36));
+  leftSideStands->insertAFace(new Face(9,10,37));
+  leftSideStands->insertAFace(new Face(7,8,37));
+  leftSideStands->insertAFace(new Face(27,38,14));
+  leftSideStands->insertAFace(new Face(8,26,38));
+  leftSideStands->insertAFace(new Face(13,14,39));
+  leftSideStands->insertAFace(new Face(11,12,39));
+  leftSideStands->insertAFace(new Face(12,28,40));
+  leftSideStands->insertAFace(new Face(29,40,18));
+  leftSideStands->insertAFace(new Face(17,18,41));
+  leftSideStands->insertAFace(new Face(41,15,16));
+  leftSideStands->insertAFace(new Face(31,42,22));
+  leftSideStands->insertAFace(new Face(16,30,42));
+  leftSideStands->insertAFace(new Face(21,22,43));
+  leftSideStands->insertAFace(new Face(19,20,43));
+  leftSideStands->insertAFace(new Face(23,33,44));
+  leftSideStands->insertAFace(new Face(20,32,44));
 
-  theMesh2->insertApoint(new Point(
-    baseVector2->get_x_Point() - (edgeLeng),
-    baseVector2->get_y_Point(),
-    baseVector2->get_z_Point() - (edgeLeng)
-  ));
+  leftSideStands->addWrapper(
+    new Vector(-375,-125,-350),
+    250,
+    100,
+    new Vector(0,0,-1)
+  );
 
-  theMesh2->insertApoint(new Point(
-    baseVector2->get_x_Point() - (edgeLeng),
-    baseVector2->get_y_Point(),
-    baseVector2->get_z_Point() + (edgeLeng)
-  ));
+  Mesh *rightSideStands = new Mesh();
+  rightSideStands->set_K_a(mesh_ks);
+  rightSideStands->set_K_e(mesh_ks);
+  rightSideStands->set_K_d(mesh_ks);
+  rightSideStands->set_shine(5);
 
-  theMesh2->insertApoint(new Point(
-    baseVector2->get_x_Point() + (edgeLeng),
-    baseVector2->get_y_Point(),
-    baseVector2->get_z_Point() + (edgeLeng)
-  ));
-
-  theMesh2->insertApoint(new Point(
-    baseVector2->get_x_Point() + (edgeLeng),
-    baseVector2->get_y_Point(),
-    baseVector2->get_z_Point() - (edgeLeng)
-  ));
-
-  theMesh2->insertApoint(new Point(
-    baseVector2->get_x_Point() - (edgeLeng),
-    baseVector2->get_y_Point() + edgeLeng,
-    baseVector2->get_z_Point() - (edgeLeng)
-  ));
-
-  theMesh2->insertApoint(new Point(
-    baseVector2->get_x_Point() - (edgeLeng),
-    baseVector2->get_y_Point() + edgeLeng,
-    baseVector2->get_z_Point() + (edgeLeng)
-  ));
-
-  theMesh2->insertApoint(new Point(
-    baseVector2->get_x_Point() + (edgeLeng),
-    baseVector2->get_y_Point() + edgeLeng,
-    baseVector2->get_z_Point() + (edgeLeng)
-  ));
-
-  theMesh2->insertApoint(new Point(
-    baseVector2->get_x_Point() + (edgeLeng),
-    baseVector2->get_y_Point() + edgeLeng,
-    baseVector2->get_z_Point() - (edgeLeng)
-  ));
+  rightSideStands->insertApoint(new Point(400,-150,-600));
+  rightSideStands->insertApoint(new Point(350,-150,-600));
+  rightSideStands->insertApoint(new Point(350,-150,-355));
+  rightSideStands->insertApoint(new Point(400,-150,-355));
 
 
-  theMesh2->insertAEdge(
-    new Edge(0,1)
+  rightSideStands->insertApoint(new Point(400,-100,-600));
+  rightSideStands->insertApoint(new Point(390,-100,-600));
+  rightSideStands->insertApoint(new Point(390,-110,-600));
+  rightSideStands->insertApoint(new Point(380,-110,-600));
+  rightSideStands->insertApoint(new Point(380,-120,-600));
+  rightSideStands->insertApoint(new Point(370,-120,-600));
+  rightSideStands->insertApoint(new Point(370,-130,-600));
+  rightSideStands->insertApoint(new Point(360,-130,-600));
+  rightSideStands->insertApoint(new Point(360,-140,-600));
+  rightSideStands->insertApoint(new Point(350,-140,-600));
+
+  rightSideStands->insertApoint(new Point(350,-140,-355));
+  rightSideStands->insertApoint(new Point(360,-140,-355));
+  rightSideStands->insertApoint(new Point(360,-130,-355));
+  rightSideStands->insertApoint(new Point(370,-130,-355));
+  rightSideStands->insertApoint(new Point(370,-120,-355));
+  rightSideStands->insertApoint(new Point(380,-120,-355));
+  rightSideStands->insertApoint(new Point(380,-110,-355));
+  rightSideStands->insertApoint(new Point(390,-110,-355));
+  rightSideStands->insertApoint(new Point(390,-100,-355));
+  rightSideStands->insertApoint(new Point(400,-100,-355));
+
+  rightSideStands->insertAEdge(new Edge(4,0));
+  rightSideStands->insertAEdge(new Edge(0,3));
+  rightSideStands->insertAEdge(new Edge(3,23));
+  rightSideStands->insertAEdge(new Edge(23,4));
+  rightSideStands->insertAEdge(new Edge(4,5));
+  rightSideStands->insertAEdge(new Edge(5,22));
+  rightSideStands->insertAEdge(new Edge(22,23));
+  rightSideStands->insertAEdge(new Edge(6,7));
+  rightSideStands->insertAEdge(new Edge(7,20));
+  rightSideStands->insertAEdge(new Edge(20,21));
+  rightSideStands->insertAEdge(new Edge(21,6));
+  rightSideStands->insertAEdge(new Edge(8,9));
+  rightSideStands->insertAEdge(new Edge(9,18));
+  rightSideStands->insertAEdge(new Edge(18,19));
+  rightSideStands->insertAEdge(new Edge(19,8));
+  rightSideStands->insertAEdge(new Edge(10,11));
+  rightSideStands->insertAEdge(new Edge(11,16));
+  rightSideStands->insertAEdge(new Edge(16,17));
+  rightSideStands->insertAEdge(new Edge(17,10));
+  rightSideStands->insertAEdge(new Edge(12,13));
+  rightSideStands->insertAEdge(new Edge(13,14));
+  rightSideStands->insertAEdge(new Edge(14,15));
+  rightSideStands->insertAEdge(new Edge(15,12));
+  rightSideStands->insertAEdge(new Edge(1,2));
+
+  rightSideStands->insertAEdge(new Edge(5,6));
+  rightSideStands->insertAEdge(new Edge(22,21));
+  rightSideStands->insertAEdge(new Edge(7,8));
+  rightSideStands->insertAEdge(new Edge(20,19));
+  rightSideStands->insertAEdge(new Edge(9,10));
+  rightSideStands->insertAEdge(new Edge(18,17));
+  rightSideStands->insertAEdge(new Edge(11,12));
+  rightSideStands->insertAEdge(new Edge(16,15));
+  rightSideStands->insertAEdge(new Edge(13,1));
+  rightSideStands->insertAEdge(new Edge(14,2));
+
+  rightSideStands->insertAEdge(new Edge(3,4));
+  rightSideStands->insertAEdge(new Edge(4,22));
+  rightSideStands->insertAEdge(new Edge(6,22));
+  rightSideStands->insertAEdge(new Edge(6,20));
+  rightSideStands->insertAEdge(new Edge(8,20));
+  rightSideStands->insertAEdge(new Edge(8,18));
+  rightSideStands->insertAEdge(new Edge(10,18));
+  rightSideStands->insertAEdge(new Edge(10,16));
+  rightSideStands->insertAEdge(new Edge(12,16));
+  rightSideStands->insertAEdge(new Edge(12,14));
+  rightSideStands->insertAEdge(new Edge(1,14));
+
+
+  rightSideStands->insertAFace(new Face(0,1,34));
+  rightSideStands->insertAFace(new Face(3,34,2));
+  rightSideStands->insertAFace(new Face(6,3,35));
+  rightSideStands->insertAFace(new Face(4,5,35));
+  rightSideStands->insertAFace(new Face(25,36,10));
+  rightSideStands->insertAFace(new Face(5,24,36));
+  rightSideStands->insertAFace(new Face(9,10,37));
+  rightSideStands->insertAFace(new Face(7,8,37));
+  rightSideStands->insertAFace(new Face(27,38,14));
+  rightSideStands->insertAFace(new Face(8,26,38));
+  rightSideStands->insertAFace(new Face(13,14,39));
+  rightSideStands->insertAFace(new Face(11,12,39));
+  rightSideStands->insertAFace(new Face(12,28,40));
+  rightSideStands->insertAFace(new Face(29,40,18));
+  rightSideStands->insertAFace(new Face(17,18,41));
+  rightSideStands->insertAFace(new Face(41,15,16));
+  rightSideStands->insertAFace(new Face(31,42,22));
+  rightSideStands->insertAFace(new Face(16,30,42));
+  rightSideStands->insertAFace(new Face(21,22,43));
+  rightSideStands->insertAFace(new Face(19,20,43));
+  rightSideStands->insertAFace(new Face(23,33,44));
+  rightSideStands->insertAFace(new Face(20,32,44));
+
+  rightSideStands->addWrapper(
+    new Vector(375,-125,-350),
+    250,
+    100,
+    new Vector(0,0,-1)
   );
 
 
-  theMesh2->insertAEdge(
-    new Edge(1,2)
-  );
+  Mesh *backStands = new Mesh();
+  backStands->set_K_a(mesh_ks);
+  backStands->set_K_e(mesh_ks);
+  backStands->set_K_d(mesh_ks);
+  backStands->set_shine(5);
+
+  backStands->insertApoint(new Point(350,-150,-305));
+  backStands->insertApoint(new Point(350,-150,-355));
+  backStands->insertApoint(new Point(-350,-150,-355));
+  backStands->insertApoint(new Point(-350,-150,-305));
+
+  backStands->insertApoint(new Point(350,-100,-305));
+  backStands->insertApoint(new Point(350,-100,-315));
+  backStands->insertApoint(new Point(350,-110,-315));
+  backStands->insertApoint(new Point(350,-110,-325));
+  backStands->insertApoint(new Point(350,-120,-325));
+  backStands->insertApoint(new Point(350,-120,-335));
+  backStands->insertApoint(new Point(350,-130,-335));
+  backStands->insertApoint(new Point(350,-130,-345));
+  backStands->insertApoint(new Point(350,-140,-345));
+  backStands->insertApoint(new Point(350,-140,-355));
+
+  backStands->insertApoint(new Point(-350, -140, -355));
+  backStands->insertApoint(new Point(-350, -140, -345));
+  backStands->insertApoint(new Point(-350, -130, -345));
+  backStands->insertApoint(new Point(-350, -130, -335));
+  backStands->insertApoint(new Point(-350, -120, -335));
+  backStands->insertApoint(new Point(-350, -120, -325));
+  backStands->insertApoint(new Point(-350, -110, -325));
+  backStands->insertApoint(new Point(-350, -110, -315));
+  backStands->insertApoint(new Point(-350, -100, -315));
+  backStands->insertApoint(new Point(-350, -100, -305));
+
+  backStands->insertAEdge(new Edge(4,0));
+  backStands->insertAEdge(new Edge(0,3));
+  backStands->insertAEdge(new Edge(3,23));
+  backStands->insertAEdge(new Edge(23,4));
+  backStands->insertAEdge(new Edge(4,5));
+  backStands->insertAEdge(new Edge(5,22));
+  backStands->insertAEdge(new Edge(22,23));
+  backStands->insertAEdge(new Edge(6,7));
+  backStands->insertAEdge(new Edge(7,20));
+  backStands->insertAEdge(new Edge(20,21));
+  backStands->insertAEdge(new Edge(21,6));
+  backStands->insertAEdge(new Edge(8,9));
+  backStands->insertAEdge(new Edge(9,18));
+  backStands->insertAEdge(new Edge(18,19));
+  backStands->insertAEdge(new Edge(19,8));
+  backStands->insertAEdge(new Edge(10,11));
+  backStands->insertAEdge(new Edge(11,16));
+  backStands->insertAEdge(new Edge(16,17));
+  backStands->insertAEdge(new Edge(17,10));
+  backStands->insertAEdge(new Edge(12,13));
+  backStands->insertAEdge(new Edge(13,14));
+  backStands->insertAEdge(new Edge(14,15));
+  backStands->insertAEdge(new Edge(15,12));
+  backStands->insertAEdge(new Edge(1,2));
+
+  backStands->insertAEdge(new Edge(5,6));
+  backStands->insertAEdge(new Edge(22,21));
+  backStands->insertAEdge(new Edge(7,8));
+  backStands->insertAEdge(new Edge(20,19));
+  backStands->insertAEdge(new Edge(9,10));
+  backStands->insertAEdge(new Edge(18,17));
+  backStands->insertAEdge(new Edge(11,12));
+  backStands->insertAEdge(new Edge(16,15));
+  backStands->insertAEdge(new Edge(13,1));
+  backStands->insertAEdge(new Edge(14,2));
+
+  backStands->insertAEdge(new Edge(3,4));
+  backStands->insertAEdge(new Edge(4,22));
+  backStands->insertAEdge(new Edge(6,22));
+  backStands->insertAEdge(new Edge(6,20));
+  backStands->insertAEdge(new Edge(8,20));
+  backStands->insertAEdge(new Edge(8,18));
+  backStands->insertAEdge(new Edge(10,18));
+  backStands->insertAEdge(new Edge(10,16));
+  backStands->insertAEdge(new Edge(12,16));
+  backStands->insertAEdge(new Edge(12,14));
+  backStands->insertAEdge(new Edge(1,14));
 
 
-  theMesh2->insertAEdge(
-    new Edge(2,3)
-  );
+  backStands->insertAFace(new Face(0,1,34));
+  backStands->insertAFace(new Face(3,34,2));
+  backStands->insertAFace(new Face(6,3,35));
+  backStands->insertAFace(new Face(4,5,35));
+  backStands->insertAFace(new Face(25,36,10));
+  backStands->insertAFace(new Face(5,24,36));
+  backStands->insertAFace(new Face(9,10,37));
+  backStands->insertAFace(new Face(7,8,37));
+  backStands->insertAFace(new Face(27,38,14));
+  backStands->insertAFace(new Face(8,26,38));
+  backStands->insertAFace(new Face(13,14,39));
+  backStands->insertAFace(new Face(11,12,39));
+  backStands->insertAFace(new Face(12,28,40));
+  backStands->insertAFace(new Face(29,40,18));
+  backStands->insertAFace(new Face(17,18,41));
+  backStands->insertAFace(new Face(41,15,16));
+  backStands->insertAFace(new Face(31,42,22));
+  backStands->insertAFace(new Face(16,30,42));
+  backStands->insertAFace(new Face(21,22,43));
+  backStands->insertAFace(new Face(19,20,43));
+  backStands->insertAFace(new Face(23,33,44));
+  backStands->insertAFace(new Face(20,32,44));
 
-
-  theMesh2->insertAEdge(
-    new Edge(3,0)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(4,5)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(5,6)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(6,7)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(7,4)
-  );
-
-  theMesh2->insertAEdge(
-    new Edge(0,4)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(1,5)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(2,6)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(3,7)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(2,7)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(5,7)
-  );
-
-
-  theMesh2->insertAEdge(
-    new Edge(5,2)
-  );
-
-  theMesh2->insertAEdge(
-    new Edge(1,4)
-  );
-
-  theMesh2->insertAEdge(
-    new Edge(1,3)
-  );
-
-  theMesh2->insertAEdge(
-    new Edge(3,4)
-  );
-
-
-
-  theMesh2->insertAFace(
-    new Face(6, 10, 12)
-  );
-
-  theMesh2->insertAFace(
-    new Face(12, 2, 11)
-  );
-
-  theMesh2->insertAFace(
-    new Face(7, 4, 13)
-  );
-
-  theMesh2->insertAFace(
-    new Face(13, 5, 6)
-  );
-
-  theMesh2->insertAFace(
-    new Face(5, 14, 10)
-  );
-
-  theMesh2->insertAFace(
-    new Face(9, 1, 14)
-  );
-
-  theMesh2->insertAFace(
-    new Face(4, 15, 9)
-  );
-
-  theMesh2->insertAFace(
-    new Face(8, 0, 15)
-  );
-
-  theMesh2->insertAFace(
-    new Face(1, 16, 2)
-  );
-
-  theMesh2->insertAFace(
-    new Face(3, 16, 10)
-  );
-
-  theMesh2->insertAFace(
-    new Face(11, 17, 7)
-  );
-
-  theMesh2->insertAFace(
-    new Face(3, 8, 17)
-  );
-
-  theMesh2->addWrapper(
-    new Vector(90,-130,-300),
-    80,
-    60,
+  backStands->addWrapper(
+    new Vector(-350,-125,-330),
+    710,
+    100,
     new Vector(1,0,0)
   );
 
@@ -686,7 +735,11 @@ int main() {
 
 
   //theScenery->addObjectToTheScene(theMesh);
-  theScenery->addObjectToTheScene(theMesh);
+  theScenery->addObjectToTheScene(frontStands);
+  theScenery->addObjectToTheScene(leftSideStands);
+  theScenery->addObjectToTheScene(rightSideStands);
+  theScenery->addObjectToTheScene(backStands);
+  theScenery->addObjectToTheScene(soccerField);
 
   /* calling the ray tracing algorithm */
   theScenery->ray_tracing_algorithm();
