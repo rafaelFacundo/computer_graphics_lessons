@@ -8,8 +8,9 @@ class Cone : public Object {
         Vector *B_vectorIni;
         Vector *vertice_vectorIni;
         Vector *unitary_vector;
+        Vector *unitary_vector;
         Vector *B_vector;
-        double T_i;
+
         double height;
         double radius;
         double cos_angle;

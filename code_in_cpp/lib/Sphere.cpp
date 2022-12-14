@@ -164,6 +164,7 @@ void Sphere::applyRotateZ(double angle){};
 
 void Sphere::applyTranslate(double x, double y, double z){
     this->get_center_vector()->ThisTranslate(x,y,z);
+    this->centerIni->ThisTranslate(x,y,z);
 };
 
 void Sphere::applyScale(double sx, double sy, double sz){

@@ -28,10 +28,10 @@ int main() {
 11) Luz ambiente: Intensidade I_A = (0.3, 0.3, 0.3) */
 
   Vector *ambient_light = new Vector(0.3,0.3,0.3);
-  Vector *light_intensity = new Vector(0.5,0.5,0.5);
+  Vector *light_intensity = new Vector(0.7,0.7,0.7);
   Vector *light_position = new Vector(0.0,95.0,0);
   Vector *P_o = new Vector(0.0,0.0,0.0);
-  Vector *directionLight = new Vector(0,-0.8,-1);
+  Vector *directionLight = new Vector(0,-0.5,-1);
 
   DirectionalLight* theLight = new DirectionalLight();
   theLight->setIntesity(light_intensity);
@@ -50,7 +50,7 @@ int main() {
   spot->setAngle(0.5);
   spot->setType(1);
 
-  Light* light_list[2] = {pLigh, spot};
+  Light* light_list[1] = {theLight};
 
   /* initing the sdl window */
   renderer = init_sdl_window (
@@ -63,7 +63,7 @@ int main() {
   /* instanciating the scenery class */
   Scenery *theScenery = new Scenery(
     light_list,
-    2,
+    1,
     ambient_light,
     P_o,
     n_lines,
@@ -1522,10 +1522,237 @@ int main() {
   theScenery->addObjectToTheScene(front_wall); */
 
  //theScenery->addObjectToTheScene(cubo_1_esq);
-  theScenery->addObjectToTheScene(Floor);
-  theScenery->addObjectToTheScene(front_wall);
-  theScenery->addObjectToTheScene(theSphere);
 
+
+  /* double cone_ks[3] = {0.0,1.0,0.498};
+  Cone *theCone = new Cone();
+  theCone->set_K_a(cone_ks);
+  theCone->set_K_d(cone_ks);
+  theCone->set_K_e(cone_ks);
+  theCone->set_radius(90);
+  theCone->set_height(150);
+  theCone->set_direction_vector(0.0,1.0,0.0);
+  theCone->set_B_vector(0.0,-60.0,-200.0);
+  theCone->set_shine(1); */
+
+
+  /* double cylinder_ks[3] = {0.0,1.0,0.498};
+  Cylinder *theCylinder = new Cylinder();
+  theCylinder->set_B_vector(0.0,-150.0,-300.0);
+  theCylinder->set_height(250);
+  theCylinder->set_K_a(cylinder_ks);
+  theCylinder->set_K_d(cylinder_ks);
+  theCylinder->set_K_e(cylinder_ks);
+  theCylinder->set_shine(1);
+  theCylinder->set_radius(20);
+  theCylinder->set_unitary_vector(0.0,1.0,0.0); */
+
+
+
+  double edgeLeng = 40.0;
+  Vector *baseVector = new Vector(0.0, -150.0, -165.0);
+
+  Mesh *theMesh = new Mesh();
+  theMesh->set_K_a(mesh_ks);
+  theMesh->set_K_e(mesh_ks);
+  theMesh->set_K_d(mesh_ks);
+  theMesh->set_shine(5);
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() - (edgeLeng/2),
+    baseVector->get_y_Point(),
+    baseVector->get_z_Point() - (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() - (edgeLeng/2),
+    baseVector->get_y_Point(),
+    baseVector->get_z_Point() + (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() + (edgeLeng/2),
+    baseVector->get_y_Point(),
+    baseVector->get_z_Point() + (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() + (edgeLeng/2),
+    baseVector->get_y_Point(),
+    baseVector->get_z_Point() - (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() - (edgeLeng/2),
+    baseVector->get_y_Point() + edgeLeng,
+    baseVector->get_z_Point() - (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() - (edgeLeng/2),
+    baseVector->get_y_Point() + edgeLeng,
+    baseVector->get_z_Point() + (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() + (edgeLeng/2),
+    baseVector->get_y_Point() + edgeLeng,
+    baseVector->get_z_Point() + (edgeLeng/2)
+  ));
+
+  theMesh->insertApoint(new Point(
+    baseVector->get_x_Point() + (edgeLeng/2),
+    baseVector->get_y_Point() + edgeLeng,
+    baseVector->get_z_Point() - (edgeLeng/2)
+  ));
+
+
+  theMesh->insertAEdge(
+    new Edge(0,1)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(1,2)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(2,3)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(3,0)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(4,5)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(5,6)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(6,7)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(7,4)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(0,4)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(1,5)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(2,6)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(3,7)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(2,7)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(5,7)
+  );
+
+
+  theMesh->insertAEdge(
+    new Edge(5,2)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(1,4)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(1,3)
+  );
+
+  theMesh->insertAEdge(
+    new Edge(3,4)
+  );
+
+
+
+  theMesh->insertAFace(
+    new Face(6, 10, 12)
+  );
+
+  theMesh->insertAFace(
+    new Face(12, 2, 11)
+  );
+
+  theMesh->insertAFace(
+    new Face(7, 4, 13)
+  );
+
+  theMesh->insertAFace(
+    new Face(13, 5, 6)
+  );
+
+  theMesh->insertAFace(
+    new Face(5, 14, 10)
+  );
+
+  theMesh->insertAFace(
+    new Face(9, 1, 14)
+  );
+
+  theMesh->insertAFace(
+    new Face(4, 15, 9)
+  );
+
+  theMesh->insertAFace(
+    new Face(8, 0, 15)
+  );
+
+  theMesh->insertAFace(
+    new Face(1, 16, 2)
+  );
+
+  theMesh->insertAFace(
+    new Face(3, 16, 10)
+  );
+
+  theMesh->insertAFace(
+    new Face(11, 17, 7)
+  );
+
+  theMesh->insertAFace(
+    new Face(3, 8, 17)
+  );
+
+  theMesh->addWrapper(
+    new Vector(0.0, -150.0, -165.0),
+    50,
+    30,
+    new Vector(0,1,0)
+  );
+
+
+
+  theScenery->addObjectToTheScene(theMesh);
+  theScenery->addObjectToTheScene(Floor);
 
   /* calling the ray tracing algorithm */
   theScenery->ray_tracing_algorithm();

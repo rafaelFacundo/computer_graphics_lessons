@@ -155,16 +155,20 @@ returnType Plan::does_the_point_intercept(Vector *dir, Vector *P_o) {
 
 void Plan::applyRotateX(double angle){
     this->N_vector->ThisRotateX(angle);
+    this->N_vectorIni->ThisRotateX(angle);
 };
 void Plan::applyRotateY(double angle){
     this->N_vector->ThisRotateY(angle);
+    this->N_vectorIni->ThisRotateY(angle);
 };
 void Plan::applyRotateZ(double angle){
     this->N_vector->ThisRotateZ(angle);
+    this->N_vectorIni->ThisRotateZ(angle);
 };
 
 void Plan::applyTranslate(double x, double y, double z){
     this->Ppi_Point->ThisTranslate(x,y,z);
+    this->Ppi_PointIni->ThisTranslate(x,y,z);
 };
 
 void Plan::applyScale(double sx, double sy, double sz){

@@ -212,12 +212,16 @@ void Cylinder::gime_your_color(
     Vector *I_eye_e = intensity->at_sign_with(this->get_K_e());
     I_eye_e = I_eye_e->multiply_by_a_scalar(F_e);
 
+
+
+
     Vector *vectorWithColors = I_eye_d->sum_with_the_vector(I_eye_e);
     vectorWithColors = vectorWithColors->sum_with_the_vector(Ambient_light_intensity->at_sign_with(this->get_K_a()));
 
     addressToPutTheColor[0] += vectorWithColors->get_x_Point();
     addressToPutTheColor[1] += vectorWithColors->get_y_Point();
     addressToPutTheColor[2] += vectorWithColors->get_z_Point();
+
 
 };
 
@@ -270,12 +274,14 @@ returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
         bool Ti_2_verification = this->is_Ti_a_valid_point(P_o, dir, Ti_2);
 
         if (Ti_1_verification && Ti_2_verification && (Ti_1 < Ti_2)) {
+            this->set_T_i(Ti_1);
             result.point_of_intersection = Ti_1;
             result.doesIntersect = true;
             this->setInterception(false);
             this->setIntercBase(false);
             this->setIntercLid(false);
         }else if (Ti_1_verification && Ti_2_verification && (Ti_1 >= Ti_2)) {
+            this->set_T_i(Ti_2);
             result.point_of_intersection = Ti_2;
             result.doesIntersect = true;
             this->setInterception(false);
@@ -287,18 +293,21 @@ returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
             returnType T2_top = didThePointIntercepted(dir, P_o, this->get_center_top_vector());
 
             if (T2_base.doesIntersect && T2_base.point_of_intersection < Ti_1) {
+                this->set_T_i(T2_base.point_of_intersection);
                 result.point_of_intersection = Ti_2;
                 result.doesIntersect = true;
                 this->setInterception(true);
                 this->setIntercBase(true);
                 this->setIntercLid(false);
             }else if (T2_top.doesIntersect && (T2_top.point_of_intersection < Ti_1)) {
+                this->set_T_i(T2_top.point_of_intersection);
                 result.point_of_intersection = Ti_2;
                 result.doesIntersect = true;
                 this->setInterception(true);
                 this->setIntercBase(false);
                 this->setIntercLid(true);
             }else {
+                this->set_T_i(Ti_1);
                 result.point_of_intersection = Ti_1;
                 result.doesIntersect = true;
                 this->setInterception(false);
@@ -309,18 +318,21 @@ returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
             returnType T1_base = didThePointIntercepted(dir, P_o, this->get_B_vector());
             returnType T1_top = didThePointIntercepted(dir, P_o, this->get_center_top_vector());
             if (T1_base.doesIntersect && (T1_base.point_of_intersection < Ti_2)) {
+                this->set_T_i(T1_base.point_of_intersection);
                 result.point_of_intersection = Ti_1;
                 result.doesIntersect = true;
                 this->setInterception(true);
                 this->setIntercBase(true);
                 this->setIntercLid(false);
             }else if (T1_top.doesIntersect && (T1_top.point_of_intersection < Ti_2)) {
+                this->set_T_i(T1_top.point_of_intersection);
                 result.point_of_intersection = Ti_1;
                 result.doesIntersect = true;
                 this->setInterception(true);
                 this->setIntercBase(false);
                 this->setIntercLid(true);
             }else {
+                this->set_T_i(Ti_2);
                 result.point_of_intersection = Ti_2;
                 result.doesIntersect = true;
                 this->setInterception(false);
@@ -331,12 +343,14 @@ returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
             returnType bse = didThePointIntercepted(dir, P_o, this->get_B_vector());
             returnType tp = didThePointIntercepted(dir, P_o, this->get_center_top_vector());
             if(bse.doesIntersect && tp.doesIntersect && (bse.point_of_intersection <= tp.point_of_intersection)) {
+                this->set_T_i(bse.point_of_intersection);
                 result.point_of_intersection = bse.point_of_intersection;
                 result.doesIntersect = true;
                 this->setInterception(true);
                 this->setIntercBase(true);
                 this->setIntercLid(false);
             }else if(bse.doesIntersect && tp.doesIntersect && (bse.point_of_intersection > tp.point_of_intersection)){
+                this->set_T_i(tp.point_of_intersection);
                 result.point_of_intersection = tp.point_of_intersection;
                 result.doesIntersect = true;
                 this->setInterception(true);

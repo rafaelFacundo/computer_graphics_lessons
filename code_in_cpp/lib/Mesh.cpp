@@ -554,7 +554,8 @@ void Mesh::gime_your_color(
 
 void Mesh::applyRotateX(double angle){
     for (Point* point : this->listOfPoints) {
-        point->gimmeTheCoordinateVector()->ThisRotateX(angle);
+        point->getPointIni()->ThisRotateX(angle);
+        //point->gimmeTheCoordinateVector()->ThisRotateX(angle);
     };
     if (this->wrapper != NULL) {
         this->wrapper->applyRotateX(angle);
@@ -563,7 +564,9 @@ void Mesh::applyRotateX(double angle){
 };
 void Mesh::applyRotateY(double angle){
     for (Point* point : this->listOfPoints) {
-        point->gimmeTheCoordinateVector()->ThisRotateY(angle);
+        point->getPointIni()->ThisRotateY(angle);
+        //point->gimmeTheCoordinateVector()->ThisRotateY(angle);
+
     };
     if (this->wrapper != NULL) {
         this->wrapper->applyRotateY(angle);
@@ -571,7 +574,9 @@ void Mesh::applyRotateY(double angle){
 };
 void Mesh::applyRotateZ(double angle){
     for (Point* point : this->listOfPoints) {
-        point->gimmeTheCoordinateVector()->ThisRotateZ(angle);
+        point->getPointIni()->ThisRotateZ(angle);
+        //point->gimmeTheCoordinateVector()->ThisRotateZ(angle);
+
     };
     if (this->wrapper != NULL) {
         this->wrapper->applyRotateZ(angle);
@@ -580,7 +585,9 @@ void Mesh::applyRotateZ(double angle){
 
 void Mesh::applyTranslate(double x, double y, double z){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisTranslate(x,y,z);
         point->gimmeTheCoordinateVector()->ThisTranslate(x,y,z);
+
     };
 
     if (this->wrapper != NULL) {
@@ -589,7 +596,8 @@ void Mesh::applyTranslate(double x, double y, double z){
 };
 void Mesh::applyScale(double sx, double sy, double sz){
     for (Point* point : this->listOfPoints) {
-        point->gimmeTheCoordinateVector()->ThisScale(sx,sy,sz);
+        point->getPointIni()->ThisScale(sx,sy,sz);
+        //point->gimmeTheCoordinateVector()->ThisScale(sx,sy,sz);
     };
     if (this->wrapper != NULL) {
         this->wrapper->applyScale(sx,sy,sz);
@@ -598,6 +606,7 @@ void Mesh::applyScale(double sx, double sy, double sz){
 
 void Mesh::applyReflectXY(){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisReflectXY();
         point->gimmeTheCoordinateVector()->ThisReflectXY();
     };
     if (this->wrapper != NULL) {
@@ -606,6 +615,7 @@ void Mesh::applyReflectXY(){
 };
 void Mesh::applyReflectXZ(){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisReflectXZ();
         point->gimmeTheCoordinateVector()->ThisReflectXZ();
     };
     if (this->wrapper != NULL) {
@@ -614,6 +624,7 @@ void Mesh::applyReflectXZ(){
 };
 void Mesh::applyReflectYZ(){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisReflectYZ();
         point->gimmeTheCoordinateVector()->ThisReflectYZ();
     };
     if (this->wrapper != NULL) {
@@ -623,36 +634,42 @@ void Mesh::applyReflectYZ(){
 
 void Mesh::applyShearYX(double angle){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisShearYX(angle);
         point->gimmeTheCoordinateVector()->ThisShearYX(angle);
     };
     this->wrapper = NULL;
 };
 void Mesh::applyShearXY(double angle){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisShearXY(angle);
         point->gimmeTheCoordinateVector()->ThisShearXY(angle);
     };
     this->wrapper = NULL;
 };
 void Mesh::applyShearXZ(double angle){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisShearXZ(angle);
         point->gimmeTheCoordinateVector()->ThisShearXZ(angle);
     };
     this->wrapper = NULL;
 };
 void Mesh::applyShearZX(double angle){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisShearZX(angle);
         point->gimmeTheCoordinateVector()->ThisShearZX(angle);
     };
     this->wrapper = NULL;
 };
 void Mesh::applyShearYZ(double angle){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisShearYZ(angle);
         point->gimmeTheCoordinateVector()->ThisShearYZ(angle);
     };
     this->wrapper = NULL;
 };
 void Mesh::applyShearZY(double angle){
     for (Point* point : this->listOfPoints) {
+        point->getPointIni()->ThisShearZY(angle);
         point->gimmeTheCoordinateVector()->ThisShearZY(angle);
     };
     this->wrapper = NULL;

@@ -205,17 +205,27 @@ bool Scenery::verify_the_shadow(
 ){
     Vector *L_vector;
     Vector *Pf_pi;
+    double Pf_pi_norm;
     int numberOfObjects = this->get_Object_list_lenght();
     double nearPoint = 0;
     int indexOfInterceptedObje = -1;
 
+    /* Vector *L_vector = this->list_Of_Objects[indexOfObject]->get_L_vector(dir, P_o, Light_source_position);
     Vector *P_i = this->list_Of_Objects[indexOfObject]->get_Pi(dir, P_o);
+    Vector *Pf_pi = Light_source_position->minus_with_the_vector(P_i);
+    double Pf_pi_norm = sqrt(Pf_pi->scalar_with(Pf_pi)); */
+
+    Vector *P_i = this->list_Of_Objects[indexOfObject]->get_Pi(dir, P_o);
+
     if (light->getType() != 2) {
         L_vector = this->list_Of_Objects[indexOfObject]->get_L_vector(dir, P_o, ((PointLight*)light)->getPosition());
         Pf_pi = ((PointLight*)light)->getPosition()->minus_with_the_vector(P_i);
+        Pf_pi_norm = sqrt(Pf_pi->scalar_with(Pf_pi));
+    }else {
+        L_vector = ((DirectionalLight*)light)->getDirection()->multiply_by_a_scalar(-1);
+        Pf_pi_norm = L_vector->getNormOfThisVector();
     }
 
-    double Pf_pi_norm = sqrt(Pf_pi->scalar_with(Pf_pi));
 
     for (int i = 0; i < numberOfObjects; i++) {
         if ( i != indexOfObject ) {
