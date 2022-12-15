@@ -12,12 +12,17 @@ Cylinder::Cylinder():Object(){
 
 void Cylinder::set_unitary_vector(double x, double y, double z){
     this->unitary_vector = new Vector(x,y,z);
-    this->top_ini = this->get_center_top_vector();
+    Vector *topToInsert = this->get_center_top_vector();
+    this->top_ini = new Vector(
+        topToInsert->get_x_Point(),
+        topToInsert->get_y_Point(),
+        topToInsert->get_z_Point()
+    );
 };
 
 void Cylinder::set_B_vector(double x, double y, double z){
     this->B_vector = new Vector(x,y,z);
-    this->B_vectorIni = this->B_vector;
+    this->B_vectorIni = new Vector(x,y,z);
 };
 
 void Cylinder::set_radius(double radius) {
@@ -55,8 +60,8 @@ returnType Cylinder::didThePointIntercepted(Vector *dir, Vector *P_o, Vector *ba
     returnType result;
     double D_scalar_n;
     Vector* Pi_minus_base;
-    Vector *Ppi_minus_P_o = base->minus_with_the_vector(P_o);
-    double Ppi_mns_Po_scalar_N = Ppi_minus_P_o->scalar_with(this->get_unitary_vector()->multiply_by_a_scalar(-1.0));
+    //Vector *Ppi_minus_P_o = base->minus_with_the_vector(P_o);
+    double Ppi_mns_Po_scalar_N = base->minus_with_the_vector(P_o)->scalar_with(this->get_unitary_vector()->multiply_by_a_scalar(-1.0));
 
     if (base == this->get_B_vector()) {
         D_scalar_n = dir->scalar_with(this->get_unitary_vector()->multiply_by_a_scalar(-1.0));
@@ -121,9 +126,7 @@ void Cylinder::gime_your_color(
     Vector *Pf_Pi;
     Vector *normal;
 
-    Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
-
-    Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
+    Vector *P_i = Eye_position->sum_with_the_vector(Direction->multiply_by_a_scalar(this->T_i));
 
     if (light->getType() == 0 ) {
         Light_source_position = ((PointLight*)light)->getPosition();
@@ -158,8 +161,8 @@ void Cylinder::gime_your_color(
         intensity = light->getIntensity();
     };
 
-    Vector *Pi_m_B = P_i->minus_with_the_vector(this->get_B_vector());
-    double Pi_m_b_Scalar_U = Pi_m_B->scalar_with(this->get_unitary_vector());
+
+    double Pi_m_b_Scalar_U = (P_i->minus_with_the_vector(this->get_B_vector()))->scalar_with(this->get_unitary_vector());
     /* ================================================================================= */
     /* Vector_UpB = U_times_Pi_m_b_ScalarU  */
 
@@ -168,13 +171,7 @@ void Cylinder::gime_your_color(
     }else if (this->intercepted && this->intercepLid) {
         normal = this->get_unitary_vector();
     }else {
-        Vector *Vector_UpB = this->get_unitary_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U);
-
-        Vector *Pi_minus_Vector_UpB = P_i->minus_with_the_vector(Vector_UpB);
-
-        double norm_of_Pi_minus_Vector_UpB = sqrt(Pi_minus_Vector_UpB->scalar_with(Pi_minus_Vector_UpB));
-
-        normal = Pi_minus_Vector_UpB->multiply_by_a_scalar(1/norm_of_Pi_minus_Vector_UpB);
+        normal = (P_i->minus_with_the_vector(this->get_unitary_vector()->multiply_by_a_scalar(Pi_m_b_Scalar_U)))->get_this_vector_unitary();
     }
 
 
@@ -226,11 +223,9 @@ void Cylinder::gime_your_color(
 };
 
 bool Cylinder::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti) {
-    Vector *Dr_times_ti = Dr->multiply_by_a_scalar(Ti);
-    Vector *Pi = P_o->sum_with_the_vector(Dr_times_ti);
 
     /* Pi_m_B = Pi_minus_B_vector  */
-    Vector *Pi_m_B = Pi->minus_with_the_vector(this->get_B_vector());
+    Vector *Pi_m_B = (P_o->sum_with_the_vector(Dr->multiply_by_a_scalar(Ti)))->minus_with_the_vector(this->get_B_vector());
     double Pi_m_b_Scalar_U = Pi_m_B->scalar_with(this->get_unitary_vector());
 
     /* Vector_UpB = U_times_Pi_m_b_ScalarU  */
@@ -246,15 +241,14 @@ bool Cylinder::is_Ti_a_valid_point(Vector *P_o, Vector *Dr, double Ti) {
 
 returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
     returnType result;
-    Vector *d_scalar_u = this->get_unitary_vector()->multiply_by_a_scalar(dir->scalar_with(this->get_unitary_vector()));
-    Vector *w_vector = dir->minus_with_the_vector(d_scalar_u);
-    Vector *Po_minus_B = P_o->minus_with_the_vector(this->get_B_vector());
-    Vector *Po_minus_B_scalar_u = this->get_unitary_vector()->multiply_by_a_scalar(Po_minus_B->scalar_with(this->get_unitary_vector()));
-    Vector *v_vector = Po_minus_B->minus_with_the_vector(Po_minus_B_scalar_u);
+    Vector *v_vector = (P_o->minus_with_the_vector(this->get_B_vector()))->minus_with_the_vector(this->get_unitary_vector()->multiply_by_a_scalar((P_o->minus_with_the_vector(this->get_B_vector()))->scalar_with(this->get_unitary_vector())));
 
-    double a = w_vector->scalar_with(w_vector);
-    double b = 2 * (v_vector->scalar_with(w_vector));
+    double a = (dir->minus_with_the_vector(this->get_unitary_vector()->multiply_by_a_scalar(dir->scalar_with(this->get_unitary_vector()))))->scalar_with(dir->minus_with_the_vector(this->get_unitary_vector()->multiply_by_a_scalar(dir->scalar_with(this->get_unitary_vector()))));
+
+    double b = 2 * (v_vector->scalar_with(dir->minus_with_the_vector(this->get_unitary_vector()->multiply_by_a_scalar(dir->scalar_with(this->get_unitary_vector())))));
+
     double c = v_vector->scalar_with(v_vector) - pow(this->get_radius(), 2);
+
     double delta = pow(b,2) - 4*a*c;
 
     result.point_of_intersection = -1.0;
@@ -267,8 +261,6 @@ returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
         /* calculo os dois ti */
         double Ti_1 = (-b + sqrt(delta))/(2*a);
         double Ti_2 = (-b - sqrt(delta))/(2*a);
-
-
 
         bool Ti_1_verification = this->is_Ti_a_valid_point(P_o, dir, Ti_1);
         bool Ti_2_verification = this->is_Ti_a_valid_point(P_o, dir, Ti_2);
@@ -365,13 +357,22 @@ returnType Cylinder::does_the_point_intercept(Vector *dir, Vector *P_o){
 
 
 void Cylinder::applyRotateX(double angle){
-    this->get_unitary_vector()->ThisRotateX(angle);
+    Vector *top = this->get_center_top_vector();
+    top->ThisRotateX(angle);
+    this->get_B_vector()->ThisRotateX(angle);
+    this->unitary_vector = top->minus_with_the_vector(this->B_vector)->get_this_vector_unitary();
 };
 void Cylinder::applyRotateY(double angle){
-    this->get_unitary_vector()->ThisRotateY(angle);
-};
+    Vector *top = this->get_center_top_vector();
+    top->ThisRotateY(angle);
+    this->get_B_vector()->ThisRotateY(angle);
+    this->unitary_vector = top->minus_with_the_vector(this->B_vector)->get_this_vector_unitary();
+}
 void Cylinder::applyRotateZ(double angle){
-    this->get_unitary_vector()->ThisRotateZ(angle);
+   Vector *top = this->get_center_top_vector();
+    top->ThisRotateZ(angle);
+    this->get_B_vector()->ThisRotateZ(angle);
+    this->unitary_vector = top->minus_with_the_vector(this->B_vector)->get_this_vector_unitary();
 };
 
 void Cylinder::applyTranslate(double x, double y, double z){
@@ -425,9 +426,9 @@ void Cylinder::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector
     this->get_B_vector()->set_y_Point(newY);
     this->get_B_vector()->set_z_Point(newZ);
 
-    x = top_vector-> get_x_Point();
-    y = top_vector-> get_y_Point();
-    z = top_vector-> get_z_Point();
+    x = top_ini->get_x_Point();
+    y = top_ini->get_y_Point();
+    z = top_ini->get_z_Point();
 
     newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
     newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;

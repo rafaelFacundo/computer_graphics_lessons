@@ -68,6 +68,17 @@ void Scenery::set_renderer(SDL_Renderer *renderer) {
     this->renderer = renderer;
 };
 
+void Scenery::set_nLines(int lines) {
+    this->n_lines = lines;
+};
+void Scenery::set_nCol(int col) {
+    this->n_collumns = col;
+};
+
+void Scenery::setRenderer(SDL_Renderer *renderer){
+    this->renderer = renderer;
+};
+
 SDL_Renderer* Scenery::get_sceneryRender(){
     return this->renderer;
 };
@@ -269,28 +280,31 @@ void Scenery::calculateTheColor(int indexOfObject, Vector *dir) {
         /* Vector *LightIntensity = this->Light_intensity[i];
         Vector *LightPosition = this->Light_position[i]; */
         light = list_of_light[i];
-        bool doesHaveShadowForThisLight = verify_the_shadow(
-            light,
-            dir,
-            this->get_observer_position(),
-            indexOfObject
-        );
-
-        if (!doesHaveShadowForThisLight) {
-            this->list_Of_Objects[indexOfObject]->gime_your_color(
-                this->get_observer_position(),
-                dir,
+        if (light->active()) {
+            bool doesHaveShadowForThisLight = verify_the_shadow(
                 light,
-                this->get_ambient_light_intensity(),
-                this->colorToDraw
-            );
-        }else {
-            this->list_Of_Objects[indexOfObject]->gimme_your_ambientColor(
-                this->get_ambient_light_intensity(),
-                this->colorToDraw
+                dir,
+                this->get_observer_position(),
+                indexOfObject
             );
 
+            if (!doesHaveShadowForThisLight) {
+                this->list_Of_Objects[indexOfObject]->gime_your_color(
+                    this->get_observer_position(),
+                    dir,
+                    light,
+                    this->get_ambient_light_intensity(),
+                    this->colorToDraw
+                );
+            }else {
+                this->list_Of_Objects[indexOfObject]->gimme_your_ambientColor(
+                    this->get_ambient_light_intensity(),
+                    this->colorToDraw
+                );
+
+            }
         }
+
     }
 
 
@@ -622,16 +636,16 @@ void Scenery::makeModificationOnObject(int indexOfObj) {
 void Scenery::modifyScenery() {
     int resposta;
     int resposta2;
+    Light *selectedLight;
     double *newCoeficients = (double*)malloc(sizeof(double) * 3);
     cout << "Digite oque você deseja fazer: \n";
     cout << "1 - mudar o observador de lugar: \n";
     cout << "2 - mudar a intensidade da luz ambiente.\n";
-    cout << "3 - mudar o número o tamanho e altura da janela.\n";
-    cout << "4 - mudar a intensidade de uma luz especifica.\n";
-    cout << "5 - mudar a distância d.\n";
-    cout << "6 - mudar o tipo de projeção.\n";
+    cout << "3 - mudar as propriedades de uma luz especifica.\n";
+    cout << "4 - mudar a distância d.\n";
+    cout << "5 - mudar o tipo de projeção.\n";
     cin >> resposta;
-    if ( cin.fail() || resposta > 6 || resposta < 1 ) {
+    if ( cin.fail() || resposta > 5 || resposta < 1 ) {
         cin.clear();
         cin.ignore(1000, '\n');
         cout << "entrada inválida.";
@@ -660,26 +674,7 @@ void Scenery::modifyScenery() {
             this->get_ambient_light_intensity()->set_z_Point(newCoeficients[2]);
             break;
         case 3:
-            cout << "Digite o número de linhas: \n";
-            cin >> newCoeficients[0];
-            if ( cin.fail() ) {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "entrada inválida.";
-                return;
-            }
-            cout << "Digite o número de colunas: \n";
-            cin >> newCoeficients[1];
-            if ( cin.fail() ) {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "entrada inválida.";
-                return;
-            }
-            this->width = newCoeficients[1];
-            this->height = newCoeficients[0];
-            break;
-        case 4:
+            this->listLights();
             cout << "Digite o indice da luz correspondente: \n";
             cin >> resposta2;
             if ( cin.fail() || resposta2 > this->list_of_light.size() || resposta2 < 0) {
@@ -688,11 +683,11 @@ void Scenery::modifyScenery() {
                 cout << "entrada inválida.";
                 return;
             }
-            cout << "Digite o vetor da nova intensidade: no formato x,y,z.\n";
-            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
-            this->list_of_light[resposta2]->setIntesity(new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]));
+            selectedLight = this->list_of_light[resposta2];
+            modifyLight(selectedLight);
+
             break;
-        case 5:
+        case 4:
             cout << "Digite o valor do novo z (o valor será somado): \n";
             cin >> newCoeficients[0];
             if ( cin.fail() ) {
@@ -703,7 +698,7 @@ void Scenery::modifyScenery() {
             }
             this->set_z(this->get_z() + newCoeficients[0]);
             break;
-        case 6:
+        case 5:
             cout << "Digite 1 para projeção perspectiva e digite 2 para projeção ortográfica: ";
             cin >> resposta2;
             if ( cin.fail() || resposta2 > 2 || resposta2 < 1) {
@@ -721,6 +716,113 @@ void Scenery::modifyScenery() {
 };
 
 
+void Scenery::modifyLight(Light *light) {
+    double *newCoeficients = (double*)malloc(sizeof(double) * 3);
+    int resposta;
+    switch (light->getType()) {
+    case 0:
+        cout << "Digite a opção que deseja modificar: \n";
+        cout << "1 - Mudar posição.\n";
+        cout << "2 - Mudar intensidade.\n";
+        cout << "3 - Apagar a luz.\n";
+        cout << "4 - Acender a luz.\n";
+        cin >> resposta;
+        if ( cin.fail() || resposta > 3 || resposta < 1) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "entrada inválida.";
+            return;
+        }
+        if (resposta == 1) {
+            cout << "Digite o vetor da nova posição: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            ((PointLight*)light)->setPostion(new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]));
+        }else if (resposta == 2) {
+            cout << "Digite o vetor da nova intesidade: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            ((PointLight*)light)->setIntesity(new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]));
+        }else if (resposta == 3){
+            ((PointLight*)light)->turnOnOrTurnOff(false);
+        }else {
+            ((PointLight*)light)->turnOnOrTurnOff(true);
+        }
+        break;
+    case 1:
+        cout << "Digite a opção que deseja modificar: \n";
+        cout << "1 - Mudar posição.\n";
+        cout << "2 - Mudar intensidade.\n";
+        cout << "3 - Mudar direção.\n";
+        cout << "4 - Mudar angulo.\n";
+        cout << "5 - Apagar a luz.\n";
+        cout << "6 - Acender a luz.\n";
+        cin >> resposta;
+        if ( cin.fail() || resposta > 6 || resposta < 1) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "entrada inválida.";
+            return;
+        }
+        if (resposta == 1) {
+            cout << "Digite o vetor da nova posição: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            ((SpotLight*)light)->setPostion(new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]));
+        }else if (resposta == 2) {
+            cout << "Digite o vetor da nova intesidade: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            ((SpotLight*)light)->setIntesity(new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]));
+        }else if (resposta == 3) {
+            cout << "Digite o vetor da nova direção: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            ((SpotLight*)light)->setDirection(new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]));
+        }else if (resposta == 4) {
+            cout << "Digite o valor do novo angulo: ";
+            cin >> newCoeficients[0];
+            if ( cin.fail() || newCoeficients[0] < 0) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "entrada inválida.";
+                return;
+            }
+            ((SpotLight*)light)->setAngle(newCoeficients[0]);
+        }else  if (resposta == 5){
+            ((SpotLight*)light)->turnOnOrTurnOff(false);
+        }else {
+            ((SpotLight*)light)->turnOnOrTurnOff(true);
+        }
+        break;
+    case 2:
+        cout << "Digite a opção que deseja modificar: \n";
+        cout << "1 - Mudar direção.\n";
+        cout << "2 - Mudar intensidade.\n";
+        cout << "3 - Apagar a luz.\n";
+        cout << "4 - Acender a luz.\n";
+        cin >> resposta;
+        if ( cin.fail() || resposta > 4 || resposta < 1) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "entrada inválida.";
+            return;
+        }
+        if (resposta == 1) {
+            cout << "Digite o vetor da nova direção: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            ((DirectionalLight*)light)->setDirection(new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]));
+        }else if (resposta == 2) {
+            cout << "Digite o vetor da nova intesidade: no formato x,y,z.\n";
+            scanf("%lf, %lf, %lf", &newCoeficients[0],&newCoeficients[1],&newCoeficients[2]);
+            ((DirectionalLight*)light)->setIntesity(new Vector(newCoeficients[0],newCoeficients[1],newCoeficients[2]));
+        }else  if (resposta == 3){
+            ((SpotLight*)light)->turnOnOrTurnOff(false);
+        }else {
+            ((SpotLight*)light)->turnOnOrTurnOff(true);
+        }
+        break;
+
+    default:
+        break;
+    }
+};
+
 
 
 void Scenery::set_projection(int type) {
@@ -731,3 +833,35 @@ void Scenery::set_projection(int type) {
     }
 };
 
+
+void Scenery::listLights() {
+    int i = 0;
+    for (Light *light : this->list_of_light){
+        cout << "indice: " << i << '\n';
+        cout << "Intensidade: ";
+        light->getIntensity()->printValues();
+        cout << '\n';
+        if (light->getType() == 0 ) {
+            cout << "Tipo: pontual.\n";
+            cout << "Posição: ";
+            ((PointLight*)light)->getPosition()->printValues();
+            cout << '\n';
+        }else if (light->getType() == 1) {
+            cout << "Tipo: Spot.\n";
+            cout << "Posição: ";
+            ((SpotLight*)light)->getPosition()->printValues();
+            cout << '\n';
+            cout << "Angulo: " << ((SpotLight*)light)->getAngle() << '\n';
+            cout << "Direção: ";
+            ((SpotLight*)light)->getDirection()->printValues();
+            cout << '\n';
+        }else {
+            cout << "Tipo: direcional.\n";
+            cout << "Direção: ";
+            ((DirectionalLight*)light)->getDirection()->printValues();
+            cout << '\n';
+        }
+        i += 1;
+    }
+
+};

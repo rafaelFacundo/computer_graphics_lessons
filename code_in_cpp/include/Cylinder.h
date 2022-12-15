@@ -4,9 +4,11 @@
 
 class Cylinder : public Object {
     Vector *unitary_vector;
+    //Vector *unitary_vectorIni;
     Vector *B_vector;
     Vector *B_vectorIni;
     Vector *top_ini;
+    Vector *top;
 
     double height;
     double radius;

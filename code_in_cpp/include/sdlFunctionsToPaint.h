@@ -14,4 +14,3 @@ void paint_the_point (
     int column,
     int line
 );
-

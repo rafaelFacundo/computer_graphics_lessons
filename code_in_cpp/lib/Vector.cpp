@@ -274,7 +274,7 @@ void Vector::ThisRotateY(double angle){
     double z = this->get_z_Point();
     this->set_x_Point((x * cos(angle)) + (z * sin(angle)));
     //this->get_y_Point(),
-    this->set_z_Point((-(x) * sin(angle)) + (z * cos(angle)));
+    this->set_z_Point(((-1) * (x * sin(angle))) + (z * cos(angle)));
 };
 void Vector::ThisRotateZ(double angle){
     double x = this->get_x_Point();

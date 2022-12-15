@@ -13,8 +13,10 @@ SDL_Renderer* init_sdl_window (
 
 void show_the_window(SDL_Renderer *renderer);
 
-void SDL_events( Scenery *scenery, SDL_Event *event, SDL_Window* window);
+void SDL_events( Scenery *scenery, SDL_Event *event, SDL_Window* window, SDL_Renderer *renderer);
 
-void handleMouseEvent(SDL_Window* window, Scenery *scenery, SDL_MouseButtonEvent &event);
+void handleMouseEvent(SDL_Window* window, Scenery *scenery, SDL_MouseButtonEvent &event,SDL_Renderer *renderer);
 
 void updateWindow(SDL_Window * window);
+
+void closeAndOpenWindow();

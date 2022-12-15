@@ -60,6 +60,9 @@ class Scenery {
         void set_z(int z);
         void set_renderer(SDL_Renderer *renderer);
         void set_projection(int type);
+        void set_nLines(int lines);
+        void set_nCol(int col);
+        void setRenderer(SDL_Renderer *renderer);
 
 
         void calculateTheColor(int indexOfObject, Vector *dir);
@@ -80,4 +83,8 @@ class Scenery {
 
         void modifyScenery();
         void applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up);
+
+
+        void listLights();
+        void modifyLight(Light *light);
 };

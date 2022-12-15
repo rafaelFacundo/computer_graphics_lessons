@@ -12,12 +12,18 @@ Wrapper::Wrapper(){
 
 void Wrapper::set_unitary_vector(double x, double y, double z){
     this->unitary_vector = new Vector(x,y,z);
-    this->top_ini = this->get_center_top_vector();
+    this->unitary_vector = new Vector(x,y,z);
+    Vector *topToInsert = this->get_center_top_vector();
+    this->top_ini = new Vector(
+        topToInsert->get_x_Point(),
+        topToInsert->get_y_Point(),
+        topToInsert->get_z_Point()
+    );
 };
 
 void Wrapper::set_B_vector(double x, double y, double z){
     this->B_vector = new Vector(x,y,z);
-    this->B_vectorIni = this->B_vector;
+    this->B_vectorIni = new Vector(x,y,z);
 };
 
 void Wrapper::set_radius(double radius) {
@@ -249,7 +255,7 @@ void Wrapper::applyRotateZ(double angle){
 
 void Wrapper::applyTranslate(double x, double y, double z){
     this->get_B_vector()->ThisTranslate(x,y,z);
-
+    this->B_vectorIni->ThisTranslate(x,y,z);
 };
 
 void Wrapper::applyScale(double sx, double sy, double sz){
@@ -298,9 +304,9 @@ void Wrapper::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector 
     this->get_B_vector()->set_y_Point(newY);
     this->get_B_vector()->set_z_Point(newZ);
 
-    x = top_vector-> get_x_Point();
-    y = top_vector-> get_y_Point();
-    z = top_vector-> get_z_Point();
+    x = top_ini->get_x_Point();
+    y = top_ini->get_y_Point();
+    z = top_ini->get_z_Point();
 
     newX = minusIcPlusEye + Ic->get_z_Point() * z + Ic->get_y_Point() * y + Ic->get_x_Point() * x;
     newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
@@ -350,6 +356,17 @@ void Mesh::insertAFace(Face *face){
 
 
 returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
+    Vector *P1_vector;
+    Vector *P2_vector;
+    Vector *P3_vector;
+    Vector *R1_vector;
+    Vector *R2_vector;
+    Vector *normal;
+    Vector *w;
+    Vector *normalUnitary;
+    Vector *Pi;
+    Vector *distance_vector;
+    Vector *V;
     double C1, C2, C3;
     returnType wrapperResult;
     wrapperResult.doesIntersect = true;
@@ -394,19 +411,19 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
             v3 = (n1/ (v1+1)) - 1;
         };
 
-        Vector *P1_vector = this->listOfPoints[v1]->gimmeTheCoordinateVector();
-        Vector *P2_vector = this->listOfPoints[v2]->gimmeTheCoordinateVector();
-        Vector *P3_vector = this->listOfPoints[v3]->gimmeTheCoordinateVector();
+        P1_vector = this->listOfPoints[v1]->gimmeTheCoordinateVector();
+        P2_vector = this->listOfPoints[v2]->gimmeTheCoordinateVector();
+        P3_vector = this->listOfPoints[v3]->gimmeTheCoordinateVector();
 
-        Vector *R1_vector = P2_vector->minus_with_the_vector(P1_vector);
+        R1_vector = P2_vector->minus_with_the_vector(P1_vector);
 
-        Vector *R2_vector = P3_vector->minus_with_the_vector(P1_vector);
+        R2_vector = P3_vector->minus_with_the_vector(P1_vector);
 
-        Vector *normal = R1_vector->vectorProductWith(R2_vector);
+        normal = R1_vector->vectorProductWith(R2_vector);
 
-        Vector *normalUnitary = normal->get_this_vector_unitary();
+        normalUnitary = normal->get_this_vector_unitary();
 
-        Vector *w = P_o->minus_with_the_vector(P1_vector);
+        w = P_o->minus_with_the_vector(P1_vector);
 
         //double Po_minus_P1_scalar_normal = (P_o->minus_with_the_vector(P1_vector))->scalar_with(normal);
 
@@ -415,13 +432,13 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
 
         if ( Dir_scalar_normal != 0 && Ti_point > 0 ) {
             /* Pi point */
-            Vector *Pi = P_o->sum_with_the_vector(dir->multiply_by_a_scalar(Ti_point));
+            Pi = P_o->sum_with_the_vector(dir->multiply_by_a_scalar(Ti_point));
 
-            Vector *distance_vector = Pi->minus_with_the_vector(P_o);
+            distance_vector = Pi->minus_with_the_vector(P_o);
 
             double distanceFromP_o = distance_vector->getNormOfThisVector();
 
-            Vector *V = Pi->minus_with_the_vector(P_o);
+            V = Pi->minus_with_the_vector(P_o);
 
             /* Calculating the C1, C2 e C3 */
             double R1_vetorial_R2_scalar_normal = (R1_vector->vectorProductWith(R2_vector))->scalar_with(normal);
@@ -438,12 +455,12 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
             //double P2_Pi_vetorial_P3_Pi_scalarNormal = ( (P2_vector->minus_with_the_vector(Pi))->vectorProductWith(P3_vector->minus_with_the_vector(Pi)) )->scalar_with(normal);
             C3 = 1 - C1 - C2;
 
-            if ( result.point_of_intersection == -1 && (C1 >= 0 && C2 >= 0 && C3 >= 0) && ((C1 + C2 + C3) == 1)) {
+            if ( result.point_of_intersection == -1 && (C1 >= 0 && C2 >= 0 && C3 >= 0) ) {
                 result.doesIntersect = true;
                 result.point_of_intersection = Ti_point;
                 this->set_T_i(Ti_point);
                 this->setNormal(normalUnitary);
-            }else if ( (C1 >= 0 && C2 >= 0 && C3 >= 0) && ((C1 + C2 + C3) == 1) && Ti_point < result.point_of_intersection ) {
+            }else if ( (C1 >= 0 && C2 >= 0 && C3 >= 0) && Ti_point < result.point_of_intersection ) {
                 result.doesIntersect = true;
                 result.point_of_intersection = Ti_point;
                 this->set_T_i(Ti_point);
@@ -453,6 +470,18 @@ returnType Mesh::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
         }
 
     }
+
+
+
+
+    delete R1_vector;
+    delete R2_vector;
+    delete normal;
+    delete w;
+    delete normalUnitary;
+    delete Pi;
+    delete distance_vector;
+    delete V;
 
     return result;
 };
@@ -474,9 +503,9 @@ void Mesh::gime_your_color(
     Vector *Light_source_position;
     Vector *intensity;
     double clds;
-    Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
 
-    Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
+
+    Vector *P_i = Eye_position->sum_with_the_vector(Direction->multiply_by_a_scalar(this->T_i));
 
     if (light->getType() == 0 ) {
         Light_source_position = ((PointLight*)light)->getPosition();
@@ -548,6 +577,10 @@ void Mesh::gime_your_color(
     addressToPutTheColor[0] += vectorWithColors->get_x_Point();
     addressToPutTheColor[1] += vectorWithColors->get_y_Point();
     addressToPutTheColor[2] += vectorWithColors->get_z_Point();
+
+    delete I_eye_d;
+    delete I_eye_e;
+    delete vectorWithColors;
 };
 
 /* Matrix transformations application */
@@ -707,6 +740,13 @@ void Mesh::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up
     if (this->wrapper != NULL) {
         this->wrapper->applyConvertWordVectoToCanvas(P_o,P_Look,Up);
     }
+
+    delete K;
+    delete Kc;
+    delete Vup;
+    delete I;
+    delete Ic;
+    delete Jc;
 
 };
 

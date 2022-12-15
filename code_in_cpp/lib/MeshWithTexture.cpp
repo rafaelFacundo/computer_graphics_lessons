@@ -386,6 +386,17 @@ void MeshWithTexture::insertAFace(Face *face){
 
 
 returnType MeshWithTexture::calculateIntersectionForEachFace(Vector *dir, Vector *P_o) {
+    Vector *P1_vector;
+    Vector *P2_vector;
+    Vector *P3_vector;
+    Vector *R1_vector;
+    Vector *R2_vector;
+    Vector *normal;
+    Vector *w;
+    Vector *normalUnitary;
+    Vector *Pi;
+    Vector *distance_vector;
+    Vector *V;
     double C1, C2, C3;
     returnType wrapperResult;
     wrapperResult.doesIntersect = true;
@@ -430,19 +441,19 @@ returnType MeshWithTexture::calculateIntersectionForEachFace(Vector *dir, Vector
             v3 = (n1/ (v1+1)) - 1;
         };
 
-        Vector *P1_vector = this->listOfPoints[v1]->gimmeTheCoordinateVector();
-        Vector *P2_vector = this->listOfPoints[v2]->gimmeTheCoordinateVector();
-        Vector *P3_vector = this->listOfPoints[v3]->gimmeTheCoordinateVector();
+        P1_vector = this->listOfPoints[v1]->gimmeTheCoordinateVector();
+        P2_vector = this->listOfPoints[v2]->gimmeTheCoordinateVector();
+        P3_vector = this->listOfPoints[v3]->gimmeTheCoordinateVector();
 
-        Vector *R1_vector = P2_vector->minus_with_the_vector(P1_vector);
+        R1_vector = P2_vector->minus_with_the_vector(P1_vector);
 
-        Vector *R2_vector = P3_vector->minus_with_the_vector(P1_vector);
+        R2_vector = P3_vector->minus_with_the_vector(P1_vector);
 
-        Vector *normal = R1_vector->vectorProductWith(R2_vector);
+        normal = R1_vector->vectorProductWith(R2_vector);
 
-        Vector *normalUnitary = normal->get_this_vector_unitary();
+        normalUnitary = normal->get_this_vector_unitary();
 
-        Vector *w = P_o->minus_with_the_vector(P1_vector);
+        w = P_o->minus_with_the_vector(P1_vector);
 
         //double Po_minus_P1_scalar_normal = (P_o->minus_with_the_vector(P1_vector))->scalar_with(normal);
 
@@ -451,13 +462,13 @@ returnType MeshWithTexture::calculateIntersectionForEachFace(Vector *dir, Vector
 
         if ( Dir_scalar_normal != 0 && Ti_point > 0 ) {
             /* Pi point */
-            Vector *Pi = P_o->sum_with_the_vector(dir->multiply_by_a_scalar(Ti_point));
+            Pi = P_o->sum_with_the_vector(dir->multiply_by_a_scalar(Ti_point));
 
-            Vector *distance_vector = Pi->minus_with_the_vector(P_o);
+            distance_vector = Pi->minus_with_the_vector(P_o);
 
             double distanceFromP_o = distance_vector->getNormOfThisVector();
 
-            Vector *V = Pi->minus_with_the_vector(P_o);
+            V = Pi->minus_with_the_vector(P_o);
 
             /* Calculating the C1, C2 e C3 */
             double R1_vetorial_R2_scalar_normal = (R1_vector->vectorProductWith(R2_vector))->scalar_with(normal);
@@ -474,12 +485,12 @@ returnType MeshWithTexture::calculateIntersectionForEachFace(Vector *dir, Vector
             //double P2_Pi_vetorial_P3_Pi_scalarNormal = ( (P2_vector->minus_with_the_vector(Pi))->vectorProductWith(P3_vector->minus_with_the_vector(Pi)) )->scalar_with(normal);
             C3 = 1 - C1 - C2;
 
-            if ( result.point_of_intersection == -1 && (C1 >= 0 && C2 >= 0 && C3 >= 0) && ((C1 + C2 + C3) == 1)) {
+            if ( result.point_of_intersection == -1 && (C1 >= 0 && C2 >= 0 && C3 >= 0) ) {
                 result.doesIntersect = true;
                 result.point_of_intersection = Ti_point;
                 this->set_T_i(Ti_point);
                 this->setNormal(normalUnitary);
-            }else if ( (C1 >= 0 && C2 >= 0 && C3 >= 0) && ((C1 + C2 + C3) == 1) && Ti_point < result.point_of_intersection ) {
+            }else if ( (C1 >= 0 && C2 >= 0 && C3 >= 0) && Ti_point < result.point_of_intersection ) {
                 result.doesIntersect = true;
                 result.point_of_intersection = Ti_point;
                 this->set_T_i(Ti_point);
@@ -489,6 +500,12 @@ returnType MeshWithTexture::calculateIntersectionForEachFace(Vector *dir, Vector
         }
 
     }
+
+
+
+
+
+
 
     return result;
 };

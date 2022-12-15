@@ -20,3 +20,4 @@ void paint_the_point (
     SDL_RenderDrawPoint(renderer, column, line);
 };
 
+

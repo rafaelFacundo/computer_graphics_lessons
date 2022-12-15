@@ -34,9 +34,8 @@ void Plan::gime_your_color(
     Vector *Pf_Pi;
     Vector *intensity;
     double clds;
-    Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
 
-    Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
+    Vector *P_i = Eye_position->sum_with_the_vector(Direction->multiply_by_a_scalar(this->T_i));
 
     if (light->getType() == 0) {
         Pf_Pi = ((PointLight*)light)->getPosition()->minus_with_the_vector(P_i);
@@ -68,14 +67,10 @@ void Plan::gime_your_color(
         this->set_K_e(newColor);
     }
 
-    Vector *l_vector = new Vector(
-        (Pf_Pi->get_x_Point())/Pf_pi_norm,
-        (Pf_Pi->get_y_Point())/Pf_pi_norm,
-        (Pf_Pi->get_z_Point())/Pf_pi_norm
-    );
+    //Vector *l_vector = Pf_Pi->get_this_vector_unitary();
 
     if (light->getType() == 1) {
-        clds = l_vector->scalar_with(((SpotLight*)light)->getDirection()->multiply_by_a_scalar(-1));
+        clds = (Pf_Pi->get_this_vector_unitary())->scalar_with(((SpotLight*)light)->getDirection()->multiply_by_a_scalar(-1));
         if (clds < cos(((SpotLight*)light)->getAngle())) {
             intensity = new Vector(0.0,0.0,0.0);
         }else {
@@ -86,23 +81,23 @@ void Plan::gime_your_color(
     };
 
     double Dr_magnitude = sqrt(Direction->scalar_with(Direction));
-    Vector *vector_v = new Vector(
+    /* Vector *vector_v = new Vector(
         -(Direction->get_x_Point())/Dr_magnitude,
         -(Direction->get_y_Point())/Dr_magnitude,
         -(Direction->get_z_Point())/Dr_magnitude
-    );
+    ); */
 
-    double l_scalar_normal = 2 * (l_vector->scalar_with(this->get_N_vector()));
+    double l_scalar_normal = 2 * ((Pf_Pi->get_this_vector_unitary())->scalar_with(this->get_N_vector()));
     Vector *nomal_scalar_with_above = this->get_N_vector()->multiply_by_a_scalar(l_scalar_normal);
-    Vector *R_vector = nomal_scalar_with_above->minus_with_the_vector(l_vector);
+    Vector *R_vector = nomal_scalar_with_above->minus_with_the_vector((Pf_Pi->get_this_vector_unitary()));
 
-    double F_d = l_vector->scalar_with(this->get_N_vector());
+    double F_d = (Pf_Pi->get_this_vector_unitary())->scalar_with(this->get_N_vector());
 
     if (F_d < 0 ) {
         F_d = 0;
     }
 
-    double F_e = R_vector->scalar_with(vector_v);
+    double F_e = R_vector->scalar_with(Direction->get_this_vector_unitary()->multiply_by_a_scalar(-1));
 
     if (F_e < 0 ) {
         F_e = 0;
@@ -127,6 +122,11 @@ void Plan::gime_your_color(
     addressToPutTheColor[1] += vectorWithColors->get_y_Point();
     addressToPutTheColor[2] += vectorWithColors->get_z_Point();
 
+    delete I_eye_d;
+    delete I_eye_e;
+    delete vectorWithColors;
+
+
 
 };
 
@@ -149,6 +149,7 @@ returnType Plan::does_the_point_intercept(Vector *dir, Vector *P_o) {
         result.doesIntersect = true;
         return result;
     }
+    delete Ppi_minus_P_o;
     return result;
 };
 
@@ -209,6 +210,13 @@ Vector *Plan::calculateWordToCanvas(Vector *P_o, Vector *P_Look, Vector *Up, Vec
     double newY = minusJcPlusEye + Jc->get_z_Point() * z + Jc->get_y_Point() * y + Jc->get_x_Point() * x;
     double newZ = minusKcPlusEye + Kc->get_z_Point() * z + Kc->get_y_Point() * y + Kc->get_x_Point() * x;
 
+    delete K;
+    delete Kc;
+    delete Vup;
+    delete I;
+    delete Ic;
+    delete Jc;
+
     return new Vector(newX, newY, newZ);
 };
 
@@ -254,6 +262,13 @@ void Plan::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *Up
     newNvector = newNvector->get_this_vector_unitary();
 
     this->N_vector = newNvector;
+
+    delete K;
+    delete Kc;
+    delete Vup;
+    delete I;
+    delete Ic;
+    delete Jc;
 };
 
 

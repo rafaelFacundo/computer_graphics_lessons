@@ -29,7 +29,7 @@ int main() {
 
   Vector *ambient_light = new Vector(0.3,0.3,0.3);
   Vector *light_intensity = new Vector(0.7,0.7,0.7);
-  Vector *light_position = new Vector(0.0,95.0,0);
+  Vector *light_position = new Vector(0.0,95.0,-100);
   Vector *P_o = new Vector(0.0,0.0,0.0);
   Vector *directionLight = new Vector(0,-0.5,-1);
 
@@ -37,11 +37,13 @@ int main() {
   theLight->setIntesity(light_intensity);
   theLight->setDirection(directionLight);
   theLight->setType(2);
+  theLight->turnOnOrTurnOff(true);
 
   PointLight* pLigh = new PointLight();
   pLigh->setIntesity(light_intensity);
   pLigh->setPostion(directionLight);
   pLigh->setType(0);
+  pLigh->turnOnOrTurnOff(true);
 
   SpotLight* spot = new SpotLight();
   spot->setIntesity(light_intensity);
@@ -49,8 +51,9 @@ int main() {
   spot->setDirection(directionLight);
   spot->setAngle(0.5);
   spot->setType(1);
+  spot->turnOnOrTurnOff(true);
 
-  Light* light_list[1] = {theLight};
+  Light* light_list[3] = {pLigh, spot };
 
   /* initing the sdl window */
   renderer = init_sdl_window (
@@ -63,7 +66,7 @@ int main() {
   /* instanciating the scenery class */
   Scenery *theScenery = new Scenery(
     light_list,
-    1,
+    2,
     ambient_light,
     P_o,
     n_lines,
@@ -209,16 +212,7 @@ int main() {
     new Vector(1,0,0)
   );
 
-  double centroEsfera[3] = {0.0,-140.0, -477.5};
-  double K_d[3] = {0.845, 0.647, 0.125};
-  Sphere *theSphere = new Sphere(
-    centroEsfera,
-    K_d,
-    K_d,
-    1.0,
-    50.0
-  );
-  theSphere->set_K_a(K_d);
+
 
 
   //Vector *iniPoint = new Vector(-350.0,-150.0, -600);
@@ -1748,18 +1742,53 @@ int main() {
     30,
     new Vector(0,1,0)
   );
+double cylinder_ks[3] = {0.0,1.0,0.498};
+  Cylinder *theCylinder = new Cylinder();
+  theCylinder->set_B_vector(0.0,-150.0,-300.0);
+  theCylinder->set_height(250);
+  theCylinder->set_K_a(cylinder_ks);
+  theCylinder->set_K_d(cylinder_ks);
+  theCylinder->set_K_e(cylinder_ks);
+  theCylinder->set_shine(1);
+  theCylinder->set_radius(20);
+  theCylinder->set_unitary_vector(0.0,1.0,0.0);
+
+  double centroEsfera[3] = {-100.0,-150.0, -300};
+  double K_d[3] = {0.845, 0.647, 0.125};
+  Sphere *theSphere = new Sphere(
+    centroEsfera,
+    K_d,
+    K_d,
+    1.0,
+    50.0
+  );
+  theSphere->set_K_a(K_d);
+
+  double cone_ks[3] = {0.0,1.0,0.498};
+  Cone *theCone = new Cone();
+  theCone->set_K_a(cone_ks);
+  theCone->set_K_d(cone_ks);
+  theCone->set_K_e(cone_ks);
+  theCone->set_radius(90);
+  theCone->set_height(150);
+  theCone->set_direction_vector(0.0,1.0,0.0);
+  theCone->set_B_vector(0.0,-60.0,-200.0);
+  theCone->set_shine(1);
 
 
 
-  theScenery->addObjectToTheScene(theMesh);
-  theScenery->addObjectToTheScene(Floor);
+  //theScenery->addObjectToTheScene(theMesh);
+  theScenery->addObjectToTheScene(soccerField);
+
+
+
 
   /* calling the ray tracing algorithm */
   theScenery->ray_tracing_algorithm();
 
 
 
-  SDL_events(theScenery, &event, window);
+  SDL_events(theScenery, &event, window, renderer);
 
 
 

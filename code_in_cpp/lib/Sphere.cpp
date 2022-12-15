@@ -67,9 +67,8 @@ void Sphere::gime_your_color(
     double clds;
     Vector *Light_source_position;
     Vector *Pf_Pi;
-    Vector *Dir_times_t = Direction->multiply_by_a_scalar(this->T_i);
 
-    Vector *P_i = Eye_position->sum_with_the_vector(Dir_times_t);
+    Vector *P_i = Eye_position->sum_with_the_vector(Direction->multiply_by_a_scalar(this->T_i));
 
     if (light->getType() == 0 ) {
         Light_source_position = ((PointLight*)light)->getPosition();
@@ -98,6 +97,7 @@ void Sphere::gime_your_color(
         if (clds < cos(((SpotLight*)light)->getAngle())) {
             intensity = new Vector(0.0,0.0,0.0);
         }else {
+
             intensity = ((SpotLight*)light)->getIntensity()->multiply_by_a_scalar(clds);
         }
     }else {
@@ -150,6 +150,12 @@ void Sphere::gime_your_color(
     addressToPutTheColor[0] += vectorWithColors->get_x_Point();
     addressToPutTheColor[1] += vectorWithColors->get_y_Point();
     addressToPutTheColor[2] += vectorWithColors->get_z_Point();
+
+    delete I_eye_d;
+    delete I_eye_e;
+    delete vectorWithColors;
+
+
 
 
 };
@@ -209,4 +215,11 @@ void Sphere::applyConvertWordVectoToCanvas(Vector *P_o, Vector *P_Look, Vector *
     this->get_center_vector()->set_x_Point(newX);
     this->get_center_vector()->set_y_Point(newY);
     this->get_center_vector()->set_z_Point(newZ);
+
+    delete K;
+    delete Kc;
+    delete Vup;
+    delete I;
+    delete Ic;
+    delete Jc;
 }
